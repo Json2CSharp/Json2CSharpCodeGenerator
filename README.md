@@ -1,4 +1,4 @@
-# Json2CSharp Issues
+# Json2CSharp Toolkit Issues
 
 ## How to submit an issue : An Introductory Course 
 
