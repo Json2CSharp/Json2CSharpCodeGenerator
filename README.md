@@ -1,7 +1,7 @@
 # Json2CSharp Toolkit
 
 ## How to Contribute : Bug Fixing ?
-### 1- Choose a problem from the issues labeled "Bug Help Wanted"
+### 1- Choose a problem from the issues labeled "Bug" or "Help Wanted"
 ### 2- Clone the repository and build it
 ### 3- Create a Unit Test using "CreatTest.ps1" Powershell Script
 **>>>>> Unit Test Name should be in the format of "[TestNumber]_[DescribeProblem]"**
