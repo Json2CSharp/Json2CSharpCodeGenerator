@@ -1,0 +1,39 @@
+C:\Users\Hilal\Downloads\jsonclassgenerator\sourceCode\jsonclassgenerator\JsonCSharpClassGeneratorLib\bin\Debug\Xamasoft.JsonClassGenerator.dll
+C:\Users\Hilal\Downloads\jsonclassgenerator\sourceCode\jsonclassgenerator\JsonCSharpClassGeneratorLib\bin\Debug\Xamasoft.JsonClassGenerator.pdb
+C:\Users\Hilal\Downloads\jsonclassgenerator\sourceCode\jsonclassgenerator\JsonCSharpClassGeneratorLib\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Hilal\Downloads\jsonclassgenerator\sourceCode\jsonclassgenerator\JsonCSharpClassGeneratorLib\bin\Debug\System.Data.Entity.Design.PluralizationServices.dll
+C:\Users\Hilal\Downloads\jsonclassgenerator\sourceCode\jsonclassgenerator\JsonCSharpClassGeneratorLib\obj\Debug\JsonClassGeneratorLib.csprojAssemblyReference.cache
+C:\Users\Hilal\Downloads\jsonclassgenerator\sourceCode\jsonclassgenerator\JsonCSharpClassGeneratorLib\obj\Debug\Xamasoft.JsonClassGenerator.Properties.Resources.resources
+C:\Users\Hilal\Downloads\jsonclassgenerator\sourceCode\jsonclassgenerator\JsonCSharpClassGeneratorLib\obj\Debug\JsonClassGeneratorLib.csproj.GenerateResource.cache
+C:\Users\Hilal\Downloads\jsonclassgenerator\sourceCode\jsonclassgenerator\JsonCSharpClassGeneratorLib\obj\Debug\JsonClassGeneratorLib.csproj.CoreCompileInputs.cache
+C:\Users\Hilal\Downloads\jsonclassgenerator\sourceCode\jsonclassgenerator\JsonCSharpClassGeneratorLib\obj\Debug\JsonClassGeneratorLib.csproj.CopyComplete
+C:\Users\Hilal\Downloads\jsonclassgenerator\sourceCode\jsonclassgenerator\JsonCSharpClassGeneratorLib\obj\Debug\Xamasoft.JsonClassGenerator.dll
+C:\Users\Hilal\Downloads\jsonclassgenerator\sourceCode\jsonclassgenerator\JsonCSharpClassGeneratorLib\obj\Debug\Xamasoft.JsonClassGenerator.pdb
+C:\Users\Hilal\Documents\Visual Studio 2017\Projects\json-to-csharp-function\JsonCSharpClassGeneratorLib\bin\Debug\Xamasoft.JsonClassGenerator.dll
+C:\Users\Hilal\Documents\Visual Studio 2017\Projects\json-to-csharp-function\JsonCSharpClassGeneratorLib\bin\Debug\Xamasoft.JsonClassGenerator.pdb
+C:\Users\Hilal\Documents\Visual Studio 2017\Projects\json-to-csharp-function\JsonCSharpClassGeneratorLib\obj\Debug\JsonClassGeneratorLib.csprojAssemblyReference.cache
+C:\Users\Hilal\Documents\Visual Studio 2017\Projects\json-to-csharp-function\JsonCSharpClassGeneratorLib\obj\Debug\Xamasoft.JsonClassGenerator.Properties.Resources.resources
+C:\Users\Hilal\Documents\Visual Studio 2017\Projects\json-to-csharp-function\JsonCSharpClassGeneratorLib\obj\Debug\JsonClassGeneratorLib.csproj.GenerateResource.cache
+C:\Users\Hilal\Documents\Visual Studio 2017\Projects\json-to-csharp-function\JsonCSharpClassGeneratorLib\obj\Debug\JsonClassGeneratorLib.csproj.CoreCompileInputs.cache
+C:\Users\Hilal\Documents\Visual Studio 2017\Projects\json-to-csharp-function\JsonCSharpClassGeneratorLib\obj\Debug\JsonClassGeneratorLib.csproj.CopyComplete
+C:\Users\Hilal\Documents\Visual Studio 2017\Projects\json-to-csharp-function\JsonCSharpClassGeneratorLib\obj\Debug\Xamasoft.JsonClassGenerator.dll
+C:\Users\Hilal\Documents\Visual Studio 2017\Projects\json-to-csharp-function\JsonCSharpClassGeneratorLib\obj\Debug\Xamasoft.JsonClassGenerator.pdb
+C:\Users\Hilal\Documents\Visual Studio 2017\Projects\Json2CSharpCodeGenerator\JsonClassGeneratorLib\bin\Debug\Xamasoft.JsonClassGenerator.dll
+C:\Users\Hilal\Documents\Visual Studio 2017\Projects\Json2CSharpCodeGenerator\JsonClassGeneratorLib\bin\Debug\Xamasoft.JsonClassGenerator.pdb
+C:\Users\Hilal\Documents\Visual Studio 2017\Projects\Json2CSharpCodeGenerator\JsonClassGeneratorLib\obj\Debug\JsonClassGeneratorLib.csprojAssemblyReference.cache
+C:\Users\Hilal\Documents\Visual Studio 2017\Projects\Json2CSharpCodeGenerator\JsonClassGeneratorLib\obj\Debug\Xamasoft.JsonClassGenerator.Properties.Resources.resources
+C:\Users\Hilal\Documents\Visual Studio 2017\Projects\Json2CSharpCodeGenerator\JsonClassGeneratorLib\obj\Debug\JsonClassGeneratorLib.csproj.GenerateResource.cache
+C:\Users\Hilal\Documents\Visual Studio 2017\Projects\Json2CSharpCodeGenerator\JsonClassGeneratorLib\obj\Debug\JsonClassGeneratorLib.csproj.CoreCompileInputs.cache
+C:\Users\Hilal\Documents\Visual Studio 2017\Projects\Json2CSharpCodeGenerator\JsonClassGeneratorLib\obj\Debug\JsonClassGeneratorLib.csproj.CopyComplete
+C:\Users\Hilal\Documents\Visual Studio 2017\Projects\Json2CSharpCodeGenerator\JsonClassGeneratorLib\obj\Debug\Xamasoft.JsonClassGenerator.dll
+C:\Users\Hilal\Documents\Visual Studio 2017\Projects\Json2CSharpCodeGenerator\JsonClassGeneratorLib\obj\Debug\Xamasoft.JsonClassGenerator.pdb
+C:\Users\Hilal\Desktop\Json2CSharpCodeGenerator\JsonClassGeneratorLib\bin\Debug\Xamasoft.JsonClassGenerator.dll
+C:\Users\Hilal\Desktop\Json2CSharpCodeGenerator\JsonClassGeneratorLib\bin\Debug\Xamasoft.JsonClassGenerator.pdb
+C:\Users\Hilal\Desktop\Json2CSharpCodeGenerator\JsonClassGeneratorLib\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Hilal\Desktop\Json2CSharpCodeGenerator\JsonClassGeneratorLib\obj\Debug\JsonClassGeneratorLib.csprojAssemblyReference.cache
+C:\Users\Hilal\Desktop\Json2CSharpCodeGenerator\JsonClassGeneratorLib\obj\Debug\Xamasoft.JsonClassGenerator.Properties.Resources.resources
+C:\Users\Hilal\Desktop\Json2CSharpCodeGenerator\JsonClassGeneratorLib\obj\Debug\JsonClassGeneratorLib.csproj.GenerateResource.cache
+C:\Users\Hilal\Desktop\Json2CSharpCodeGenerator\JsonClassGeneratorLib\obj\Debug\JsonClassGeneratorLib.csproj.CoreCompileInputs.cache
+C:\Users\Hilal\Desktop\Json2CSharpCodeGenerator\JsonClassGeneratorLib\obj\Debug\JsonClassGeneratorLib.csproj.CopyComplete
+C:\Users\Hilal\Desktop\Json2CSharpCodeGenerator\JsonClassGeneratorLib\obj\Debug\Xamasoft.JsonClassGenerator.dll
+C:\Users\Hilal\Desktop\Json2CSharpCodeGenerator\JsonClassGeneratorLib\obj\Debug\Xamasoft.JsonClassGenerator.pdb

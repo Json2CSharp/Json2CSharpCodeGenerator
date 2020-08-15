@@ -1,0 +1,41 @@
+// import com.fasterxml.jackson.databind.ObjectMapper; // version 2.11.1
+// import com.fasterxml.jackson.annotation.JsonProperty; // version 2.11.1
+/* ObjectMapper om = new ObjectMapper();
+Root root = om.readValue(myJsonString), Root.class); */
+public class Awesomeobject{
+    @JsonProperty("SomeProps1") 
+    public int someProps1;
+    @JsonProperty("SomeProps2") 
+    public String someProps2;
+}
+
+public class User{
+    public String id;
+    public String name;
+    public String created_at;
+    public String updated_at;
+    public String email;
+    public String testanadditionalfield;
+}
+
+public class Class1{
+    public int id;
+    public String user_id;
+    public Awesomeobject awesomeobject;
+    public String created_at;
+    public String updated_at;
+    public List<User> users;
+}
+
+public class Class2{
+    @JsonProperty("SomePropertyOfClass2") 
+    public String somePropertyOfClass2;
+}
+
+public class Root{
+    @JsonProperty("Class1") 
+    public Class1 class1;
+    @JsonProperty("Class2") 
+    public Class2 class2;
+}
+
