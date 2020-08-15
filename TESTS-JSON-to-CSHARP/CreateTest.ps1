@@ -23,7 +23,7 @@ using Xamasoft.JsonClassGenerator.CodeWriters;
 namespace TESTS_JSON_TO_CSHARP
 {
 
-    [TestClass]
+    [TestClass] 
 ";
 $testFileClassName = "  public class Test_{0}" -f $TestName;
 
