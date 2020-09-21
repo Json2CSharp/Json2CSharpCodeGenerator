@@ -139,7 +139,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             // }
             // else
             // {
-                WriteClassMembers(config, sw, type, prefix);
+            WriteClassMembers(config, sw, type, prefix);
             // }
 
             // if (shouldSuppressWarning)
@@ -159,7 +159,12 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             sw.AppendLine();
         }
 
+        internal static List<string> keywords = new List<string>(){"abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "int", "interface", "internal", "is", "lock", "long", "namespace", "new", "null", "object", "operator", "out", "override", "params", "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual", "void", "volatile", "while"} ;
 
+        internal static bool isReservedKeyword(string name)
+        {
+            return keywords.Contains(name);
+        }
 
         public void WriteClassMembers(IJsonClassGeneratorConfig config, StringBuilder sw, JsonType type, string prefix)
         {
@@ -168,7 +173,8 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
             foreach (var field in type.Fields)
             {
-
+                string fieldMemberName = field.MemberName;
+                if (isReservedKeyword(fieldMemberName)) fieldMemberName = "@" + fieldMemberName;
                 if (config.ExamplesInDocumentation)
                 {
                     sw.AppendFormat(prefix + "/// <summary>");
@@ -183,11 +189,11 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
                 if (config.UseFields)
                 {
-                    sw.AppendFormat(prefix + "public {0} {1}; {2}", field.Type.GetTypeName(), field.MemberName, Environment.NewLine);
+                    sw.AppendFormat(prefix + "public {0} {1}; {2}", field.Type.GetTypeName(), fieldMemberName, Environment.NewLine);
                 }
                 else
                 {
-                    sw.AppendFormat(prefix + "public {0} {1} {{ get; set; }} {2}", field.Type.GetTypeName(), field.MemberName, Environment.NewLine);
+                    sw.AppendFormat(prefix + "public {0} {1} {{ get; set; }} {2}", field.Type.GetTypeName(), fieldMemberName, Environment.NewLine);
                 }
 
                 if ((config.UsePascalCase || config.UseJsonAttributes) && count != counter)
