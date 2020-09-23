@@ -1,7 +1,6 @@
 ﻿
 $TestName = Read-Host -Prompt 'Test Name With Number: THE FORMAT IS [TESTNUMBER]_[TESTNAME], EXAMPLE : 10_TESTNAME.'
-# TO CHANGE $Dir TO CHANGE $Dir TO CHANGE $Dir TO CHANGE $Dir TO CHANGE $Dir TO CHANGE $Dir TO CHANGE $Dir TO CHANGE $Dir 
-$Dir = "C:\Users\Hilal\Desktop\Json2CSharpCodeGenerator\TESTS-JSON-to-CSHARP\" 
+$Dir = $PSScriptRoot + "\" 
 $fullPath = $Dir + "Test_" + $TestName + ".cs"
 $fullPathInput = $Dir + "Test_" + $TestName + "_INPUT"+ ".txt"
 $fullPathOutput = $Dir + "Test_" + $TestName + "_OUTPUT"+".txt"
