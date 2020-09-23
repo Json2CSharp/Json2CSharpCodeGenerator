@@ -1,15 +1,19 @@
-# Json2CSharp Toolkit Issues
+# Json2CSharp Toolkit
 
-## How to submit an issue : An Introductory Course 
+## How to Contribute : Bug Fixing ?
+### 1- Choose a problem from the issues labeled "Bug" or "Help Wanted"
+### 2- Clone the repository and build it
+### 3- Create a Unit Test using "CreatTest.ps1" Powershell Script
+**>>>>> Unit Test Name should be in the format of "[TestNumber]_[DescribeProblem]"**
+* Change the directory of where the test files will be created
+![alt text](https://json2csharpcdn.azureedge.net/images/github-repo-images/poweshell.png)
 
-### 1- Mention the tool: example: "Json to C#", "Potato to Potata"
+* Run the script in Powershell
+* This will create 3 files: the csharp test, the Json Input text file, and the Output C# or JAVA etc.. file
+![alt text](https://json2csharpcdn.azureedge.net/images/github-repo-images/Test%20Files.png)
 
-### 2- Mention the input: example: "{your 'Killer' JSON here }"
+* Start Debugging, Put some test Json and Get to Know the solution 
 
-### 3- Describe the intended output: example: "should fly to the moon"
-
-
-## If it's a feature
-
-### 1- Mention in the begining "FEATURE" so my drunk eyes would be able to spot it quickly
-
+## How to Contribute : New Code Generators : F#, Typescript etc.. ?
+Implement the below functions
+![alt text](https://json2csharpcdn.azureedge.net/images/github-repo-images/IMPLEMENT.png)
