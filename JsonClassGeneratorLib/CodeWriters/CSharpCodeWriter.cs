@@ -159,8 +159,6 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             sw.AppendLine();
         }
 
-
-
         public void WriteClassMembers(IJsonClassGeneratorConfig config, StringBuilder sw, JsonType type, string prefix)
         {
             int count = type.Fields.Count;
@@ -199,8 +197,6 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             }
 
         }
-
-
 
         #region Code for (obsolete) explicit deserialization
         private void WriteClassWithPropertiesExplicitDeserialization(TextWriter sw, JsonType type, string prefix)
