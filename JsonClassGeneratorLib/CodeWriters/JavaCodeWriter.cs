@@ -18,6 +18,8 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             get { return "Java"; }
         }
 
+        public List<string> ReservedKeywords => throw new NotImplementedException();
+
         public string GetTypeName(JsonType type, IJsonClassGeneratorConfig config)
         {
             var arraysAsLists = !config.ExplicitDeserialization;

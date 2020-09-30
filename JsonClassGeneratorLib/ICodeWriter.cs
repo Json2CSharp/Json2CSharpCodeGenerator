@@ -18,6 +18,8 @@ namespace Xamasoft.JsonClassGenerator
         void WriteNamespaceEnd(IJsonClassGeneratorConfig config, StringBuilder sw, bool root);
         void WriteDeserializationComment(IJsonClassGeneratorConfig config, StringBuilder sw);
         void WriteClassMembers(IJsonClassGeneratorConfig config, StringBuilder sw, JsonType type, string prefix);
+
+        List<string> ReservedKeywords { get; }
     }
 
     public interface ICodeWriter

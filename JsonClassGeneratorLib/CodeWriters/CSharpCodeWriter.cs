@@ -19,9 +19,10 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             get { return "C#"; }
         }
 
-
         private const string NoRenameAttribute = "[Obfuscation(Feature = \"renaming\", Exclude = true)]";
         private const string NoPruneAttribute = "[Obfuscation(Feature = \"trigger\", Exclude = false)]";
+
+        public List<string> ReservedKeywords => new List<string>() { "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "int", "interface", "internal", "is", "lock", "long", "namespace", "new", "null", "object", "operator", "out", "override", "params", "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual", "void", "volatile", "while" };
 
         public string GetTypeName(JsonType type, IJsonClassGeneratorConfig config)
         {
@@ -159,13 +160,6 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             sw.AppendLine();
         }
 
-        internal static List<string> keywords = new List<string>(){"abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "int", "interface", "internal", "is", "lock", "long", "namespace", "new", "null", "object", "operator", "out", "override", "params", "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual", "void", "volatile", "while"} ;
-
-        internal static bool isReservedKeyword(string name)
-        {
-            return keywords.Contains(name);
-        }
-
         public void WriteClassMembers(IJsonClassGeneratorConfig config, StringBuilder sw, JsonType type, string prefix)
         {
             int count = type.Fields.Count;
@@ -174,7 +168,10 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             foreach (var field in type.Fields)
             {
                 string fieldMemberName = field.MemberName;
-                if (isReservedKeyword(fieldMemberName)) fieldMemberName = "@" + fieldMemberName;
+
+                // Check if property is a reserved keyword
+                if (ReservedKeywords.Contains(fieldMemberName)) fieldMemberName = "@" + fieldMemberName;
+                
                 if (config.ExamplesInDocumentation)
                 {
                     sw.AppendFormat(prefix + "/// <summary>");
@@ -205,85 +202,6 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             }
 
         }
-
-        #region Code for (obsolete) explicit deserialization
-        private void WriteClassWithPropertiesExplicitDeserialization(TextWriter sw, JsonType type, string prefix)
-        {
-
-            sw.WriteLine(prefix + "private JObject __jobject;");
-            sw.WriteLine(prefix + "public {0}(JObject obj)", type.AssignedName);
-            sw.WriteLine(prefix + "{");
-            sw.WriteLine(prefix + "    this.__jobject = obj;");
-            sw.WriteLine(prefix + "}");
-            sw.WriteLine();
-
-            foreach (var field in type.Fields)
-            {
-
-                string variable = null;
-                if (field.Type.MustCache)
-                {
-                    variable = "_" + char.ToLower(field.MemberName[0]) + field.MemberName.Substring(1);
-                    sw.WriteLine(prefix + "[System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]");
-                    sw.WriteLine(prefix + "private {0} {1};", field.Type.GetTypeName(), variable);
-                }
-
-
-                sw.WriteLine(prefix + "public {0} {1}", field.Type.GetTypeName(), field.MemberName);
-                sw.WriteLine(prefix + "{");
-                sw.WriteLine(prefix + "    get");
-                sw.WriteLine(prefix + "    {");
-                if (field.Type.MustCache)
-                {
-                    sw.WriteLine(prefix + "        if ({0} == null)", variable);
-                    sw.WriteLine(prefix + "            {0} = {1};", variable, field.GetGenerationCode("__jobject"));
-                    sw.WriteLine(prefix + "        return {0};", variable);
-                }
-                else
-                {
-                    sw.WriteLine(prefix + "        return {0};", field.GetGenerationCode("__jobject"));
-                }
-                sw.WriteLine(prefix + "    }");
-                sw.WriteLine(prefix + "}");
-                sw.WriteLine();
-
-            }
-
-        }
-
-
-        private void WriteStringConstructorExplicitDeserialization(IJsonClassGeneratorConfig config, TextWriter sw, JsonType type, string prefix)
-        {
-            sw.WriteLine();
-            sw.WriteLine(prefix + "public {1}(string json)", config.InternalVisibility ? "internal" : "public", type.AssignedName);
-            sw.WriteLine(prefix + "    : this(JObject.Parse(json))");
-            sw.WriteLine(prefix + "{");
-            sw.WriteLine(prefix + "}");
-            sw.WriteLine();
-        }
-
-        private void WriteClassWithFieldsExplicitDeserialization(TextWriter sw, JsonType type, string prefix)
-        {
-
-
-            sw.WriteLine(prefix + "public {0}(JObject obj)", type.AssignedName);
-            sw.WriteLine(prefix + "{");
-
-            foreach (var field in type.Fields)
-            {
-                sw.WriteLine(prefix + "    this.{0} = {1};", field.MemberName, field.GetGenerationCode("obj"));
-
-            }
-
-            sw.WriteLine(prefix + "}");
-            sw.WriteLine();
-
-            foreach (var field in type.Fields)
-            {
-                sw.WriteLine(prefix + "public readonly {0} {1};", field.Type.GetTypeName(), field.MemberName);
-            }
-        }
-        #endregion
 
     }
 }
