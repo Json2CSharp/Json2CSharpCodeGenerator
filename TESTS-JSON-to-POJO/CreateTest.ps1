@@ -35,7 +35,8 @@ $testFileContentStart1 = "{
         { 
         ";
 
-$content1 = "string path = Directory.GetCurrentDirectory().Replace(""bin\\Debug"", """")  + @`"Test_{0}_INPUT.txt`";" -f $TestName;
+$content1 = "string path = Directory.GetCurrentDirectory().Replace(""bin\\Debug"", """")  + @`"Test_{0}_INPUT.txt`";
+" -f $TestName;
 $content2 = "string resultPath = Directory.GetCurrentDirectory().Replace(""bin\\Debug"", """") + @`"Test_{0}_OUTPUT.txt`";" -f $TestName;
  
 $testFileContentMiddle = "            
