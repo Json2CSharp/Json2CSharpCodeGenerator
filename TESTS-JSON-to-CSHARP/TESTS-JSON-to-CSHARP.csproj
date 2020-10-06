@@ -94,8 +94,6 @@
     <Content Include="Test_3_ReplaceSpecialCharacters_OUTPUT.txt" />
     <Content Include="Test_4_BracketError_INPUT.txt" />
     <Content Include="Test_4_BracketError_OUTPUT.txt" />
-    <Content Include="Test_5_JsonPropertyName_Annotation_INPUT.txt" />
-    <Content Include="Test_5_JsonPropertyName_Annotation_OUTPUT.txt" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
