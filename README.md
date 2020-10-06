@@ -1,5 +1,14 @@
 # Json2CSharp Toolkit
-
+## NEW: Bounty Program
+### Contribute on below listed issues -> Get rewarded
+### 1- SOLVE ISSUE #17: Throws error when two bracket exists, one is empty the other is not #17
+#### Reward : 15$ Amazon Gift Card
+#### Rules : 
+     a - You need to get the task assigned to you
+     b - Fix the issue
+     c - Validate using the mentioned unit test
+     d - Pull Request
+   
 ## How to Contribute : Bug Fixing ?
 ### 1- Choose a problem from the issues labeled "Bug" or "Help Wanted"
 ### 2- Clone the repository and build it
