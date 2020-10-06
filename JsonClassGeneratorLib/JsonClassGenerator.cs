@@ -26,13 +26,15 @@ namespace Xamasoft.JsonClassGenerator
         public bool NoHelperClass { get; set; }
         public string MainClass { get; set; }
 
-    public class SouRce    {
+        public class SouRce    {
         public List<string> includes { get; set; } 
 
     }
 
         public bool UsePascalCase { get; set; }
         public bool UseJsonAttributes { get; set; }
+        public bool UseJsonPropertyName { get; set; }
+
 
         public bool UseNestedClasses { get; set; }
         public bool UseProperties { get; set; }
@@ -253,7 +255,7 @@ namespace Xamasoft.JsonClassGenerator
                 }
             }
 
-            type.Fields = jsonFields.Select(x => new FieldInfo(this, x.Key, x.Value, UsePascalCase, UseJsonAttributes,fieldExamples[x.Key])).ToArray();
+            type.Fields = jsonFields.Select(x => new FieldInfo(this, x.Key, x.Value, UsePascalCase, UseJsonAttributes, UseJsonPropertyName, fieldExamples[x.Key])).ToArray();
 
             if (!string.IsNullOrEmpty(type.AssignedName))
                 Types.Add(type);

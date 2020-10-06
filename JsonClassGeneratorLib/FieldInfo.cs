@@ -11,12 +11,12 @@ namespace Xamasoft.JsonClassGenerator
     public class FieldInfo
     {
 
-        public FieldInfo(IJsonClassGeneratorConfig generator, string jsonMemberName, JsonType type, bool usePascalCase, bool useJsonAttributes, IList<object> Examples)
+        public FieldInfo(IJsonClassGeneratorConfig generator, string jsonMemberName, JsonType type, bool usePascalCase, bool useJsonAttributes, bool useJsonPropertyName, IList<object> Examples)
         {
             this.generator = generator;
             this.JsonMemberName = jsonMemberName;
             this.MemberName = jsonMemberName;
-            if (usePascalCase || useJsonAttributes) MemberName = JsonClassGenerator.ToTitleCase(MemberName);
+            if (usePascalCase || useJsonAttributes || useJsonPropertyName) MemberName = JsonClassGenerator.ToTitleCase(MemberName);
             this.Type = type;
             this.Examples = Examples;
         }

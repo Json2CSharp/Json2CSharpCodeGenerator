@@ -1,0 +1,62 @@
+// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
+    public class Awesomeobject    {
+        [JsonPropertyName("SomeProps1")]
+        public int SomeProps1 { get; set; } 
+
+        [JsonPropertyName("SomeProps2")]
+        public string SomeProps2 { get; set; } 
+    }
+
+    public class User    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; } 
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; } 
+
+        [JsonPropertyName("created_at")]
+        public string CreatedAt { get; set; } 
+
+        [JsonPropertyName("updated_at")]
+        public string UpdatedAt { get; set; } 
+
+        [JsonPropertyName("email")]
+        public string Email { get; set; } 
+
+        [JsonPropertyName("testanadditionalfield")]
+        public string Testanadditionalfield { get; set; } 
+    }
+
+    public class Class1    {
+        [JsonPropertyName("id")]
+        public int Id { get; set; } 
+
+        [JsonPropertyName("user_id")]
+        public string UserId { get; set; } 
+
+        [JsonPropertyName("awesomeobject")]
+        public Awesomeobject Awesomeobject { get; set; } 
+
+        [JsonPropertyName("created_at")]
+        public string CreatedAt { get; set; } 
+
+        [JsonPropertyName("updated_at")]
+        public string UpdatedAt { get; set; } 
+
+        [JsonPropertyName("users")]
+        public List<User> Users { get; set; } 
+    }
+
+    public class Class2    {
+        [JsonPropertyName("SomePropertyOfClass2")]
+        public string SomePropertyOfClass2 { get; set; } 
+    }
+
+    public class Root    {
+        [JsonPropertyName("Class1")]
+        public Class1 Class1 { get; set; } 
+
+        [JsonPropertyName("Class2")]
+        public Class2 Class2 { get; set; } 
+    }
+

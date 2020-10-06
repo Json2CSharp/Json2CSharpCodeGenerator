@@ -57,9 +57,11 @@
     <Compile Include="Test_1_3_SETTINGS_FIELDS.cs" />
     <Compile Include="Test_1_4_SETTINGS_JSONPROPERTY.cs" />
     <Compile Include="Test_1_5_SETTINGS_FIELDS_JSONPROPERTY.cs" />
+    <Compile Include="Test_1_6_SETTINGS_JSONPROPERTYNAME_NETCORE.cs" />
     <Compile Include="Test_1_SETTINGS.cs" />
     <Compile Include="Test_2_CHECK_RESERVED_KEYWORDS.cs" />
     <Compile Include="Test_3_ReplaceSpecialCharacters.cs" />
+    <Compile Include="Test_4_BracketError.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CreateTest.ps1" />
@@ -82,12 +84,18 @@
     <Content Include="Test_1_4_SETTINGS_JSONPROPERTY_OUTPUT.txt" />
     <Content Include="Test_1_5_SETTINGS_FIELDS_JSONPROPERTY_INPUT.txt" />
     <Content Include="Test_1_5_SETTINGS_FIELDS_JSONPROPERTY_OUTPUT.txt" />
+    <Content Include="Test_1_6_SETTINGS_JSONPROPERTYNAME_NETCORE_INPUT.txt" />
+    <Content Include="Test_1_6_SETTINGS_JSONPROPERTYNAME_NETCORE_OUTPUT.txt" />
     <Content Include="Test_1_SETTINGS_INPUT.txt" />
     <Content Include="Test_1_SETTINGS_OUTPUT.txt" />
     <Content Include="Test_2_CHECK_RESERVED_KEYWORDS_INPUT.txt" />
     <Content Include="Test_2_CHECK_RESERVED_KEYWORDS_OUTPUT.txt" />
     <Content Include="Test_3_ReplaceSpecialCharacters_INPUT.txt" />
     <Content Include="Test_3_ReplaceSpecialCharacters_OUTPUT.txt" />
+    <Content Include="Test_4_BracketError_INPUT.txt" />
+    <Content Include="Test_4_BracketError_OUTPUT.txt" />
+    <Content Include="Test_5_JsonPropertyName_Annotation_INPUT.txt" />
+    <Content Include="Test_5_JsonPropertyName_Annotation_OUTPUT.txt" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

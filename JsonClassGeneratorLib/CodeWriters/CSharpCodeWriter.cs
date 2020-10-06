@@ -79,6 +79,12 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                     sw.AppendLine("using Newtonsoft.Json;");
                     sw.AppendLine("using Newtonsoft.Json.Linq;");
                 }
+
+                if (!config.ExplicitDeserialization && config.UseJsonPropertyName)
+                {
+                    sw.AppendLine("System.Text.Json;");
+                }
+
                 if (config.ExplicitDeserialization)
                     sw.AppendLine("using JsonCSharpClassGenerator;");
                 if (config.SecondaryNamespace != null && config.HasSecondaryClasses && !config.UseNestedClasses)
@@ -181,10 +187,15 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                     sw.AppendFormat(prefix + "/// </summary>");
                 }
 
-                if (config.UseJsonAttributes)
+                if (config.UseJsonPropertyName)
+                {
+                    sw.AppendFormat(prefix + "[JsonPropertyName(\"{0}\")]{1}", field.JsonMemberName, Environment.NewLine);
+                }
+                else if (config.UseJsonAttributes)
                 {
                     sw.AppendFormat(prefix + "[JsonProperty(\"{0}\")]{1}", field.JsonMemberName, Environment.NewLine);
                 }
+               
 
                 if (config.UseFields)
                 {
@@ -195,7 +206,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                     sw.AppendFormat(prefix + "public {0} {1} {{ get; set; }} {2}", field.Type.GetTypeName(), fieldMemberName, Environment.NewLine);
                 }
 
-                if (config.UseJsonAttributes && count != counter)
+                if ((config.UseJsonAttributes || config.UseJsonPropertyName )&& count != counter)
                 {
                     sw.AppendLine();
                 }
