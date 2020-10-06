@@ -1,0 +1,9 @@
+{
+"test": "asdfasjdfajjfasldf",
+
+"test-test" : "test",
+
+"continue" : "test",
+
+"class" : "test"
+}

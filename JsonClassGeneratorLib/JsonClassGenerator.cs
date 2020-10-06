@@ -253,7 +253,7 @@ namespace Xamasoft.JsonClassGenerator
                 }
             }
 
-            type.Fields = jsonFields.Select(x => new FieldInfo(this, x.Key, x.Value, UsePascalCase, fieldExamples[x.Key])).ToArray();
+            type.Fields = jsonFields.Select(x => new FieldInfo(this, x.Key, x.Value, UsePascalCase, UseJsonAttributes,fieldExamples[x.Key])).ToArray();
 
             if (!string.IsNullOrEmpty(type.AssignedName))
                 Types.Add(type);
