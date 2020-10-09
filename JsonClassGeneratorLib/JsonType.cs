@@ -7,6 +7,8 @@ using System.Text;
 using Newtonsoft.Json.Linq;
 using System.Data.Entity.Design.PluralizationServices;
 using System.Globalization;
+using System.Runtime.InteropServices;
+
 namespace Xamasoft.JsonClassGenerator
 {
     public class JsonType
@@ -168,13 +170,20 @@ namespace Xamasoft.JsonClassGenerator
 
         public JsonType GetCommonType(JsonType type2)
         {
-            var commonType = GetCommonTypeEnum(this.Type, type2.Type);
+            
+
+            var commonType = GetCommonTypeEnum(this.Type, type2);
 
             if (commonType == JsonTypeEnum.Array)
             {
                 if (type2.Type == JsonTypeEnum.NullableSomething) return this;
                 if (this.Type == JsonTypeEnum.NullableSomething) return type2;
-                var commonInternalType = InternalType.GetCommonType(type2.InternalType).MaybeMakeNullable(generator);
+
+                JsonType commonInternalType;
+                if (InternalType == null && type2.InternalType != null) // Handling the case Test_4 where the first array is an empty object
+                    commonInternalType = type2.InternalType;
+                else commonInternalType = InternalType.GetCommonType(type2.InternalType).MaybeMakeNullable(generator);
+
                 if (commonInternalType != InternalType) return new JsonType(generator, JsonTypeEnum.Array) { InternalType = commonInternalType };
             }
 
@@ -198,8 +207,13 @@ namespace Xamasoft.JsonClassGenerator
 
 
 
-        private JsonTypeEnum GetCommonTypeEnum(JsonTypeEnum type1, JsonTypeEnum type2)
+        private JsonTypeEnum GetCommonTypeEnum(JsonTypeEnum type1, JsonType type2json)
         {
+            if (type2json == null)
+                return type1;
+            
+            var type2 = type2json.Type;
+            
             if (type1 == JsonTypeEnum.NonConstrained) return type2;
             if (type2 == JsonTypeEnum.NonConstrained) return type1;
 

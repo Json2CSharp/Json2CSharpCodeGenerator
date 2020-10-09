@@ -238,7 +238,7 @@ namespace Xamasoft.JsonClassGenerator
                                     }
                                 }
                             }
-                            else if (value.Type == JTokenType.Object)
+                            else if (value.Type == JTokenType.Object) //TODO J2C : ONLY LOOP OVER 50 OBJECT AND NOT THE WHOLE THING
                             {
                                 foreach (var item in (JObject)value)
                                 {
