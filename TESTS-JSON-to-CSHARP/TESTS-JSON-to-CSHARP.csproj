@@ -63,6 +63,8 @@
     <Compile Include="Test_2_CHECK_RESERVED_KEYWORDS.cs" />
     <Compile Include="Test_3_ReplaceSpecialCharacters.cs" />
     <Compile Include="Test_4_BracketError.cs" />
+    <Compile Include="Test_6_DictionaryTest.cs" />
+    <Compile Include="Test_7_DuplictedClasses.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CreateTest.ps1" />
@@ -99,6 +101,10 @@
     <Content Include="Test_4_BracketError_INPUT.txt" />
     <Content Include="Test_4_BracketError_OUTPUT_1.txt" />
     <Content Include="Test_4_BracketError_OUTPUT.txt" />
+    <Content Include="Test_6_DictionaryTest_INPUT.txt" />
+    <Content Include="Test_6_DictionaryTest_OUTPUT.txt" />
+    <Content Include="Test_7_DuplictedClasses_INPUT.txt" />
+    <Content Include="Test_7_DuplictedClasses_OUTPUT.txt" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
