@@ -95,8 +95,8 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 if (config.UseProperties)
                 {
                     sw.AppendFormat(prefix + "@JsonProperty" + "(\"{0}\") {1}", field.JsonMemberName,Environment.NewLine);
-                    sw.AppendFormat(prefix + "public {0} get{1}() {{ \r\t\t return this.{2}; \r\t}} {3}", field.Type.GetTypeName(), ChangeFirstChar(field.MemberName), ChangeFirstChar(field.MemberName, false), Environment.NewLine);
-                    sw.AppendFormat(prefix + "public void set{1}({0} {2}) {{ \r\t\t this.{2} = {2}; \r\t}} {3}", field.Type.GetTypeName(), ChangeFirstChar(field.MemberName), ChangeFirstChar(field.MemberName, false), Environment.NewLine);
+                    sw.AppendFormat(prefix + "public {0} get{1}() {{ \r\t\t return this.{2}; }} {3}", field.Type.GetTypeName(), ChangeFirstChar(field.MemberName), ChangeFirstChar(field.MemberName, false), Environment.NewLine);
+                    sw.AppendFormat(prefix + "public void set{1}({0} {2}) {{ \r\t\t this.{2} = {2}; }} {3}", field.Type.GetTypeName(), ChangeFirstChar(field.MemberName), ChangeFirstChar(field.MemberName, false), Environment.NewLine);
                     sw.AppendFormat(prefix + "{0} {1};", field.Type.GetTypeName(), ChangeFirstChar(field.MemberName, false));
                     sw.AppendLine();
                 }
