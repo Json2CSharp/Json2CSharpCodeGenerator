@@ -16,7 +16,9 @@ namespace Xamasoft.JsonClassGenerator
             this.generator = generator;
             this.JsonMemberName = jsonMemberName;
             this.MemberName = jsonMemberName;
-            if (usePascalCase || useJsonAttributes || useJsonPropertyName) MemberName = JsonClassGenerator.ToTitleCase(MemberName);
+            bool constainsSpecialChars = isContainsSpecialChars(MemberName);
+            ContainsSpecialChars = constainsSpecialChars;
+            if (usePascalCase || useJsonAttributes || useJsonPropertyName || constainsSpecialChars) MemberName = JsonClassGenerator.ToTitleCase(MemberName);
             this.Type = type;
             this.Examples = Examples;
         }
@@ -25,6 +27,42 @@ namespace Xamasoft.JsonClassGenerator
         public string JsonMemberName { get; private set; }
         public JsonType Type { get; private set; }
         public IList<object> Examples { get; private set; }
+        public bool ContainsSpecialChars { get; set; }
+        public int MyProperty { get; set; }
+
+        private bool isContainsSpecialChars(string str)
+        {
+            for (int i = 0; i < str.Length; i++)
+            {
+                var c = str[i];
+                if (!char.IsLetterOrDigit(c) && c!= '_')
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        internal static string ToTitleCase(string str)
+        {
+            var sb = new StringBuilder(str.Length);
+            var flag = true;
+
+            for (int i = 0; i < str.Length; i++)
+            {
+                var c = str[i];
+                if (char.IsLetterOrDigit(c))
+                {
+                    sb.Append(flag ? char.ToUpper(c) : c);
+                    flag = false;
+                }
+                else
+                {
+                    flag = true;
+                }
+            }
+            return sb.ToString();
+        }
 
         public string GetGenerationCode(string jobject)
         {
@@ -63,8 +101,6 @@ namespace Xamasoft.JsonClassGenerator
             }
 
         }
-
-
 
         public string GetExamplesText()
         {

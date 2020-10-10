@@ -11,7 +11,7 @@ namespace TESTS_JSON_TO_CSHARP
 {
 
     [TestClass]
-  public class Test_0_BASIC_SCENARIO{
+  public class Test_5_BASIC_SCENARIO{
    
         [TestMethod]
         public void Run()

@@ -191,7 +191,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 {
                     sw.AppendFormat(prefix + "[JsonPropertyName(\"{0}\")]{1}", field.JsonMemberName, Environment.NewLine);
                 }
-                else if (config.UseJsonAttributes)
+                else if (config.UseJsonAttributes || field.ContainsSpecialChars) // If the json Member contains special chars -> add this property
                 {
                     sw.AppendFormat(prefix + "[JsonProperty(\"{0}\")]{1}", field.JsonMemberName, Environment.NewLine);
                 }
@@ -206,7 +206,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                     sw.AppendFormat(prefix + "public {0} {1} {{ get; set; }} {2}", field.Type.GetTypeName(), fieldMemberName, Environment.NewLine);
                 }
 
-                if ((config.UseJsonAttributes || config.UseJsonPropertyName )&& count != counter)
+                if ((config.UseJsonAttributes || config.UseJsonPropertyName  )&& count != counter)
                 {
                     sw.AppendLine();
                 }
