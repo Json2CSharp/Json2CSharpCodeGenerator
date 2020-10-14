@@ -110,7 +110,10 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
         public void WriteDeserializationComment(IJsonClassGeneratorConfig config, StringBuilder sw)
         {
-            sw.AppendLine("// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); ");
+           if (config.UseJsonPropertyName)
+                sw.AppendLine("// Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);");
+            else
+                sw.AppendLine("// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); ");
         }
 
         public void WriteNamespaceStart(IJsonClassGeneratorConfig config, StringBuilder sw, bool root)
