@@ -1,4 +1,4 @@
-// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
+// Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);
     public class Awesomeobject    {
         [JsonPropertyName("SomeProps1")]
         public int SomeProps1 { get; set; } 
