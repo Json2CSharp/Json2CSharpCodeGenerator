@@ -262,7 +262,7 @@
         </member>
         <member name="T:Microsoft.VisualStudio.TestTools.UnitTesting.DataAccessMethod">
             <summary>
-            Enumeration for how how we access data rows in data driven testing.
+            Enumeration for how we access data rows in data driven testing.
             </summary>
         </member>
         <member name="F:Microsoft.VisualStudio.TestTools.UnitTesting.DataAccessMethod.Sequential">
@@ -277,7 +277,12 @@
         </member>
         <member name="T:Microsoft.VisualStudio.TestTools.UnitTesting.DataRowAttribute">
             <summary>
-            Attribute to define inline data for a test method.
+            Attribute to define in-line data for a test method.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.TestTools.UnitTesting.DataRowAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.DataRowAttribute"/> class.
             </summary>
         </member>
         <member name="M:Microsoft.VisualStudio.TestTools.UnitTesting.DataRowAttribute.#ctor(System.Object)">
@@ -3228,8 +3233,9 @@
             <summary>
             Tests whether the specified collections are equal and throws an exception
             if the two collections are not equal. Equality is defined as having the same
-            elements in the same order and quantity. Different references to the same
-            value are considered equal.
+            elements in the same order and quantity. Whether two elements are the same
+            is checked using <see cref="M:System.Object.Equals(System.Object,System.Object)" /> method.
+            Different references to the same value are considered equal.
             </summary>
             <param name="expected">
             The first collection to compare. This is the collection the tests expects.
@@ -3247,8 +3253,9 @@
             <summary>
             Tests whether the specified collections are equal and throws an exception
             if the two collections are not equal. Equality is defined as having the same
-            elements in the same order and quantity. Different references to the same
-            value are considered equal.
+            elements in the same order and quantity. Whether two elements are the same
+            is checked using <see cref="M:System.Object.Equals(System.Object,System.Object)" /> method.
+            Different references to the same value are considered equal.
             </summary>
             <param name="expected">
             The first collection to compare. This is the collection the tests expects.
@@ -3271,8 +3278,9 @@
             <summary>
             Tests whether the specified collections are equal and throws an exception
             if the two collections are not equal. Equality is defined as having the same
-            elements in the same order and quantity. Different references to the same
-            value are considered equal.
+            elements in the same order and quantity. Whether two elements are the same
+            is checked using <see cref="M:System.Object.Equals(System.Object,System.Object)" /> method.
+            Different references to the same value are considered equal.
             </summary>
             <param name="expected">
             The first collection to compare. This is the collection the tests expects.
@@ -3298,8 +3306,9 @@
             <summary>
             Tests whether the specified collections are unequal and throws an exception
             if the two collections are equal. Equality is defined as having the same
-            elements in the same order and quantity. Different references to the same
-            value are considered equal.
+            elements in the same order and quantity. Whether two elements are the same
+            is checked using <see cref="M:System.Object.Equals(System.Object,System.Object)" /> method.
+            Different references to the same value are considered equal.
             </summary>
             <param name="notExpected">
             The first collection to compare. This is the collection the tests expects
@@ -3317,8 +3326,9 @@
             <summary>
             Tests whether the specified collections are unequal and throws an exception
             if the two collections are equal. Equality is defined as having the same
-            elements in the same order and quantity. Different references to the same
-            value are considered equal.
+            elements in the same order and quantity. Whether two elements are the same
+            is checked using <see cref="M:System.Object.Equals(System.Object,System.Object)" /> method.
+            Different references to the same value are considered equal.
             </summary>
             <param name="notExpected">
             The first collection to compare. This is the collection the tests expects
@@ -3341,8 +3351,9 @@
             <summary>
             Tests whether the specified collections are unequal and throws an exception
             if the two collections are equal. Equality is defined as having the same
-            elements in the same order and quantity. Different references to the same
-            value are considered equal.
+            elements in the same order and quantity. Whether two elements are the same
+            is checked using <see cref="M:System.Object.Equals(System.Object,System.Object)" /> method.
+            Different references to the same value are considered equal.
             </summary>
             <param name="notExpected">
             The first collection to compare. This is the collection the tests expects
@@ -3749,6 +3760,11 @@
               Looks up a localized string similar to Method {0} must match the expected signature: public static {1} {0}({2})..
             </summary>
         </member>
+        <member name="P:Microsoft.VisualStudio.TestTools.UnitTesting.FrameworkMessages.DynamicDataIEnumerableEmpty">
+            <summary>
+              Looks up a localized string similar to Property or method {0} on {1} returns empty IEnumerable&lt;object[]&gt;..
+            </summary>
+        </member>
         <member name="P:Microsoft.VisualStudio.TestTools.UnitTesting.FrameworkMessages.DynamicDataIEnumerableNull">
             <summary>
               Looks up a localized string similar to Property or method {0} on {1} does not return IEnumerable&lt;object[]&gt;..
@@ -3985,6 +4001,24 @@
             The infinite.
             </summary>
         </member>
+        <member name="T:Microsoft.VisualStudio.TestTools.UnitTesting.InheritanceBehavior">
+            <summary>
+            Enumeration for inheritance behavior, that can be used with both the <see cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.ClassInitializeAttribute"/> class
+            and <see cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.ClassCleanupAttribute"/> class.
+            Defines the behavior of the ClassInitialize and ClassCleanup methods of base classes.
+            The type of the enumeration must match
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.TestTools.UnitTesting.InheritanceBehavior.None">
+            <summary>
+            None.
+            </summary>
+        </member>
+        <member name="F:Microsoft.VisualStudio.TestTools.UnitTesting.InheritanceBehavior.BeforeEachDerivedClass">
+            <summary>
+            Before each derived class.
+            </summary>
+        </member>
         <member name="T:Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute">
             <summary>
             The test class attribute.
@@ -4003,6 +4037,24 @@
             The test method attribute.
             </summary>
         </member>
+        <member name="M:Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute"/> class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute"/> class.
+            </summary>
+            <param name="displayName">
+            Display Name for the Test Window
+            </param>
+        </member>
+        <member name="P:Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute.DisplayName">
+            <summary>
+            Gets display Name for the Test Window
+            </summary>
+        </member>
         <member name="M:Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute.Execute(Microsoft.VisualStudio.TestTools.UnitTesting.ITestMethod)">
             <summary>
             Executes a test method.
@@ -4013,7 +4065,7 @@
         </member>
         <member name="T:Microsoft.VisualStudio.TestTools.UnitTesting.DataTestMethodAttribute">
             <summary>
-            Attribute for data driven test where data can be specified inline.
+            Attribute for data driven test where data can be specified in-line.
             </summary>
         </member>
         <member name="T:Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute">
@@ -4023,7 +4075,7 @@
         </member>
         <member name="T:Microsoft.VisualStudio.TestTools.UnitTesting.TestCleanupAttribute">
             <summary>
-            The test cleanup attribute.
+            The test cleanup attribute marks methods that are executed after every test marked with a <see cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute"/>.
             </summary>
         </member>
         <member name="T:Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttribute">
@@ -4080,9 +4132,49 @@
             The class initialize attribute.
             </summary>
         </member>
+        <member name="M:Microsoft.VisualStudio.TestTools.UnitTesting.ClassInitializeAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.ClassInitializeAttribute"/> class.
+            ClassInitializeAttribute
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.TestTools.UnitTesting.ClassInitializeAttribute.#ctor(Microsoft.VisualStudio.TestTools.UnitTesting.InheritanceBehavior)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.ClassInitializeAttribute"/> class.
+            ClassInitializeAttribute
+            </summary>
+            <param name="inheritanceBehavior">
+            Specifies the ClassInitialize Inheritance Behavior
+            </param>
+        </member>
+        <member name="P:Microsoft.VisualStudio.TestTools.UnitTesting.ClassInitializeAttribute.InheritanceBehavior">
+            <summary>
+            Gets the Inheritance Behavior
+            </summary>
+        </member>
         <member name="T:Microsoft.VisualStudio.TestTools.UnitTesting.ClassCleanupAttribute">
             <summary>
             The class cleanup attribute.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.TestTools.UnitTesting.ClassCleanupAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.ClassCleanupAttribute"/> class.
+            ClassCleanupAttribute
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.TestTools.UnitTesting.ClassCleanupAttribute.#ctor(Microsoft.VisualStudio.TestTools.UnitTesting.InheritanceBehavior)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.ClassCleanupAttribute"/> class.
+            ClassCleanupAttribute
+            </summary>
+            <param name="inheritanceBehavior">
+            Specifies the ClassCleanup Inheritance Behavior
+            </param>
+        </member>
+        <member name="P:Microsoft.VisualStudio.TestTools.UnitTesting.ClassCleanupAttribute.InheritanceBehavior">
+            <summary>
+            Gets the Inheritance Behavior
             </summary>
         </member>
         <member name="T:Microsoft.VisualStudio.TestTools.UnitTesting.AssemblyInitializeAttribute">
@@ -4192,7 +4284,7 @@
         </member>
         <member name="P:Microsoft.VisualStudio.TestTools.UnitTesting.WorkItemAttribute.Id">
             <summary>
-            Gets the Id to a workitem associated.
+            Gets the Id to a work item associated.
             </summary>
         </member>
         <member name="T:Microsoft.VisualStudio.TestTools.UnitTesting.TimeoutAttribute">
@@ -4205,7 +4297,7 @@
             Initializes a new instance of the <see cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.TimeoutAttribute"/> class.
             </summary>
             <param name="timeout">
-            The timeout.
+            The timeout in milliseconds.
             </param>
         </member>
         <member name="M:Microsoft.VisualStudio.TestTools.UnitTesting.TimeoutAttribute.#ctor(Microsoft.VisualStudio.TestTools.UnitTesting.TestTimeout)">
@@ -4218,7 +4310,7 @@
         </member>
         <member name="P:Microsoft.VisualStudio.TestTools.UnitTesting.TimeoutAttribute.Timeout">
             <summary>
-            Gets the timeout.
+            Gets the timeout in milliseconds.
             </summary>
         </member>
         <member name="T:Microsoft.VisualStudio.TestTools.UnitTesting.TestResult">
