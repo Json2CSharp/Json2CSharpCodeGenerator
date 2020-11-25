@@ -1,4 +1,4 @@
-﻿
+﻿Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned -Confirm:$false -Force;
 $TestName = Read-Host -Prompt 'Test Name With Number: THE FORMAT IS [TESTNUMBER]_[TESTNAME], EXAMPLE : 10_TESTNAME.'
 $Dir = $PSScriptRoot + "\" 
 $fullPath = $Dir + "Test_" + $TestName + ".cs"
@@ -38,11 +38,11 @@ $content2 = "string resultPath =  Directory.GetCurrentDirectory().Replace(""bin\
  
 $testFileContentMiddle = "            
             string input = File.ReadAllText(path);
-             string errorMessage = string.Empty;
-                CSharpCodeWriter csharpCodeWriter = new CSharpCodeWriter();
-                JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
-				jsonClassGenerator.CodeWriter = csharpCodeWriter;
-				  string returnVal = jsonClassGenerator.GenerateClasses(input, out errorMessage).ToString();
+            string errorMessage = string.Empty;
+            CSharpCodeWriter csharpCodeWriter = new CSharpCodeWriter();
+            JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
+			jsonClassGenerator.CodeWriter = csharpCodeWriter;
+			string returnVal = jsonClassGenerator.GenerateClasses(input, out errorMessage).ToString();
             string resultsCompare = File.ReadAllText(resultPath); 
             ";
 
@@ -53,8 +53,11 @@ $testFileContentEnd = "
 }";
 
 
-$tesformattedString = $testFileContentStart + $testFileClassName +$testFileContentStart1+ $content1 + $content2  + $testFileContentMiddle + $testFileAssertion +$testFileContentEnd
+$tesformattedString = $testFileContentStart + $testFileClassName +$testFileContentStart1+ $content1 + [Environment]::NewLine + $content2  + $testFileContentMiddle + $testFileAssertion +$testFileContentEnd
 
 Set-Content -Path $fullPath -Value $tesformattedString 
 
 Set-Content -Path $fullPathOutput -Value "dfasdfadfasdf" # DO NOT REMOVE : IF THIS IS EMPTY THE TEST WILL SUCCEED, WE WANT TO FAIL INITIALLY
+
+
+Set-ExecutionPolicy Restricted -Confirm:$false -Force;

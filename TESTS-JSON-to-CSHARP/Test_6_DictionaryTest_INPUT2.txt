@@ -1,0 +1,36 @@
+{
+   "2103":{
+      "position":"OT",
+      "first_name":"Cody",
+      "player_id":"2103",
+      "last_name":"Booth",
+      "team":null,
+   },
+   "6250":{
+      "position":"DT",
+      "first_name":"Eurndraus",
+      "player_id":"6250",
+      "last_name":"Bryant",
+      "team":null,
+   }
+}
+
+or 
+
+{"Test" : {
+   "2103":{
+      "position":"OT",
+      "first_name":"Cody",
+      "player_id":"2103",
+      "last_name":"Booth",
+      "team":null
+   },
+   "6250":{
+      "position":"DT",
+      "first_name":"Eurndraus",
+      "player_id":"6250",
+      "last_name":"Bryant",
+      "team":null
+   }
+}
+}

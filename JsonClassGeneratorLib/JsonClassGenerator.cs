@@ -1,22 +1,20 @@
 ﻿// Copyright © 2010 Xamasoft
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.IO;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity.Design.PluralizationServices;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
 using Xamasoft.JsonClassGenerator.CodeWriters;
-using System.Text.RegularExpressions;
 
 namespace Xamasoft.JsonClassGenerator
 {
     public class JsonClassGenerator : IJsonClassGeneratorConfig
     {
-
         public string Example { get; set; }
         public string Namespace { get; set; }
         public string SecondaryNamespace { get; set; }
