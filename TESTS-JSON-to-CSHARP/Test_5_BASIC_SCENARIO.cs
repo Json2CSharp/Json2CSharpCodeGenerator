@@ -16,8 +16,8 @@ namespace TESTS_JSON_TO_CSHARP
         [TestMethod]
         public void Run()
         { 
-        string path = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_0_BASIC_SCENARIO_INPUT.txt";
-            string resultPath = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_0_BASIC_SCENARIO_OUTPUT.txt";            
+        string path = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_5_BASIC_SCENARIO_INPUT.txt";
+            string resultPath = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_5_BASIC_SCENARIO_OUTPUT.txt";            
             string input = File.ReadAllText(path);
              string errorMessage = string.Empty;
                 CSharpCodeWriter csharpCodeWriter = new CSharpCodeWriter();
