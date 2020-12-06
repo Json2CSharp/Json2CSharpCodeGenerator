@@ -1,30 +1,24 @@
 {
-
-"testobject" : [
-   { 
-       "testprop" : "test",
-       "testprop2" : "test2"
-   },
-   { 
-       "testprop" : "test",
-       "testprop2" : "test2"
-   }
-]
-,
-
-"testparent": {
-    
-"testobject" : [
-   { 
-       "testprop" : "test",
-       "testprop2" : "test2"
-   },
-   { 
-       "testprop" : "test",
-       "testprop2" : "test2"
-   }
-]
-    
-}
-    
+  "testobject": [
+    {
+      "testprop": "test",
+      "testprop2": "test2"
+    },
+    {
+      "testprop": "test",
+      "testprop2": "test2"
+    }
+  ],
+  "testparent": {
+    "testobject": [
+      {
+        "testprop": "test",
+        "testprop2": "test2"
+      },
+      {
+        "testprop": "test",
+        "testprop2": "test2"
+      }
+    ]
+  }
 }

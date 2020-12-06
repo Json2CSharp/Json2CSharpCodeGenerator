@@ -23,7 +23,6 @@ using Xamasoft.JsonClassGenerator.CodeWriters;
 
 namespace TESTS_JSON_to_POJO
 {
-
     [TestClass]
 ";
 $testFileClassName = "  public class Test_{0}" -f $TestName;
@@ -55,12 +54,10 @@ $testFileContentEnd = "
     }
 }";
 
-
-$tesformattedString = $testFileContentStart + $testFileClassName +$testFileContentStart1+ $content1 + [Environment]::NewLine + $content2  + $testFileContentMiddle + $testFileAssertion +$testFileContentEnd
+$tesformattedString = $testFileContentStart + $testFileClassName + $testFileContentStart1 + $content1 + [Environment]::NewLine + $content2  + $testFileContentMiddle + $testFileAssertion + $testFileContentEnd
 
 Set-Content -Path $fullPath -Value $tesformattedString 
 
 Set-Content -Path $fullPathOutput -Value "dfasdfadfasdf" # DO NOT REMOVE : IF THIS IS EMPTY THE TEST WILL SUCCEED, WE WANT TO FAIL INITIALLY
-
 
 Set-ExecutionPolicy Restricted -Confirm:$false -Force;

@@ -10,24 +10,25 @@ using Xamasoft.JsonClassGenerator.CodeWriters;
 
 namespace TESTS_JSON_TO_CSHARP
 {
-
     [TestClass]
     public class Test_8_LargeArrayOfObjects
     {
-
         [TestMethod]
         public void Run()
         {
-            string path = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_8_LargeArrayOfObjects_INPUT.txt"; string resultPath = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_8_LargeArrayOfObjects_OUTPUT.txt";
+            string path = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_8_LargeArrayOfObjects_INPUT.txt"; 
+            string resultPath = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_8_LargeArrayOfObjects_OUTPUT.txt";
             string input = File.ReadAllText(path);
-            string errorMessage = string.Empty;
             CSharpCodeWriter csharpCodeWriter = new CSharpCodeWriter();
 
             Stopwatch watch = new Stopwatch();
             watch.Start();
 
-            JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
-            jsonClassGenerator.CodeWriter = csharpCodeWriter;
+            JsonClassGenerator jsonClassGenerator = new JsonClassGenerator
+            {
+                CodeWriter = csharpCodeWriter
+            };
+            string errorMessage;
             string returnVal = jsonClassGenerator.GenerateClasses(input, out errorMessage).ToString();
             watch.Stop();
 
@@ -35,7 +36,8 @@ namespace TESTS_JSON_TO_CSHARP
             Assert.IsTrue(false);
 
             string resultsCompare = File.ReadAllText(resultPath);
-            //Assert.AreEqual(resultsCompare.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""), returnVal.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""));
+            /*Assert.AreEqual(resultsCompare.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""), 
+                              returnVal.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""));*/
         }
     }
 }
