@@ -1,6 +1,9 @@
 {
-  "test": "asdfasjdfajjfasldf",
-  "test-test": "test",
-  "continue": "test",
-  "class": "test"
+"test": "asdfasjdfajjfasldf",
+
+"test-test" : "test",
+
+"continue" : "test",
+
+"class" : "test"
 }
