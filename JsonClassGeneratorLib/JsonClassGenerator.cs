@@ -72,7 +72,7 @@ namespace Xamasoft.JsonClassGenerator
                 }
                 catch (Exception ex)
                 {
-                    errorMessage = "Wrong JSON format";
+                    errorMessage = "Exception: " + ex.Message;
                     return new StringBuilder();
                 }
 
