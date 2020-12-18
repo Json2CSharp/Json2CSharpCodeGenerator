@@ -102,8 +102,10 @@
     <Content Include="Test_4_BracketError_INPUT.txt" />
     <Content Include="Test_4_BracketError_OUTPUT_1.txt" />
     <Content Include="Test_4_BracketError_OUTPUT.txt" />
+    <Content Include="Test_6_DictionaryTest_INPUT1.txt" />
     <Content Include="Test_6_DictionaryTest_INPUT2.txt" />
     <Content Include="Test_6_DictionaryTest_INPUT.txt" />
+    <Content Include="Test_6_DictionaryTest_OUTPUT1.txt" />
     <Content Include="Test_6_DictionaryTest_OUTPUT2.txt" />
     <Content Include="Test_6_DictionaryTest_OUTPUT.txt" />
     <Content Include="Test_7_DuplictedClasses_INPUT.txt" />
