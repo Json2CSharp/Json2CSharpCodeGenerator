@@ -92,17 +92,21 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 //     sw.AppendLine();
                 // }
 
+                // Check if property name starts with number
+                string memberName = field.MemberName;
+                if (char.IsDigit(field.MemberName[0])) memberName = "_" + memberName;
+
                 if (config.UseProperties)
                 {
                     sw.AppendFormat(prefix + "@JsonProperty" + "(\"{0}\") {1}", field.JsonMemberName,Environment.NewLine);
-                    sw.AppendFormat(prefix + "public {0} get{1}() {{ \r\t\t return this.{2}; }} {3}", field.Type.GetTypeName(), ChangeFirstChar(field.MemberName), ChangeFirstChar(field.MemberName, false), Environment.NewLine);
-                    sw.AppendFormat(prefix + "public void set{1}({0} {2}) {{ \r\t\t this.{2} = {2}; }} {3}", field.Type.GetTypeName(), ChangeFirstChar(field.MemberName), ChangeFirstChar(field.MemberName, false), Environment.NewLine);
-                    sw.AppendFormat(prefix + "{0} {1};", field.Type.GetTypeName(), ChangeFirstChar(field.MemberName, false));
+                    sw.AppendFormat(prefix + "public {0} get{1}() {{ \r\t\t return this.{2}; }} {3}", field.Type.GetTypeName(), ChangeFirstChar(memberName), ChangeFirstChar(memberName, false), Environment.NewLine);
+                    sw.AppendFormat(prefix + "public void set{1}({0} {2}) {{ \r\t\t this.{2} = {2}; }} {3}", field.Type.GetTypeName(), ChangeFirstChar(memberName), ChangeFirstChar(memberName, false), Environment.NewLine);
+                    sw.AppendFormat(prefix + "{0} {1};", field.Type.GetTypeName(), ChangeFirstChar(memberName, false));
                     sw.AppendLine();
                 }
                 else
                 {
-                    string memberName = ChangeFirstChar(field.MemberName, false);
+                     memberName = ChangeFirstChar(memberName, false);
                     if (field.JsonMemberName != memberName)
                         sw.AppendFormat(prefix + "@JsonProperty" + "(\"{0}\") {1}", field.JsonMemberName, Environment.NewLine);
                     sw.AppendFormat(prefix + "public {0} {1};{2}", field.Type.GetTypeName(), memberName, Environment.NewLine);

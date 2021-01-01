@@ -1,8 +1,7 @@
-﻿Set-ExecutionPolicy RemoteSigned -Confirm:$false -Force;
-$TestName = Read-Host -Prompt 'Test Name With Number: THE FORMAT IS [TESTNUMBER]_[TESTNAME], EXAMPLE : 10_TESTNAME.'
+﻿$TestName = Read-Host -Prompt 'Test Name With Number: THE FORMAT IS [TESTNUMBER]_[TESTNAME], EXAMPLE : 10_TESTNAME.'
 # TO CHANGE $Dir TO CHANGE $Dir TO CHANGE $Dir TO CHANGE $Dir TO CHANGE $Dir TO CHANGE $Dir TO CHANGE $Dir TO CHANGE $Dir 
 
-$Dir = "C:\Users\Hilal\Desktop\Json2CSharpCodeGenerator\TESTS-JSON-to-POJO\" 
+$Dir =  ($psise.CurrentFile.FullPath -replace "CreateTest.ps1", "") 
 $fullPath = $Dir + "Test_" + $TestName + ".cs"
 $fullPathInput = $Dir + "Test_" + $TestName + "_INPUT"+ ".txt"
 $fullPathOutput = $Dir + "Test_" + $TestName + "_OUTPUT"+".txt"
@@ -10,7 +9,6 @@ $fullPathOutput = $Dir + "Test_" + $TestName + "_OUTPUT"+".txt"
 New-Item -Path $fullPath  -ItemType File
 New-Item -Path $fullPathInput  -ItemType File
 New-Item -Path $fullPathOutput  -ItemType File
-
 
 $testFileContentStart = "
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -55,12 +53,6 @@ $testFileContentEnd = "
     }
 }";
 
-
 $tesformattedString = $testFileContentStart + $testFileClassName +$testFileContentStart1+ $content1 + [Environment]::NewLine + $content2  + $testFileContentMiddle + $testFileAssertion +$testFileContentEnd
-
 Set-Content -Path $fullPath -Value $tesformattedString 
-
 Set-Content -Path $fullPathOutput -Value "dfasdfadfasdf" # DO NOT REMOVE : IF THIS IS EMPTY THE TEST WILL SUCCEED, WE WANT TO FAIL INITIALLY
-
-
-Set-ExecutionPolicy Restricted -Confirm:$false -Force;

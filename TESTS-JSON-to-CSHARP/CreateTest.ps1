@@ -1,6 +1,6 @@
-﻿Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned -Confirm:$false -Force;
+﻿#Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned -Confirm:$false -Force;
 $TestName = Read-Host -Prompt 'Test Name With Number: THE FORMAT IS [TESTNUMBER]_[TESTNAME], EXAMPLE : 10_TESTNAME.'
-$Dir = $PSScriptRoot + "\" 
+$Dir =  ($psise.CurrentFile.FullPath -replace "CreateTest.ps1", "") 
 $fullPath = $Dir + "Test_" + $TestName + ".cs"
 $fullPathInput = $Dir + "Test_" + $TestName + "_INPUT"+ ".txt"
 $fullPathOutput = $Dir + "Test_" + $TestName + "_OUTPUT"+".txt"
@@ -60,4 +60,4 @@ Set-Content -Path $fullPath -Value $tesformattedString
 Set-Content -Path $fullPathOutput -Value "dfasdfadfasdf" # DO NOT REMOVE : IF THIS IS EMPTY THE TEST WILL SUCCEED, WE WANT TO FAIL INITIALLY
 
 
-Set-ExecutionPolicy Restricted -Confirm:$false -Force;
+#Set-ExecutionPolicy Restricted -Confirm:$false -Force;

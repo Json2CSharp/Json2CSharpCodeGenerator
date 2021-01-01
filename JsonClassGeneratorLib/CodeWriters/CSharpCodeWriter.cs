@@ -133,7 +133,8 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
         {
             var visibility = "public";
 
-            sw.AppendFormat("    {0} class {1}", visibility, type.AssignedName);
+            var className = type.AssignedName;
+            sw.AppendFormat("    {0} class {1}", visibility, className);
             sw.AppendLine("    {");
 
             var prefix = config.UseNestedClasses && !type.IsRoot ? "            " : "        ";
@@ -182,7 +183,10 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
                 // Check if property is a reserved keyword
                 if (ReservedKeywords.Contains(fieldMemberName)) fieldMemberName = "@" + fieldMemberName;
-                
+
+                // Check if property name starts with number
+                if (char.IsDigit(fieldMemberName[0])) fieldMemberName = "_" + fieldMemberName;
+
                 if (config.ExamplesInDocumentation)
                 {
                     sw.AppendFormat(prefix + "/// <summary>");

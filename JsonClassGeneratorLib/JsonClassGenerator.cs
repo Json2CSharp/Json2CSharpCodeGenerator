@@ -24,10 +24,11 @@ namespace Xamasoft.JsonClassGenerator
         public bool NoHelperClass { get; set; }
         public string MainClass { get; set; }
 
-        public class SouRce    {
-        public List<string> includes { get; set; } 
+        public class SouRce
+        {
+            public List<string> includes { get; set; }
 
-    }
+        }
 
         public bool UsePascalCase { get; set; }
         public bool UseJsonAttributes { get; set; }
@@ -222,7 +223,7 @@ namespace Xamasoft.JsonClassGenerator
 
                                         // if (!(item is JObject)) throw new NotSupportedException("Arrays of non-objects are not supported yet.");
                                         if ((item is JObject))
-                                        subexamples.Add((JObject)item);
+                                            subexamples.Add((JObject)item);
                                         ++count;
                                     }
                                 }
@@ -232,7 +233,7 @@ namespace Xamasoft.JsonClassGenerator
                                     {
                                         // if (!(item is JObject)) throw new NotSupportedException("Arrays of non-objects are not supported yet.");
                                         if ((item is JObject))
-                                        subexamples.Add((JObject)item);
+                                            subexamples.Add((JObject)item);
                                     }
                                 }
                             }
@@ -242,7 +243,7 @@ namespace Xamasoft.JsonClassGenerator
                                 {
                                     // if (!(item.Value is JObject)) throw new NotSupportedException("Arrays of non-objects are not supported yet.");
                                     if ((item.Value is JObject))
-                                    subexamples.Add((JObject)item.Value);
+                                        subexamples.Add((JObject)item.Value);
                                 }
                             }
                         }
@@ -294,9 +295,19 @@ namespace Xamasoft.JsonClassGenerator
             for (int i = 0; i < str.Length; i++)
             {
                 var c = str[i];
+                string specialCaseFirstCharIsNumber = string.Empty;
+
+                // Handle the case where the first character is a number
+                if (i == 0 && char.IsDigit(c))
+                    specialCaseFirstCharIsNumber = "_" + c;
+
                 if (char.IsLetterOrDigit(c))
                 {
-                    sb.Append(flag ? char.ToUpper(c) : c);
+                    if (string.IsNullOrEmpty(specialCaseFirstCharIsNumber))
+                        sb.Append(flag ? char.ToUpper(c) : c);
+                    else
+                        sb.Append(flag ? specialCaseFirstCharIsNumber.ToUpper() : specialCaseFirstCharIsNumber);
+                    
                     flag = false;
                 }
                 else
@@ -307,12 +318,13 @@ namespace Xamasoft.JsonClassGenerator
 
             return sb.ToString();
         }
-        
+
 
         public bool HasSecondaryClasses
         {
             get { return Types.Count > 1; }
         }
-    
+
+
     }
 }

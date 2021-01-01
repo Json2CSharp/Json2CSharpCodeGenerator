@@ -1,0 +1,22 @@
+// import com.fasterxml.jackson.databind.ObjectMapper; // version 2.11.1
+// import com.fasterxml.jackson.annotation.JsonProperty; // version 2.11.1
+/* ObjectMapper om = new ObjectMapper();
+Root root = om.readValue(myJsonString), Root.class); */
+public class _1TEST{
+    @JsonProperty("1_star") 
+    public int _1_star;
+    @JsonProperty("2_star") 
+    public int _2_star;
+    @JsonProperty("3_star") 
+    public int _3_star;
+    @JsonProperty("4_star") 
+    public int _4_star;
+    @JsonProperty("5_star") 
+    public int _5_star;
+}
+
+public class Root{
+    @JsonProperty("1_TEST") 
+    public _1TEST _1_TEST;
+}
+

@@ -66,6 +66,7 @@
     <Compile Include="Test_6_DictionaryTest.cs" />
     <Compile Include="Test_7_DuplictedClasses.cs" />
     <Compile Include="Test_8_LargeArrayOfObjects.cs" />
+    <Compile Include="Test_9_HANDLE_NUMBERS.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CreateTest.ps1" />
@@ -112,6 +113,10 @@
     <Content Include="Test_7_DuplictedClasses_OUTPUT.txt" />
     <Content Include="Test_8_LargeArrayOfObjects_INPUT.txt" />
     <Content Include="Test_8_LargeArrayOfObjects_OUTPUT.txt" />
+    <Content Include="Test_9_HANDLE_NUMBERS_INPUT1.txt" />
+    <Content Include="Test_9_HANDLE_NUMBERS_INPUT.txt" />
+    <Content Include="Test_9_HANDLE_NUMBERS_OUTPUT1.txt" />
+    <Content Include="Test_9_HANDLE_NUMBERS_OUTPUT.txt" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

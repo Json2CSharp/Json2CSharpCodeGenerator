@@ -1,8 +1,4 @@
 ﻿{
 
-"test" : {
-
-	"testdd" :{
-}
-
+"test_thing" : 1
 }

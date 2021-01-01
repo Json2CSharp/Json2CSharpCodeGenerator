@@ -1,0 +1,13 @@
+// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
+    public class _1TEST    {
+        public int _10_star { get; set; } 
+        public int _2_star { get; set; } 
+        public int _3_star { get; set; } 
+        public int _4_star { get; set; } 
+        public int _5_star { get; set; } 
+    }
+
+    public class Root    {
+        public _1TEST _1_TEST { get; set; } 
+    }
+
