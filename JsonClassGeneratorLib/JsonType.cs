@@ -82,13 +82,21 @@ namespace Xamasoft.JsonClassGenerator
         public JsonTypeEnum Type { get; private set; }
         public JsonType InternalType { get; private set; }
         public string AssignedName { get; private set; }
-
+        public string OriginalName { get; private set; }
+        public string NewAssignedName { get; private set; }
 
         public void AssignName(string name)
         {
             AssignedName = name;
         }
-
+        public void AssignOriginalName(string name)
+        {
+            OriginalName = name;
+        }
+        public void AssignNewAssignedName(string name)
+        {
+           NewAssignedName = name;
+        }
 
 
         public bool MustCache
@@ -347,7 +355,7 @@ namespace Xamasoft.JsonClassGenerator
         }
 
 
-        public IList<FieldInfo> Fields { get; internal set; }
+        public List<FieldInfo> Fields { get; internal set; }
         public bool IsRoot { get; internal set; }
     }
 }

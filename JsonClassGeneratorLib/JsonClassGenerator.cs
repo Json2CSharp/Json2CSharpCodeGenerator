@@ -85,6 +85,9 @@ namespace Xamasoft.JsonClassGenerator
                 rootType.IsRoot = true;
                 rootType.AssignName("Root");
                 GenerateClass(examples, rootType);
+                
+                Types = HandleDuplicateClasses(Types);
+
                 StringBuilder builder = new StringBuilder();
                 WriteClassesToFile(builder, Types);
 
@@ -138,6 +141,7 @@ namespace Xamasoft.JsonClassGenerator
                     JsonType fieldType;
                     var currentType = new JsonType(this, prop.Value);
                     var propName = prop.Name;
+                   
                     if (jsonFields.TryGetValue(propName, out fieldType))
                     {
 
@@ -153,6 +157,7 @@ namespace Xamasoft.JsonClassGenerator
                         jsonFields.Add(propName, commonType);
                         fieldExamples[propName] = new List<object>();
                     }
+
                     var fe = fieldExamples[propName];
                     var val = prop.Value;
                     if (val.Type == JTokenType.Null || val.Type == JTokenType.Undefined)
@@ -198,7 +203,10 @@ namespace Xamasoft.JsonClassGenerator
                         }
                     }
 
+                    fieldType.AssignOriginalName(field.Key);
                     fieldType.AssignName(CreateUniqueClassName(field.Key));
+                    fieldType.AssignNewAssignedName(ToTitleCase(field.Key));
+
                     GenerateClass(subexamples.ToArray(), fieldType);
                 }
 
@@ -249,15 +257,48 @@ namespace Xamasoft.JsonClassGenerator
                         }
                     }
 
+                    field.Value.InternalType.AssignOriginalName(field.Key);
                     field.Value.InternalType.AssignName(CreateUniqueClassNameFromPlural(field.Key));
+                    field.Value.InternalType.AssignNewAssignedName(pluralizationService.Singularize(ToTitleCase(field.Key)));
+
                     GenerateClass(subexamples.ToArray(), field.Value.InternalType);
                 }
             }
 
-            type.Fields = jsonFields.Select(x => new FieldInfo(this, x.Key, x.Value, UsePascalCase, UseJsonAttributes, UseJsonPropertyName, fieldExamples[x.Key])).ToArray();
+            type.Fields = jsonFields.Select(x => new FieldInfo(this, x.Key, x.Value, UsePascalCase, UseJsonAttributes, UseJsonPropertyName, fieldExamples[x.Key])).ToList();
 
             if (!string.IsNullOrEmpty(type.AssignedName))
                 Types.Add(type);
+        }
+
+        /// <summary>
+        /// Checks if there are any duplicate classes in the input, and merges its corresponding properties (TEST CASE 7)
+        /// </summary>
+        /// <param name="types"></param>
+        /// <returns></returns>
+        private IList<JsonType> HandleDuplicateClasses(IList<JsonType> types) {
+
+            var typesWithNoDuplicates = new List<JsonType>();
+
+            foreach (var type in types)
+            {
+
+                if (!typesWithNoDuplicates.Exists(p => p.OriginalName == type.OriginalName))
+                    typesWithNoDuplicates.Add(type);
+                // Handle duplication
+                else
+                {
+                    var duplicatedType = typesWithNoDuplicates.FirstOrDefault(p => p.OriginalName == type.OriginalName);
+
+                    // Rename all references of this type to the original assigned name
+                    foreach (var field in type.Fields)
+                    {
+                        if (!duplicatedType.Fields.ToList().Exists(x => x.JsonMemberName == field.JsonMemberName))   
+                            duplicatedType.Fields.Add(field);
+                    }
+                }
+            }
+            return typesWithNoDuplicates;
         }
 
         public IList<JsonType> Types { get; private set; }
@@ -271,6 +312,7 @@ namespace Xamasoft.JsonClassGenerator
             var i = 2;
             while (Names.Any(x => x.Equals(finalName, StringComparison.OrdinalIgnoreCase)))
             {
+
                 finalName = name + i.ToString();
                 i++;
             }
