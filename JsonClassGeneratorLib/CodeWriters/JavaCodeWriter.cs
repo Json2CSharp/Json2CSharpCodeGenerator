@@ -94,7 +94,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
                 // Check if property name starts with number
                 string memberName = field.MemberName;
-                if (char.IsDigit(field.MemberName[0])) memberName = "_" + memberName;
+                if (!string.IsNullOrEmpty(field.MemberName) && char.IsDigit(field.MemberName[0])) memberName = "_" + memberName;
 
                 if (config.UseProperties)
                 {

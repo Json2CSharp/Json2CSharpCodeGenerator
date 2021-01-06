@@ -185,7 +185,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 if (ReservedKeywords.Contains(fieldMemberName)) fieldMemberName = "@" + fieldMemberName;
 
                 // Check if property name starts with number
-                if (char.IsDigit(fieldMemberName[0])) fieldMemberName = "_" + fieldMemberName;
+                if (!string.IsNullOrEmpty(fieldMemberName) && char.IsDigit(fieldMemberName[0])) fieldMemberName = "_" + fieldMemberName;
 
                 if (config.ExamplesInDocumentation)
                 {
