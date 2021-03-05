@@ -19,7 +19,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
         private const string NoRenameAttribute = "[Obfuscation(Feature = \"renaming\", Exclude = true)]";
         private const string NoPruneAttribute = "[Obfuscation(Feature = \"trigger\", Exclude = false)]";
 
-        private static readonly HashSet<string> _reservedKeywords = new HashSet<string>( StringComparer.Ordinal ) {
+        private static readonly HashSet<string> _reservedKeywords = new HashSet<string>( StringComparer.OrdinalIgnoreCase ) {
             "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const", "continue",
             "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false", "finally",
             "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "int", "interface", "internal", "is", "lock", "long",
@@ -167,6 +167,11 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             else
 #endif
             {
+                if (config.ImmutableClasses)
+                {
+                    this.WriteClassConstructor(config, sw, type, prefix);
+                }
+
                 this.WriteClassMembers(config, sw, type, prefix);
             }
 #if CAN_SUPPRESS
@@ -188,20 +193,41 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             sw.AppendLine();
         }
 
+        /// <summary>Converts an identifier from JSON into a C#-safe PascalCase identifier.</summary>
+        private string GetCSharpPascalCaseName(string name)
+        {
+            // Check if property is a reserved keyword
+            if (this.IsReservedKeyword(name)) name = "@" + name;
+
+            // Check if property name starts with number
+            if (!string.IsNullOrEmpty(name) && char.IsDigit(name[0])) name = "_" + name;
+
+            return name;
+        }
+
+        /// <summary>Converts a camelCase identifier from JSON into a C#-safe camelCase identifier.</summary>
+        private string GetCSharpCamelCaseName(string camelCaseFromJson)
+        {
+            if (String.IsNullOrEmpty(camelCaseFromJson)) throw new ArgumentException(message: "Value cannot be null or empty.", paramName: nameof(camelCaseFromJson));
+
+            string name = camelCaseFromJson;
+
+            if (Char.IsUpper(name[0])) name = Char.ToLower(name[0]) + name.Substring(startIndex: 1);
+
+            if      (!Char.IsLetter(name[0]))      name = "_" + name;
+            else if (this.IsReservedKeyword(name)) name = "@" + name;
+
+            return name;
+        }
+
         public void WriteClassMembers(IJsonClassGeneratorConfig config, StringBuilder sw, JsonType type, string prefix)
         {
             int count = type.Fields.Count;
             int counter = 1;
 
-            foreach (var field in type.Fields)
+            foreach (FieldInfo field in type.Fields)
             {
-                string fieldMemberName = field.MemberName;
-
-                // Check if property is a reserved keyword
-                if (this.IsReservedKeyword(fieldMemberName)) fieldMemberName = "@" + fieldMemberName;
-
-                // Check if property name starts with number
-                if (!string.IsNullOrEmpty(fieldMemberName) && char.IsDigit(fieldMemberName[0])) fieldMemberName = "_" + fieldMemberName;
+                string fieldMemberName = this.GetCSharpPascalCaseName(field.MemberName);
 
                 if (config.ExamplesInDocumentation)
                 {
@@ -237,6 +263,18 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 ++counter;
             }
 
+        }
+
+        private void WriteClassConstructor(IJsonClassGeneratorConfig config, StringBuilder sw, JsonType type, string prefix)
+        {
+            sw.AppendFormat(prefix + "public {0}({1}", type.AssignedName, Environment.NewLine);
+
+            foreach (FieldInfo field in type.Fields)
+            {
+
+            }
+
+            sw.AppendLine  (prefix + ")");
         }
 
     }
