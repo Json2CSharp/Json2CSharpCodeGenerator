@@ -37,7 +37,9 @@ namespace Xamasoft.JsonClassGenerator
 
         private readonly IJsonClassGeneratorConfig generator;
 
+        /// <summary>Pascal-cased.</summary>
         public string                MemberName     { get; }
+        /// <summary>Normally camelCased.</summary>
         public string                JsonMemberName { get; }
         public JsonType              Type           { get; }
         public IReadOnlyList<object> Examples       { get; }

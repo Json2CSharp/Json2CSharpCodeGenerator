@@ -68,13 +68,13 @@ namespace Xamasoft.JsonClassGenerator
                     using (JsonTextReader reader = new JsonTextReader(sr))
                     {
                         JToken json = JToken.ReadFrom(reader);
-                        if (json is JArray)
+                        if (json is JArray jArray)
                         {
-                            examples = ( (JArray)json ).Cast<JObject>().ToArray();
+                            examples = jArray.Cast<JObject>().ToArray();
                         }
-                        else if (json is JObject)
+                        else if (json is JObject jObject)
                         {
-                            examples = new[] { (JObject)json };
+                            examples = new[] { jObject };
                         }
                     }
                 }
@@ -177,7 +177,9 @@ namespace Xamasoft.JsonClassGenerator
                     {
                         Object v = val.Type == JTokenType.Array || val.Type == JTokenType.Object ? val : val.Value<object>();
                         if (!fe.Any(x => v.Equals(x)))
+                        {
                             fe.Add(v);
+                        }
                     }
                 }
                 first = false;
@@ -247,7 +249,9 @@ namespace Xamasoft.JsonClassGenerator
                                     {
                                         // if (!(item is JObject)) throw new NotSupportedException("Arrays of non-objects are not supported yet.");
                                         if (( item is JObject ))
+                                        {
                                             subexamples.Add((JObject)item);
+                                        }
                                     }
                                 }
                             }
@@ -257,7 +261,9 @@ namespace Xamasoft.JsonClassGenerator
                                 {
                                     // if (!(item.Value is JObject)) throw new NotSupportedException("Arrays of non-objects are not supported yet.");
                                     if (( item.Value is JObject ))
+                                    {
                                         subexamples.Add((JObject)item.Value);
+                                    }
                                 }
                             }
                         }
