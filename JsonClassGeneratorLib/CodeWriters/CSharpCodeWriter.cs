@@ -327,6 +327,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
         private void WriteClassConstructor(IJsonClassGeneratorConfig config, StringBuilder sw, JsonType type, string indentMembers, string indentBodies)
         {
+            // Write an empty constructor on a single-line:
             if(type.Fields.Count == 0)
             {
                 sw.AppendFormat(indentMembers + "public {0}() {{}}{1}", type.AssignedName, Environment.NewLine);
@@ -334,9 +335,14 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             }
 
             // Constructor signature:
+            {
+                if(config.UseJsonAttributes)
+                {
+                    sw.AppendLine(indentMembers + "[JsonConstructor]");
+                }
 
-            sw.AppendFormat(indentMembers + "public {0}({1}", type.AssignedName, Environment.NewLine);
-
+                sw.AppendFormat(indentMembers + "public {0}({1}", type.AssignedName, Environment.NewLine);
+                
             {
                 string attributeName = config.UseJsonPropertyName ? "JsonPropertyName" : "JsonProperty";
 

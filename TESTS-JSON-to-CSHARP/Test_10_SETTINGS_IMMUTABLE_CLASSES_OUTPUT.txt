@@ -1,7 +1,8 @@
-// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
+﻿// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
 
     public class Awesomeobject
     {
+        [JsonConstructor]
         public Awesomeobject(
             [JsonProperty("SomeProps1")] int someProps1,
             [JsonProperty("SomeProps2")] string someProps2
@@ -20,6 +21,7 @@
 
     public class User
     {
+        [JsonConstructor]
         public User(
             [JsonProperty("id")] string id,
             [JsonProperty("name")] string name,
@@ -58,6 +60,7 @@
 
     public class Class1
     {
+        [JsonConstructor]
         public Class1(
             [JsonProperty("id")] int id,
             [JsonProperty("user_id")] string userId,
@@ -96,6 +99,7 @@
 
     public class Class2
     {
+        [JsonConstructor]
         public Class2(
             [JsonProperty("SomePropertyOfClass2")] string somePropertyOfClass2
         )
@@ -109,6 +113,7 @@
 
     public class Root
     {
+        [JsonConstructor]
         public Root(
             [JsonProperty("Class1")] Class1 class1,
             [JsonProperty("Class2")] Class2 class2
