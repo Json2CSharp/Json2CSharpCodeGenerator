@@ -37,6 +37,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.csharpOutputTextbox = new System.Windows.Forms.TextBox();
 			this.outputLabel = new System.Windows.Forms.Label();
 			this.toolStrip = new System.Windows.Forms.ToolStrip();
+			this.openButton = new System.Windows.Forms.ToolStripButton();
 			this.optsPascalCase = new System.Windows.Forms.ToolStripButton();
 			this.sep1 = new System.Windows.Forms.ToolStripSeparator();
 			this.optsAttributeMode = new System.Windows.Forms.ToolStripDropDownButton();
@@ -51,6 +52,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.optImmutable = new System.Windows.Forms.ToolStripButton();
 			this.copyOutput = new System.Windows.Forms.ToolStripButton();
 			this.statusStrip = new System.Windows.Forms.StatusStrip();
+			this.ofd = new System.Windows.Forms.OpenFileDialog();
 			((System.ComponentModel.ISupportInitialize)(this.split)).BeginInit();
 			this.split.Panel1.SuspendLayout();
 			this.split.Panel2.SuspendLayout();
@@ -111,8 +113,9 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.inputLabel.Location = new System.Drawing.Point(1, 4);
 			this.inputLabel.Margin = new System.Windows.Forms.Padding(1, 4, 4, 2);
 			this.inputLabel.Name = "inputLabel";
+			this.inputLabel.Size = new System.Drawing.Size(395, 23);
 			this.inputLabel.TabIndex = 1;
-			this.inputLabel.Text = "JSON Input";
+			this.inputLabel.Text = "Paste JSON Input or drag and drop a *.json file:";
 			// 
 			// tableLayoutPanel2
 			// 
@@ -146,11 +149,12 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.outputLabel.Margin = new System.Windows.Forms.Padding(1, 4, 4, 2);
 			this.outputLabel.Name = "outputLabel";
 			this.outputLabel.TabIndex = 1;
-			this.outputLabel.Text = "Generated C# Output";
+			this.outputLabel.Text = "Generated C# output:";
 			// 
 			// toolStrip
 			// 
 			this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openButton,
             this.optsPascalCase,
             this.sep1,
             this.optsAttributeMode,
@@ -161,7 +165,15 @@ namespace Xamasoft.JsonClassGenerator.WinForms
             this.copyOutput});
 			this.toolStrip.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip.Name = "toolStrip";
+			this.toolStrip.Size = new System.Drawing.Size(800, 25);
 			this.toolStrip.TabIndex = 0;
+			// 
+			// openButton
+			// 
+			this.openButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.openButton.Name = "openButton";
+			this.openButton.Size = new System.Drawing.Size(49, 22);
+			this.openButton.Text = "Open...";
 			// 
 			// optsPascalCase
 			// 
@@ -274,6 +286,10 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.statusStrip.TabIndex = 1;
 			this.statusStrip.Text = "statusStrip1";
 			// 
+			// ofd
+			// 
+			this.ofd.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
+			this.ofd.SupportMultiDottedExtensions = true;
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -325,6 +341,8 @@ namespace Xamasoft.JsonClassGenerator.WinForms
         private System.Windows.Forms.ToolStripMenuItem optAttribJP;
         private System.Windows.Forms.ToolStripButton copyOutput;
         private System.Windows.Forms.StatusStrip statusStrip;
+        private System.Windows.Forms.ToolStripButton openButton;
+        private System.Windows.Forms.OpenFileDialog ofd;
     }
 }
 
