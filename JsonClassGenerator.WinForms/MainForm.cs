@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 using Microsoft.Win32;
@@ -38,6 +39,8 @@ namespace Xamasoft.JsonClassGenerator.WinForms
             this.copyOutput.Enabled = false;
 
             this.jsonInputTextbox.TextChanged += this.JsonInputTextbox_TextChanged;
+            this.jsonInputTextbox.DragDrop += this.JsonInputTextbox_DragDrop;
+            this.jsonInputTextbox.DragOver += this.JsonInputTextbox_DragOver;
 
             // Invoke event-handlers to set initial toolstrip text:
             this.optsAttributeMode.Tag = this.optsAttributeMode.Text + ": {0}";
@@ -202,7 +205,72 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 
         #endregion
 
-        //
+        #region Drag and Drop
+
+        private void JsonInputTextbox_DragOver(Object sender, DragEventArgs e)
+        {
+            bool acceptable = 
+                e.Data.GetDataPresent( DataFormats.FileDrop ) ||
+//              e.Data.GetDataPresent( DataFormats.Text ) ||
+//              e.Data.GetDataPresent( DataFormats.OemText ) ||
+                e.Data.GetDataPresent( DataFormats.UnicodeText, autoConvert: true )// ||
+//              e.Data.GetDataPresent( DataFormats.Html ) ||
+//              e.Data.GetDataPresent( DataFormats.StringFormat ) ||
+//              e.Data.GetDataPresent( DataFormats.Rtf )
+            ;
+
+            if( acceptable )
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void JsonInputTextbox_DragDrop(Object sender, DragEventArgs e)
+        {
+            if( e.Data.GetDataPresent( DataFormats.FileDrop ) )
+            {
+                String[] fileNames = (String[])e.Data.GetData( DataFormats.FileDrop );
+                if( fileNames.Length >= 1 )
+                {
+                    try
+                    {
+                        String jsonText = System.IO.File.ReadAllText( fileNames[0] );
+                        this.jsonInputTextbox.Text = jsonText; // This will invoke `GenerateCSharp()`.
+                    }
+                    catch( Exception ex )
+                    {
+                        this.csharpOutputTextbox.Text = "Error:\r\n" + ex.ToString();
+                    }
+                }
+            }
+            else if( e.Data.GetDataPresent( DataFormats.UnicodeText, autoConvert: true ) )
+            {
+                String text = (String)e.Data.GetData( DataFormats.UnicodeText, autoConvert: true );
+                if( text != null )
+                {
+                    this.jsonInputTextbox.Text = text; // This will invoke `GenerateCSharp()`.
+                }
+            }
+        }
+
+        /// <summary>This regex won't match <c>\r\n</c>, only <c>\n</c>.</summary>
+        private static readonly Regex _onlyUnixLineBreaks = new Regex( "(?<!\r)\n", RegexOptions.Compiled ); // Don't use `[^\r]?\n` because it *will* match `\r\n`, and don't use `[^\r]\n` because it won't match a leading `$\n` in a file.
+
+        private static String RepairLineBreaks( String text )
+        {
+            if( _onlyUnixLineBreaks.IsMatch( text ) )
+            {
+                return _onlyUnixLineBreaks.Replace( text, replacement: "\r\n" );
+            }
+
+            return text;
+        }
+
+        #endregion
 
         private void ConfigureGenerator( IJsonClassGeneratorConfig config )
         {
@@ -244,7 +312,18 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 
         private void JsonInputTextbox_TextChanged(Object sender, EventArgs e)
         {
-            this.GenerateCSharp();
+            if( this.preventReentrancy ) return;
+            this.preventReentrancy = true;
+            try
+            {
+                this.jsonInputTextbox.Text = RepairLineBreaks( this.jsonInputTextbox.Text );
+
+                this.GenerateCSharp();
+            }
+            finally
+            {
+                this.preventReentrancy = false;
+            }
         }
 
         private void GenerateCSharp()
@@ -271,7 +350,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
                 else
                 {
                     this.csharpOutputTextbox.Text = sb.ToString();
-                     this.copyOutput.Enabled = true;
+                    this.copyOutput.Enabled = true;
                 }
             }
             catch( Exception ex )
