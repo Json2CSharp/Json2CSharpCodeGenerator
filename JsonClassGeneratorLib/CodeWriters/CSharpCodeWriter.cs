@@ -212,7 +212,36 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
             string name = camelCaseFromJson;
 
-            if (Char.IsUpper(name[0])) name = Char.ToLower(name[0]) + name.Substring(startIndex: 1);
+            //
+
+            if (name.Length >= 3)
+            {
+                if (Char.IsUpper(name[0]) && Char.IsUpper(name[1]) && Char.IsLower(name[2]))
+                {
+                    // "ABc" --> "abc" // this may be wrong in some cases, if the first two letters are a 2-letter acronym, like "IO".
+                    name = name.Substring(startIndex: 0, length: 2).ToLowerInvariant() + name.Substring(startIndex: 2);
+                }
+                else if (Char.IsUpper(name[0]))
+                {
+                    // "Abc" --> "abc"
+                    // "AbC" --> "abC"
+                    name = Char.ToLower(name[0]) + name.Substring(startIndex: 1);
+                }
+            }
+            else if (name.Length == 2)
+            {
+                if (Char.IsUpper(name[0]))
+                {
+                    // "AB" --> "ab"
+                    // "Ab" --> "ab"
+                    name = name.ToLowerInvariant();
+                }
+            }
+            else // Implicit: name.Length == 1
+            {
+                // "A" --> "a"
+                name = name.ToLowerInvariant();
+            }
 
             if      (!Char.IsLetter(name[0]))      name = "_" + name;
             else if (this.IsReservedKeyword(name)) name = "@" + name;
@@ -227,7 +256,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
             foreach (FieldInfo field in type.Fields)
             {
-                string fieldMemberName = this.GetCSharpPascalCaseName(field.MemberName);
+                string classPropertyName = this.GetCSharpPascalCaseName(field.MemberName);
 
                 if (config.ExamplesInDocumentation)
                 {
@@ -248,11 +277,15 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
                 if (config.UseFields)
                 {
-                    sw.AppendFormat(prefix + "public {0} {1}; {2}", field.Type.GetTypeName(), fieldMemberName, Environment.NewLine);
+                    sw.AppendFormat(prefix + "public {0} {1};{2}", field.Type.GetTypeName(), classPropertyName, Environment.NewLine);
+                }
+                else if (config.ImmutableClasses)
+                {
+                    sw.AppendFormat(prefix + "public {0} {1} {{ get; }}{2}", field.Type.GetTypeName(), classPropertyName, Environment.NewLine);
                 }
                 else
                 {
-                    sw.AppendFormat(prefix + "public {0} {1} {{ get; set; }} {2}", field.Type.GetTypeName(), fieldMemberName, Environment.NewLine);
+                    sw.AppendFormat(prefix + "public {0} {1} {{ get; set; }}{2}", field.Type.GetTypeName(), classPropertyName, Environment.NewLine);
                 }
 
                 if ((config.UseJsonAttributes || config.UseJsonPropertyName  )&& count != counter)
@@ -267,14 +300,46 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
         private void WriteClassConstructor(IJsonClassGeneratorConfig config, StringBuilder sw, JsonType type, string prefix)
         {
+            if(type.Fields.Count == 0)
+            {
+                sw.AppendFormat(prefix + "public {0}() {{}}{1}", type.AssignedName, Environment.NewLine);
+                return;
+            }
+
+            // Constructor signature:
+
             sw.AppendFormat(prefix + "public {0}({1}", type.AssignedName, Environment.NewLine);
+
+            {
+                string attributeName = config.UseJsonPropertyName ? "JsonPropertyName" : "JsonProperty";
+
+                FieldInfo lastField = type.Fields[type.Fields.Count-1];
+
+                foreach (FieldInfo field in type.Fields)
+                {
+                    string ctorParameterName = this.GetCSharpCamelCaseName(field.JsonMemberName);
+
+                    bool isLast = Object.ReferenceEquals(field, lastField);
+                    string comma = isLast ? "" : ",";
+
+                    sw.AppendFormat(prefix + "[{0}(\"{1}\")] {2} {3}{4}{5}", /*0:*/ attributeName, /*1:*/ field.JsonMemberName, /*2:*/ field.Type.GetTypeName(), /*3:*/ ctorParameterName, /*4:*/ comma, /*5:*/ Environment.NewLine);
+                }
+            }
+
+            sw.AppendLine(prefix + ")");
+
+            // Constructor body:
+            sw.AppendLine(prefix + "{");
 
             foreach (FieldInfo field in type.Fields)
             {
+                string ctorParameterName = this.GetCSharpCamelCaseName(field.JsonMemberName);
+                string classPropertyName = this.GetCSharpPascalCaseName(field.MemberName);
 
+                sw.AppendFormat(prefix + "this.{0} = {1};{2}", /*0:*/ classPropertyName, /*1:*/ ctorParameterName, /*2:*/ Environment.NewLine);
             }
 
-            sw.AppendLine  (prefix + ")");
+            sw.AppendLine(prefix + "}");
         }
 
     }
