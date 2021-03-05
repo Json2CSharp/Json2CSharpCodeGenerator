@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+
+using Microsoft.Win32;
 
 namespace Xamasoft.JsonClassGenerator.WinForms
 {
@@ -11,7 +14,18 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 
         public MainForm()
         {
+            // `IconTitleFont` is what WinForms *should* be using by default.
+            // Need to set `this.Font` first, before `this.InitializeComponent();` to ensure font inheritance by controls in the form.
+            this.Font = SystemFonts.IconTitleFont;
+
             this.InitializeComponent();
+
+            this.ResetFonts();
+
+            // Also: https://docs.microsoft.com/en-us/dotnet/desktop/winforms/how-to-respond-to-font-scheme-changes-in-a-windows-forms-application?view=netframeworkdesktop-4.8
+            SystemEvents.UserPreferenceChanged += this.SystemEvents_UserPreferenceChanged;
+
+            //
 
             this.optAttribJP    .CheckedChanged += this.OnAttributesModeCheckedChanged;
             this.optAttribJpn   .CheckedChanged += this.OnAttributesModeCheckedChanged;
@@ -30,16 +44,87 @@ namespace Xamasoft.JsonClassGenerator.WinForms
             this.OnMemberModeCheckedChanged    ( this.optMemberProps, EventArgs.Empty );
         }
 
+        #region WinForms Taxes
+
+        private static Font GetMonospaceFont( Single emFontSizePoints )
+        {
+            // See if Consolas or Lucida Sans Typewriter is available before falling-back:
+            String[] preferredFonts = new[] { "Consolas", "Lucida Sans Typewriter" };
+            foreach( String fontName in preferredFonts )
+            {
+                if( TestFont( fontName, emFontSizePoints ) )
+                {
+                    return new Font( fontName, emFontSizePoints, FontStyle.Regular );
+                }
+            }
+
+            // Fallback:
+            return new Font( FontFamily.GenericMonospace, emSize: emFontSizePoints );
+        }
+
+        private static Boolean TestFont( String fontName, Single emFontSizePoints )
+        {
+            try
+            {
+                using( Font test = new Font( fontName, emFontSizePoints, FontStyle.Regular ) )
+                {
+                    return test.Name == fontName;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private void SystemEvents_UserPreferenceChanged(Object sender, UserPreferenceChangedEventArgs e)
+        {
+            switch( e.Category )
+            {
+            case UserPreferenceCategory.Accessibility:
+            case UserPreferenceCategory.Window:
+            case UserPreferenceCategory.VisualStyle:
+            case UserPreferenceCategory.Menu:
+                this.ResetFonts();
+                break;
+            }
+        }
+
+        private void ResetFonts()
+        {
+            this.Font = SystemFonts.IconTitleFont;
+
+            Font monospaceFont = GetMonospaceFont( emFontSizePoints: SystemFonts.IconTitleFont.SizeInPoints );
+            this.jsonInputTextbox   .Font = monospaceFont;
+            this.csharpOutputTextbox.Font = monospaceFont;
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            
+            if( !e.Cancel )
+            {
+                SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(SystemEvents_UserPreferenceChanged);
+            }
+        }
+
+        #endregion
+
         #region Highlander: There can only be one!
 
         private void OnAttributesModeCheckedChanged(Object sender, EventArgs e)
         {
             this.WhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohh( (ToolStripMenuItem)sender, defaultItem: this.optAttribJP, parent: this.optsAttributeMode );
+
+            this.GenerateCSharp();
         }
 
         private void OnMemberModeCheckedChanged(Object sender, EventArgs e)
         {
             this.WhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohh( (ToolStripMenuItem)sender, defaultItem: this.optMemberProps, parent: this.optMembersMode );
+
+            this.GenerateCSharp();
         }
 
         /// <summary>https://www.youtube.com/watch?v=Qy1J_i32wTg</summary>
@@ -155,6 +240,11 @@ namespace Xamasoft.JsonClassGenerator.WinForms
         }
 
         private void JsonInputTextbox_TextChanged(Object sender, EventArgs e)
+        {
+            this.GenerateCSharp();
+        }
+
+        private void GenerateCSharp()
         {
             String jsonText = this.jsonInputTextbox.Text;
             if( String.IsNullOrWhiteSpace( jsonText ) )

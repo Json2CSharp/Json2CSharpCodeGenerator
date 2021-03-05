@@ -71,7 +71,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			// split.Panel2
 			// 
 			this.split.Panel2.Controls.Add(this.tableLayoutPanel2);
-			this.split.Size = new System.Drawing.Size(800, 425);
+			this.split.Size = new System.Drawing.Size(800, 97);
 			this.split.SplitterDistance = 400;
 			this.split.TabIndex = 0;
 			// 
@@ -87,26 +87,27 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(400, 425);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(400, 97);
 			this.tableLayoutPanel1.TabIndex = 1;
 			// 
 			// jsonInputTextbox
 			// 
 			this.jsonInputTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.jsonInputTextbox.Location = new System.Drawing.Point(3, 24);
+			this.jsonInputTextbox.Location = new System.Drawing.Point(3, 22);
 			this.jsonInputTextbox.Multiline = true;
 			this.jsonInputTextbox.Name = "jsonInputTextbox";
+			this.jsonInputTextbox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
 			this.jsonInputTextbox.Size = new System.Drawing.Size(394, 398);
 			this.jsonInputTextbox.TabIndex = 0;
 			this.jsonInputTextbox.WordWrap = false;
 			// 
 			// inputLabel
 			// 
-			this.inputLabel.AutoSize = true;
-			this.inputLabel.Location = new System.Drawing.Point(4, 4);
-			this.inputLabel.Margin = new System.Windows.Forms.Padding(4);
+			this.inputLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.inputLabel.Location = new System.Drawing.Point(1, 4);
+			this.inputLabel.Margin = new System.Windows.Forms.Padding(1, 4, 4, 2);
 			this.inputLabel.Name = "inputLabel";
-			this.inputLabel.Size = new System.Drawing.Size(62, 13);
+			this.inputLabel.Size = new System.Drawing.Size(395, 13);
 			this.inputLabel.TabIndex = 1;
 			this.inputLabel.Text = "JSON Input";
 			// 
@@ -122,27 +123,28 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.tableLayoutPanel2.RowCount = 2;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(396, 425);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(396, 97);
 			this.tableLayoutPanel2.TabIndex = 1;
 			// 
 			// csharpOutputTextbox
 			// 
 			this.csharpOutputTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.csharpOutputTextbox.Location = new System.Drawing.Point(3, 24);
+			this.csharpOutputTextbox.Location = new System.Drawing.Point(3, 22);
 			this.csharpOutputTextbox.Multiline = true;
 			this.csharpOutputTextbox.Name = "csharpOutputTextbox";
 			this.csharpOutputTextbox.ReadOnly = true;
-			this.csharpOutputTextbox.Size = new System.Drawing.Size(390, 398);
+			this.csharpOutputTextbox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			this.csharpOutputTextbox.Size = new System.Drawing.Size(390, 72);
 			this.csharpOutputTextbox.TabIndex = 0;
 			this.csharpOutputTextbox.WordWrap = false;
 			// 
 			// outputLabel
 			// 
-			this.outputLabel.AutoSize = true;
-			this.outputLabel.Location = new System.Drawing.Point(4, 4);
-			this.outputLabel.Margin = new System.Windows.Forms.Padding(4);
+			this.outputLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.outputLabel.Location = new System.Drawing.Point(1, 4);
+			this.outputLabel.Margin = new System.Windows.Forms.Padding(1, 4, 4, 2);
 			this.outputLabel.Name = "outputLabel";
-			this.outputLabel.Size = new System.Drawing.Size(109, 13);
+			this.outputLabel.Size = new System.Drawing.Size(391, 13);
 			this.outputLabel.TabIndex = 1;
 			this.outputLabel.Text = "Generated C# Output";
 			// 
@@ -194,21 +196,21 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.optAttribJP.CheckOnClick = true;
 			this.optAttribJP.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.optAttribJP.Name = "optAttribJP";
-			this.optAttribJP.Size = new System.Drawing.Size(222, 22);
-			this.optAttribJP.Text = "Use [JsonProperty(\"\")]";
+			this.optAttribJP.Size = new System.Drawing.Size(204, 22);
+			this.optAttribJP.Text = "Use [JsonProperty]";
 			// 
 			// optAttribJpn
 			// 
 			this.optAttribJpn.CheckOnClick = true;
 			this.optAttribJpn.Name = "optAttribJpn";
-			this.optAttribJpn.Size = new System.Drawing.Size(222, 22);
-			this.optAttribJpn.Text = "Use [JsonPropertyName(\"\")]";
+			this.optAttribJpn.Size = new System.Drawing.Size(204, 22);
+			this.optAttribJpn.Text = "Use [JsonPropertyName]";
 			// 
 			// optAttribNone
 			// 
 			this.optAttribNone.CheckOnClick = true;
 			this.optAttribNone.Name = "optAttribNone";
-			this.optAttribNone.Size = new System.Drawing.Size(222, 22);
+			this.optAttribNone.Size = new System.Drawing.Size(204, 22);
 			this.optAttribNone.Text = "No attributes";
 			// 
 			// sep2
@@ -233,14 +235,14 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.optMemberProps.CheckOnClick = true;
 			this.optMemberProps.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.optMemberProps.Name = "optMemberProps";
-			this.optMemberProps.Size = new System.Drawing.Size(180, 22);
+			this.optMemberProps.Size = new System.Drawing.Size(149, 22);
 			this.optMemberProps.Text = "Use properties";
 			// 
 			// optMemberFields
 			// 
 			this.optMemberFields.CheckOnClick = true;
 			this.optMemberFields.Name = "optMemberFields";
-			this.optMemberFields.Size = new System.Drawing.Size(180, 22);
+			this.optMemberFields.Size = new System.Drawing.Size(149, 22);
 			this.optMemberFields.Text = "Use fields";
 			// 
 			// sep3
@@ -261,7 +263,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(800, 450);
+			this.ClientSize = new System.Drawing.Size(800, 122);
 			this.Controls.Add(this.split);
 			this.Controls.Add(this.toolStrip);
 			this.DoubleBuffered = true;
