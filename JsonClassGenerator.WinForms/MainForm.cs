@@ -39,6 +39,9 @@ namespace Xamasoft.JsonClassGenerator.WinForms
             this.optMemberFields.CheckedChanged += this.OnMemberModeCheckedChanged;
             this.optMemberProps .CheckedChanged += this.OnMemberModeCheckedChanged;
 
+            this.optImmutable   .CheckedChanged += this.OnOptionsChanged;
+            this.optsPascalCase .CheckedChanged += this.OnOptionsChanged;
+
             this.copyOutput.Click += this.CopyOutput_Click;
             this.copyOutput.Enabled = false;
 
@@ -208,6 +211,11 @@ namespace Xamasoft.JsonClassGenerator.WinForms
         }
 
         #endregion
+
+        private void OnOptionsChanged(Object sender, EventArgs e)
+        {
+            this.GenerateCSharp();
+        }
 
         #region Drag and Drop
 
