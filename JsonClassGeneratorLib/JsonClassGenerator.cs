@@ -15,39 +15,45 @@ namespace Xamasoft.JsonClassGenerator
 {
     public class JsonClassGenerator : IJsonClassGeneratorConfig
     {
-        public string Example { get; set; }
-        public string Namespace { get; set; }
-        public string SecondaryNamespace { get; set; }
-        public bool UseFields { get; set; }
-        public bool InternalVisibility { get; set; }
-        public bool ExplicitDeserialization { get; set; }
-        public bool NoHelperClass { get; set; }
-        public string MainClass { get; set; }
+        #region IJsonClassGeneratorConfig
 
+        public string       Namespace                  { get; set; }
+        public string       SecondaryNamespace         { get; set; }
+        public bool         UseFields                  { get; set; }
+        public bool         InternalVisibility         { get; set; }
+        public bool         ExplicitDeserialization    { get; set; }
+        public bool         NoHelperClass              { get; set; }
+        public string       MainClass                  { get; set; }
+        public bool         UseProperties              { get; set; }
+        public bool         UsePascalCase              { get; set; }
+        public bool         UseJsonAttributes          { get; set; }
+        public bool         UseJsonPropertyName        { get; set; }
+        public bool         UseNestedClasses           { get; set; }
+        public bool         ApplyObfuscationAttributes { get; set; }
+        public bool         SingleFile                 { get; set; }
+        public ICodeBuilder CodeWriter                 { get; set; }
+        public bool         HasSecondaryClasses        => this.Types.Count > 1;
+        public bool         AlwaysUseNullableValues    { get; set; }
+        public bool         UseNamespaces              => !String.IsNullOrEmpty(this.Namespace);
+        public bool         ExamplesInDocumentation    { get; set; }
+        public bool         ImmutableClasses           { get; set; }
+
+
+        #endregion
+
+        public string Example { get; set; }
+        
         public class SouRce
         {
             public List<string> includes { get; set; }
 
         }
 
-        public bool UsePascalCase { get; set; }
-        public bool UseJsonAttributes { get; set; }
-        public bool UseJsonPropertyName { get; set; }
-
-
-        public bool UseNestedClasses { get; set; }
-        public bool UseProperties { get; set; }
-        public bool ApplyObfuscationAttributes { get; set; }
-        public bool SingleFile { get; set; }
-        public ICodeBuilder CodeWriter { get; set; }
         public TextWriter OutputStream { get; set; }
-        public bool AlwaysUseNullableValues { get; set; }
-        public bool ExamplesInDocumentation { get; set; }
 
         private PluralizationService pluralizationService = PluralizationService.CreateService(new CultureInfo("en-us"));
 
         private bool used = false;
-        public bool UseNamespaces { get { return Namespace != null; } }
 
         public StringBuilder GenerateClasses(string jsonInput, out string errorMessage)
         {
@@ -130,7 +136,7 @@ namespace Xamasoft.JsonClassGenerator
         private void GenerateClass(JObject[] examples, JsonType type)
         {
             var jsonFields = new Dictionary<string, JsonType>();
-            var fieldExamples = new Dictionary<string, IList<object>>();
+            var fieldExamples = new Dictionary<string,List<object>>();
 
             var first = true;
 
@@ -327,8 +333,6 @@ namespace Xamasoft.JsonClassGenerator
             return CreateUniqueClassName(pluralizationService.Singularize(plural));
         }
 
-
-
         internal static string ToTitleCase(string str)
         {
             var sb = new StringBuilder(str.Length);
@@ -360,13 +364,5 @@ namespace Xamasoft.JsonClassGenerator
 
             return sb.ToString();
         }
-
-
-        public bool HasSecondaryClasses
-        {
-            get { return Types.Count > 1; }
-        }
-
-
     }
 }
