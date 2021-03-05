@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -363,15 +363,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 string ctorParameterName = this.GetCSharpCamelCaseName(field.MemberName);
                 string classPropertyName = this.GetCSharpPascalCaseName(field.MemberName);
 
-                if(field.Type.Type == JsonTypeEnum.Array && config.ImmutableClasses)
-                {
-                    string listElementTypeName = this.GetTypeName(field.Type.InternalType, config);
-                    sw.AppendFormat(indentBodies + "this.{0} = {1} ?? (IReadOnlyList<{2}>)Array.Empty<{2}>();{3}", /*0:*/ classPropertyName, /*1:*/ ctorParameterName, /*2:*/ listElementTypeName, /*3:*/ Environment.NewLine);
-                }
-                else
-                {
-                    sw.AppendFormat(indentBodies + "this.{0} = {1};{2}", /*0:*/ classPropertyName, /*1:*/ ctorParameterName, /*2:*/ Environment.NewLine);
-                }
+                sw.AppendFormat(indentBodies + "this.{0} = {1};{2}", /*0:*/ classPropertyName, /*1:*/ ctorParameterName, /*2:*/ Environment.NewLine);
             }
 
             sw.AppendLine(indentMembers + "}");
