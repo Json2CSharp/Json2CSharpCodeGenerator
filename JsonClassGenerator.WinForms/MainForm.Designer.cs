@@ -50,6 +50,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.sep3 = new System.Windows.Forms.ToolStripSeparator();
 			this.optImmutable = new System.Windows.Forms.ToolStripButton();
 			this.copyOutput = new System.Windows.Forms.ToolStripButton();
+			this.statusStrip = new System.Windows.Forms.StatusStrip();
 			((System.ComponentModel.ISupportInitialize)(this.split)).BeginInit();
 			this.split.Panel1.SuspendLayout();
 			this.split.Panel2.SuspendLayout();
@@ -265,12 +266,21 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.copyOutput.Size = new System.Drawing.Size(167, 22);
 			this.copyOutput.Text = "Copy C# Output to Clipboard";
 			// 
+			// statusStrip
+			// 
+			this.statusStrip.Location = new System.Drawing.Point(0, 278);
+			this.statusStrip.Name = "statusStrip";
+			this.statusStrip.Size = new System.Drawing.Size(800, 22);
+			this.statusStrip.TabIndex = 1;
+			this.statusStrip.Text = "statusStrip1";
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(800, 300);
 			this.Controls.Add(this.split);
+			this.Controls.Add(this.statusStrip);
 			this.Controls.Add(this.toolStrip);
 			this.DoubleBuffered = true;
 			this.Name = "MainForm";
@@ -314,6 +324,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
         private System.Windows.Forms.ToolStripDropDownButton optsAttributeMode;
         private System.Windows.Forms.ToolStripMenuItem optAttribJP;
         private System.Windows.Forms.ToolStripButton copyOutput;
+        private System.Windows.Forms.StatusStrip statusStrip;
     }
 }
 
