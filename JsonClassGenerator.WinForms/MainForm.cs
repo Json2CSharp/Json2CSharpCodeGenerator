@@ -34,6 +34,9 @@ namespace Xamasoft.JsonClassGenerator.WinForms
             this.optMemberFields.CheckedChanged += this.OnMemberModeCheckedChanged;
             this.optMemberProps .CheckedChanged += this.OnMemberModeCheckedChanged;
 
+            this.copyOutput.Click += this.CopyOutput_Click;
+            this.copyOutput.Enabled = false;
+
             this.jsonInputTextbox.TextChanged += this.JsonInputTextbox_TextChanged;
 
             // Invoke event-handlers to set initial toolstrip text:
@@ -246,6 +249,8 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 
         private void GenerateCSharp()
         {
+            this.copyOutput.Enabled = false;
+
             String jsonText = this.jsonInputTextbox.Text;
             if( String.IsNullOrWhiteSpace( jsonText ) )
             {
@@ -266,11 +271,20 @@ namespace Xamasoft.JsonClassGenerator.WinForms
                 else
                 {
                     this.csharpOutputTextbox.Text = sb.ToString();
+                     this.copyOutput.Enabled = true;
                 }
             }
             catch( Exception ex )
             {
                 this.csharpOutputTextbox.Text = "Error:\r\n" + ex.ToString();
+            }
+        }
+
+        private void CopyOutput_Click(Object sender, EventArgs e)
+        {
+            if( this.csharpOutputTextbox.Text?.Length > 0 )
+            {
+                Clipboard.SetText( this.csharpOutputTextbox.Text, TextDataFormat.UnicodeText );
             }
         }
     }

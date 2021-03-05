@@ -1,4 +1,4 @@
-﻿
+
 namespace Xamasoft.JsonClassGenerator.WinForms
 {
 	partial class MainForm
@@ -49,6 +49,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.optMemberFields = new System.Windows.Forms.ToolStripMenuItem();
 			this.sep3 = new System.Windows.Forms.ToolStripSeparator();
 			this.optImmutable = new System.Windows.Forms.ToolStripButton();
+			this.copyOutput = new System.Windows.Forms.ToolStripButton();
 			((System.ComponentModel.ISupportInitialize)(this.split)).BeginInit();
 			this.split.Panel1.SuspendLayout();
 			this.split.Panel2.SuspendLayout();
@@ -157,7 +158,8 @@ namespace Xamasoft.JsonClassGenerator.WinForms
             this.sep2,
             this.optMembersMode,
             this.sep3,
-            this.optImmutable});
+            this.optImmutable,
+            this.copyOutput});
 			this.toolStrip.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip.Name = "toolStrip";
 			this.toolStrip.Size = new System.Drawing.Size(800, 25);
@@ -259,6 +261,14 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.optImmutable.Size = new System.Drawing.Size(130, 22);
 			this.optImmutable.Text = "Use immutable classes";
 			// 
+			// copyOutput
+			// 
+			this.copyOutput.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this.copyOutput.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.copyOutput.Name = "copyOutput";
+			this.copyOutput.Size = new System.Drawing.Size(167, 22);
+			this.copyOutput.Text = "Copy C# Output to Clipboard";
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -306,6 +316,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
         private System.Windows.Forms.ToolStripSeparator sep3;
         private System.Windows.Forms.ToolStripDropDownButton optsAttributeMode;
         private System.Windows.Forms.ToolStripMenuItem optAttribJP;
+        private System.Windows.Forms.ToolStripButton copyOutput;
     }
 }
 
