@@ -93,6 +93,9 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			// 
 			// jsonInputTextbox
 			// 
+			this.jsonInputTextbox.AcceptsReturn = true;
+			this.jsonInputTextbox.AcceptsTab = true;
+			this.jsonInputTextbox.AllowDrop = true;
 			this.jsonInputTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.jsonInputTextbox.Location = new System.Drawing.Point(3, 22);
 			this.jsonInputTextbox.Multiline = true;
@@ -278,6 +281,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.Controls.Add(this.toolStrip);
 			this.DoubleBuffered = true;
 			this.Name = "MainForm";
+			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
 			this.Text = "JSON-to-C#";
 			this.split.Panel1.ResumeLayout(false);
 			this.split.Panel2.ResumeLayout(false);
