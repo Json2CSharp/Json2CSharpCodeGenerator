@@ -1,5 +1,7 @@
-﻿using System;
+using System;
 using System.Drawing;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -27,6 +29,8 @@ namespace Xamasoft.JsonClassGenerator.WinForms
             SystemEvents.UserPreferenceChanged += this.SystemEvents_UserPreferenceChanged;
 
             //
+
+            this.openButton.Click += this.OpenButton_Click;
 
             this.optAttribJP    .CheckedChanged += this.OnAttributesModeCheckedChanged;
             this.optAttribJpn   .CheckedChanged += this.OnAttributesModeCheckedChanged;
@@ -236,23 +240,20 @@ namespace Xamasoft.JsonClassGenerator.WinForms
                 String[] fileNames = (String[])e.Data.GetData( DataFormats.FileDrop );
                 if( fileNames.Length >= 1 )
                 {
-                    try
-                    {
-                        String jsonText = System.IO.File.ReadAllText( fileNames[0] );
-                        this.jsonInputTextbox.Text = jsonText; // This will invoke `GenerateCSharp()`.
-                    }
-                    catch( Exception ex )
-                    {
-                        this.csharpOutputTextbox.Text = "Error:\r\n" + ex.ToString();
-                    }
+                    // hmm, maybe allow multiple files by concatenating them all into a horrible JSON array? :D
+                    this.TryLoadJsonFile( fileNames[0] );
                 }
             }
             else if( e.Data.GetDataPresent( DataFormats.UnicodeText, autoConvert: true ) )
             {
+                this.statusStrip.Text = "";
+
                 String text = (String)e.Data.GetData( DataFormats.UnicodeText, autoConvert: true );
                 if( text != null )
                 {
                     this.jsonInputTextbox.Text = text; // This will invoke `GenerateCSharp()`.
+
+                    this.statusStrip.Text = "Loaded JSON from drag and drop data.";
                 }
             }
         }
@@ -268,6 +269,76 @@ namespace Xamasoft.JsonClassGenerator.WinForms
             }
 
             return text;
+        }
+
+        #endregion
+
+        #region Open JSON file
+
+        private void OpenButton_Click(Object sender, EventArgs e)
+        {
+            if( this.ofd.ShowDialog( owner: this ) == DialogResult.OK )
+            {
+                this.TryLoadJsonFile( this.ofd.FileName );
+            }
+        }
+
+        private void TryLoadJsonFile( String filePath )
+        {
+            if ( String.IsNullOrWhiteSpace( filePath ) )
+            {
+                this.csharpOutputTextbox.Text = "Error: an empty file path was specified.";
+            }
+//          else if ( filePath.IndexOfAny( Path.GetInvalidFileNameChars() ) > -1 )
+//          {
+//              const String fmt = "Invalid file path: \"{0}\"";
+//              this.csharpOutputTextbox.Text = String.Format( CultureInfo.CurrentCulture, fmt, filePath );
+//          }
+            else
+            {
+                FileInfo jsonFileInfo;
+                try
+                {
+                    jsonFileInfo = new FileInfo( filePath );
+                }
+                catch( Exception ex )
+                {
+                    const String fmt = "Invalid file path: \"{0}\"\r\n{1}";
+                    this.csharpOutputTextbox.Text = String.Format( CultureInfo.CurrentCulture, fmt, filePath, ex.ToString() );
+                    return;
+                }
+
+                this.TryLoadJsonFile( jsonFileInfo );
+            }
+        }
+
+        private void TryLoadJsonFile( FileInfo jsonFile )
+        {
+            if( jsonFile is null ) return;
+
+            this.statusStrip.Text = "";
+
+            try
+            {
+                jsonFile.Refresh();
+                if( jsonFile.Exists )
+                {
+                    String jsonText = File.ReadAllText( jsonFile.FullName );
+                    this.jsonInputTextbox.Text = jsonText; // This will invoke `GenerateCSharp()`.
+
+                    this.statusStrip.Text = "Loaded \"" + jsonFile.FullName + "\" successfully.";
+                }
+                else
+                {
+                    this.csharpOutputTextbox.Text = String.Format( CultureInfo.CurrentCulture, "Error: File \"{0}\" does not exist.", jsonFile.FullName );
+                }
+            }
+            catch( Exception ex )
+            {
+                const String fmt = "Error loading file: \"{0}\"\r\n{1}";
+
+                this.csharpOutputTextbox.Text = String.Format( CultureInfo.CurrentCulture, fmt, jsonFile.FullName, ex.ToString() );
+            }
         }
 
         #endregion
