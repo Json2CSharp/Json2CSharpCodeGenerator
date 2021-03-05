@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -272,32 +272,35 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
         public void WriteClassMembers(IJsonClassGeneratorConfig config, StringBuilder sw, JsonType type, string indentMembers)
         {
-            int count = type.Fields.Count;
-            int counter = 1;
-
+            bool first = true;
             foreach (FieldInfo field in type.Fields)
             {
                 string classPropertyName = this.GetCSharpPascalCaseName(field.MemberName);
+                string propertyAttribute = config.GetCSharpJsonAttributeCode(field);
+
+                if( !first && (propertyAttribute.Length > 0 || config.ExamplesInDocumentation) )
+                {
+                    // If rendering examples/XML comments - or property attributes - then add a newline before the property for readability's sake (except if it's the first property in the class)
+                    sw.AppendLine();
+                }
 
                 if (config.ExamplesInDocumentation)
                 {
                     sw.AppendFormat(indentMembers + "/// <summary>");
                     sw.AppendFormat(indentMembers + "/// Examples: " + field.GetExamplesText());
                     sw.AppendFormat(indentMembers + "/// </summary>");
+                    sw.AppendLine();
                 }
 
-                if (config.UseJsonPropertyName)
+                if (propertyAttribute.Length > 0)
                 {
-                    sw.AppendFormat(indentMembers + "[JsonPropertyName(\"{0}\")]{1}", field.JsonMemberName, Environment.NewLine);
-                }
-                else if (config.UseJsonAttributes || field.ContainsSpecialChars) // If the json Member contains special chars -> add this property
-                {
-                    sw.AppendFormat(indentMembers + "[JsonProperty(\"{0}\")]{1}", field.JsonMemberName, Environment.NewLine);
+                    sw.Append(indentMembers);
+                    sw.AppendLine(propertyAttribute);
                 }
 
                 if (config.UseFields)
                 {
-                    sw.AppendFormat(indentMembers + "public {0} {1};{2}", field.Type.GetTypeName(), classPropertyName, Environment.NewLine);
+                    sw.AppendFormat(indentMembers + "public {0}{1} {2};{3}", config.ImmutableClasses ? "readonly " : "", field.Type.GetTypeName(), classPropertyName, Environment.NewLine);
                 }
                 else if (config.ImmutableClasses)
                 {
@@ -315,12 +318,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                     sw.AppendFormat(indentMembers + "public {0} {1} {{ get; set; }}{2}", field.Type.GetTypeName(), classPropertyName, Environment.NewLine);
                 }
 
-                if ((config.UseJsonAttributes || config.UseJsonPropertyName) && count != counter)
-                {
-                    sw.AppendLine();
-                }
-
-                ++counter;
+                first = false;
             }
 
         }
@@ -343,19 +341,29 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
                 sw.AppendFormat(indentMembers + "public {0}({1}", type.AssignedName, Environment.NewLine);
                 
-            {
-                string attributeName = config.UseJsonPropertyName ? "JsonPropertyName" : "JsonProperty";
-
                 FieldInfo lastField = type.Fields[type.Fields.Count-1];
 
                 foreach (FieldInfo field in type.Fields)
                 {
+                    // Writes something like: `[JsonProperty("foobar")] string foobar,`
+
                     string ctorParameterName = this.GetCSharpCamelCaseName(field.MemberName);
 
                     bool isLast = Object.ReferenceEquals(field, lastField);
                     string comma = isLast ? "" : ",";
+                    
+                    //
 
-                    sw.AppendFormat(indentBodies + "[{0}(\"{1}\")] {2} {3}{4}{5}", /*0:*/ attributeName, /*1:*/ field.JsonMemberName, /*2:*/ field.Type.GetTypeName(), /*3:*/ ctorParameterName, /*4:*/ comma, /*5:*/ Environment.NewLine);
+                    sw.Append(indentBodies);
+
+                    string attribute = config.GetCSharpJsonAttributeCode(field);
+                    if(attribute.Length > 0)
+                    {
+                        sw.Append(attribute);
+                        sw.Append(' ');
+                    }
+
+                    sw.AppendFormat("{0} {1}{2}{3}", /*0:*/ field.Type.GetTypeName(), /*1:*/ ctorParameterName, /*2:*/ comma, /*3:*/ Environment.NewLine);
                 }
             }
 
