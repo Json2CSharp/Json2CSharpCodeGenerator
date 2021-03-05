@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Xamasoft.JsonClassGenerator.CodeWriters
@@ -78,29 +79,40 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 // {
                 //     sw.AppendFormat("// " + line);
                 // }
-                sw.AppendLine();
-                sw.AppendLine("using System;");
-                sw.AppendLine("using System.Collections.Generic;");
+
+                List<string> namespaces = new List<string>()
+                {
+                    "System",
+                    "System.Collections.Generic"
+                };
+
                 if (this.ShouldApplyNoPruneAttribute(config) || this.ShouldApplyNoRenamingAttribute(config))
                 {
-                    sw.AppendLine("using System.Reflection;");
+                    namespaces.Add("System.Reflection");
                 }
                 if (!config.ExplicitDeserialization && config.UseJsonAttributes)
                 {
-                    sw.AppendLine("using Newtonsoft.Json;");
-                    sw.AppendLine("using Newtonsoft.Json.Linq;");
+                    namespaces.Add("Newtonsoft.Json");
+                    namespaces.Add("Newtonsoft.Json.Linq");
                 }
                 if (!config.ExplicitDeserialization && config.UseJsonPropertyName)
                 {
-                    sw.AppendLine("System.Text.Json;");
+                    namespaces.Add("System.Text.Json");
                 }
                 if (config.ExplicitDeserialization)
                 {
-                    sw.AppendLine("using JsonCSharpClassGenerator;");
+                    namespaces.Add("JsonCSharpClassGenerator");
                 }
                 if (config.SecondaryNamespace != null && config.HasSecondaryClasses && !config.UseNestedClasses)
                 {
-                    sw.AppendFormat("using {0};", config.SecondaryNamespace);
+                    namespaces.Add(config.SecondaryNamespace);
+                }
+
+                namespaces.Sort(CompareNamespacesSystemFirst);
+
+                foreach(string ns in namespaces) // NOTE: Using `.Distinct()` after sorting may cause out-of-order results.
+                {
+                    sw.AppendFormat("using {0};{1}", ns, Environment.NewLine);
                 }
             }
 
@@ -108,6 +120,39 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             {
                 sw.AppendFormat("    {0} class {1}", config.InternalVisibility ? "internal" : "public", config.MainClass);
                 sw.AppendLine("    {");
+            }
+        }
+
+        private static int CompareNamespacesSystemFirst(string x, string y)
+        {
+            if (x == "System") return -1;
+            if (y == "System") return  1;
+
+            if (x.StartsWith("System.", StringComparison.Ordinal))
+            {
+                if (y.StartsWith("System.", StringComparison.Ordinal))
+                {
+                    // Both start with "System." - so compare them normally.
+                    return StringComparer.Ordinal.Compare(x,y);
+                }
+                else
+                {
+                    // Only `x` starts with "System", so `x` should always come first (i.e. `x < y` or `y > x`).
+                    return -1;
+                }
+            }
+            else
+            {
+                // Only `y` starts with "System", so `y` should always come first (i.e. `x > y` or `y < x`).
+                if (y.StartsWith("System.", StringComparison.Ordinal))
+                {
+                    return 1;
+                }
+                else
+                {
+                    // Neither are "System." namespaces - so compare them normally.
+                    return StringComparer.Ordinal.Compare(x,y);
+                }
             }
         }
 
