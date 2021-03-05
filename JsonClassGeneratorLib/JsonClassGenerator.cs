@@ -64,10 +64,10 @@ namespace Xamasoft.JsonClassGenerator
                 JObject[] examples = null;
                 try
                 {
-                    using (var sr = new StringReader(jsonInput))
-                    using (var reader = new JsonTextReader(sr))
+                    using (StringReader sr = new StringReader(jsonInput))
+                    using (JsonTextReader reader = new JsonTextReader(sr))
                     {
-                        var json = JToken.ReadFrom(reader);
+                        JToken json = JToken.ReadFrom(reader);
                         if (json is JArray)
                         {
                             examples = ( (JArray)json ).Cast<JObject>().ToArray();
@@ -88,7 +88,7 @@ namespace Xamasoft.JsonClassGenerator
 
                 this.Types = new List<JsonType>();
                 this.Names.Add("Root");
-                var rootType = new JsonType(this, examples[0]);
+                JsonType rootType = new JsonType(this, examples[0]);
                 rootType.IsRoot = true;
                 rootType.AssignName("Root");
                 this.GenerateClass(examples, rootType);
@@ -109,7 +109,7 @@ namespace Xamasoft.JsonClassGenerator
 
         private void WriteClassesToFile(string path, IEnumerable<JsonType> types)
         {
-            using (var sw = new StreamWriter(path, false, Encoding.UTF8))
+            using (StreamWriter sw = new StreamWriter(path, false, Encoding.UTF8))
             {
                 //WriteClassesToFile(sw, types);
             }
@@ -117,13 +117,13 @@ namespace Xamasoft.JsonClassGenerator
 
         private void WriteClassesToFile(StringBuilder sw, IEnumerable<JsonType> types)
         {
-            var inNamespace = false;
-            var rootNamespace = false;
+            Boolean inNamespace = false;
+            Boolean rootNamespace = false;
 
             this.CodeWriter.WriteFileStart(this, sw);
             this.CodeWriter.WriteDeserializationComment(this, sw);
 
-            foreach (var type in types)
+            foreach (JsonType type in types)
             {
                 if (this.UseNamespaces && inNamespace && rootNamespace != type.IsRoot && this.SecondaryNamespace != null) { this.CodeWriter.WriteNamespaceEnd(this, sw, rootNamespace); inNamespace = false; }
                 if (this.UseNamespaces && !inNamespace) { this.CodeWriter.WriteNamespaceStart(this, sw, type.IsRoot); inNamespace = true; rootNamespace = type.IsRoot; }
@@ -135,37 +135,37 @@ namespace Xamasoft.JsonClassGenerator
 
         private void GenerateClass(JObject[] examples, JsonType type)
         {
-            var jsonFields = new Dictionary<string, JsonType>();
-            var fieldExamples = new Dictionary<string,List<object>>();
+            Dictionary<String, JsonType> jsonFields = new Dictionary<string, JsonType>();
+            Dictionary<String, List<Object>> fieldExamples = new Dictionary<string,List<object>>();
 
-            var first = true;
+            Boolean first = true;
 
-            foreach (var obj in examples)
+            foreach (JObject obj in examples)
             {
-                foreach (var prop in obj.Properties())
+                foreach (JProperty prop in obj.Properties())
                 {
                     JsonType fieldType;
-                    var currentType = new JsonType(this, prop.Value);
-                    var propName = prop.Name;
+                    JsonType currentType = new JsonType(this, prop.Value);
+                    String propName = prop.Name;
 
                     if (jsonFields.TryGetValue(propName, out fieldType))
                     {
 
-                        var commonType = fieldType.GetCommonType(currentType);
+                        JsonType commonType = fieldType.GetCommonType(currentType);
 
                         jsonFields[propName] = commonType;
                     }
                     else
                     {
-                        var commonType = currentType;
+                        JsonType commonType = currentType;
                         if (first) commonType = commonType.MaybeMakeNullable(this);
                         else commonType = commonType.GetCommonType(JsonType.GetNull(this));
                         jsonFields.Add(propName, commonType);
                         fieldExamples[propName] = new List<object>();
                     }
 
-                    var fe = fieldExamples[propName];
-                    var val = prop.Value;
+                    List<Object> fe = fieldExamples[propName];
+                    JToken val = prop.Value;
                     if (val.Type == JTokenType.Null || val.Type == JTokenType.Undefined)
                     {
                         if (!fe.Contains(null))
@@ -175,7 +175,7 @@ namespace Xamasoft.JsonClassGenerator
                     }
                     else
                     {
-                        var v = val.Type == JTokenType.Array || val.Type == JTokenType.Object ? val : val.Value<object>();
+                        Object v = val.Type == JTokenType.Array || val.Type == JTokenType.Object ? val : val.Value<object>();
                         if (!fe.Any(x => v.Equals(x)))
                             fe.Add(v);
                     }
@@ -185,19 +185,19 @@ namespace Xamasoft.JsonClassGenerator
 
             if (this.UseNestedClasses)
             {
-                foreach (var field in jsonFields)
+                foreach (KeyValuePair<String, JsonType> field in jsonFields)
                 {
                     this.Names.Add(field.Key.ToLower());
                 }
             }
 
-            foreach (var field in jsonFields)
+            foreach (KeyValuePair<String, JsonType> field in jsonFields)
             {
-                var fieldType = field.Value;
+                JsonType fieldType = field.Value;
                 if (fieldType.Type == JsonTypeEnum.Object)
                 {
-                    var subexamples = new List<JObject>(examples.Length);
-                    foreach (var obj in examples)
+                    List<JObject> subexamples = new List<JObject>(examples.Length);
+                    foreach (JObject obj in examples)
                     {
                         JToken value;
                         if (obj.TryGetValue(field.Key, out value))
@@ -218,8 +218,8 @@ namespace Xamasoft.JsonClassGenerator
 
                 if (fieldType.InternalType != null && fieldType.InternalType.Type == JsonTypeEnum.Object)
                 {
-                    var subexamples = new List<JObject>(examples.Length);
-                    foreach (var obj in examples)
+                    List<JObject> subexamples = new List<JObject>(examples.Length);
+                    foreach (JObject obj in examples)
                     {
                         JToken value;
                         if (obj.TryGetValue(field.Key, out value))
@@ -228,9 +228,9 @@ namespace Xamasoft.JsonClassGenerator
                             {
                                 if (value.Count() > 50)
                                 {
-                                    var takeABunchOfItems = (JArray)value; // Take like 30 items from the array this will increase the chance of getting all the objects accuralty while not analyzing all the data
+                                    JArray takeABunchOfItems = (JArray)value; // Take like 30 items from the array this will increase the chance of getting all the objects accuralty while not analyzing all the data
                                     int count = 0;
-                                    foreach (var item in (JArray)takeABunchOfItems)
+                                    foreach (JToken item in (JArray)takeABunchOfItems)
                                     {
                                         if (count > 50)
                                             break;
@@ -243,7 +243,7 @@ namespace Xamasoft.JsonClassGenerator
                                 }
                                 else
                                 {
-                                    foreach (var item in (JArray)value)
+                                    foreach (JToken item in (JArray)value)
                                     {
                                         // if (!(item is JObject)) throw new NotSupportedException("Arrays of non-objects are not supported yet.");
                                         if (( item is JObject ))
@@ -253,7 +253,7 @@ namespace Xamasoft.JsonClassGenerator
                             }
                             else if (value.Type == JTokenType.Object) //TODO J2C : ONLY LOOP OVER 50 OBJECT AND NOT THE WHOLE THING
                             {
-                                foreach (var item in (JObject)value)
+                                foreach (KeyValuePair<String, JToken> item in (JObject)value)
                                 {
                                     // if (!(item.Value is JObject)) throw new NotSupportedException("Arrays of non-objects are not supported yet.");
                                     if (( item.Value is JObject ))
@@ -285,9 +285,9 @@ namespace Xamasoft.JsonClassGenerator
         private IList<JsonType> HandleDuplicateClasses(IList<JsonType> types)
         {
 
-            var typesWithNoDuplicates = new List<JsonType>();
+            List<JsonType> typesWithNoDuplicates = new List<JsonType>();
 
-            foreach (var type in types)
+            foreach (JsonType type in types)
             {
 
                 if (!typesWithNoDuplicates.Exists(p => p.OriginalName == type.OriginalName))
@@ -295,10 +295,10 @@ namespace Xamasoft.JsonClassGenerator
                 // Handle duplication
                 else
                 {
-                    var duplicatedType = typesWithNoDuplicates.FirstOrDefault(p => p.OriginalName == type.OriginalName);
+                    JsonType duplicatedType = typesWithNoDuplicates.FirstOrDefault(p => p.OriginalName == type.OriginalName);
 
                     // Rename all references of this type to the original assigned name
-                    foreach (var field in type.Fields)
+                    foreach (FieldInfo field in type.Fields)
                     {
                         if (!duplicatedType.Fields.ToList().Exists(x => x.JsonMemberName == field.JsonMemberName))
                             duplicatedType.Fields.Add(field);
@@ -315,8 +315,8 @@ namespace Xamasoft.JsonClassGenerator
         {
             name = ToTitleCase(name);
 
-            var finalName = name;
-            var i = 2;
+            String finalName = name;
+            Int32 i = 2;
             while (this.Names.Any(x => x.Equals(finalName, StringComparison.OrdinalIgnoreCase)))
             {
 
@@ -336,12 +336,12 @@ namespace Xamasoft.JsonClassGenerator
 
         internal static string ToTitleCase(string str)
         {
-            var sb = new StringBuilder(str.Length);
-            var flag = true;
+            StringBuilder sb = new StringBuilder(str.Length);
+            Boolean flag = true;
 
             for (int i = 0; i < str.Length; i++)
             {
-                var c = str[i];
+                Char c = str[i];
                 string specialCaseFirstCharIsNumber = string.Empty;
 
                 // Handle the case where the first character is a number
