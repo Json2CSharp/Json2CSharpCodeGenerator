@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -42,12 +42,15 @@ namespace Xamasoft.JsonClassGenerator.WinForms
             this.optImmutable   .CheckedChanged += this.OnOptionsChanged;
             this.optsPascalCase .CheckedChanged += this.OnOptionsChanged;
 
+            this.wrapText.CheckedChanged += this.WrapText_CheckedChanged;
+
             this.copyOutput.Click += this.CopyOutput_Click;
             this.copyOutput.Enabled = false;
 
             this.jsonInputTextbox.TextChanged += this.JsonInputTextbox_TextChanged;
             this.jsonInputTextbox.DragDrop += this.JsonInputTextbox_DragDrop;
             this.jsonInputTextbox.DragOver += this.JsonInputTextbox_DragOver;
+            //this.jsonInputTextbox.paste // annoyingly, it isn't (easily) feasible to hook/detect TextBox paste events, even globally... grrr.
 
             // Invoke event-handlers to set initial toolstrip text:
             this.optsAttributeMode.Tag = this.optsAttributeMode.Text + ": {0}";
@@ -55,6 +58,44 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 
             this.OnAttributesModeCheckedChanged( this.optAttribJP   , EventArgs.Empty );
             this.OnMemberModeCheckedChanged    ( this.optMemberProps, EventArgs.Empty );
+        }
+
+        private void WrapText_CheckedChanged(Object sender, EventArgs e)
+        {
+            ToolStripButton tsb = (ToolStripButton)sender;
+
+            // For some reason, toggling WordWrap causes a text selection in `jsonInputTextbox`. So, doing this:
+            try
+            {
+                this.jsonInputTextbox.HideSelection = true;
+                // ayayayay: https://stackoverflow.com/questions/1140250/how-to-remove-the-focus-from-a-textbox-in-winforms
+                this.ActiveControl = this.toolStrip;
+
+#if WINFORMS_TEXTBOX_GET_SCROLL_POSITION_WORKS_ARGH // It's non-trivial: https://stackoverflow.com/questions/4494162/change-scrollbar-position-in-textbox
+                //int idx1 = this.jsonInputTextbox.GetFirstCharIndexOfCurrentLine(); // but what is the "current line"?
+                int firstLineCharIndex = -1;
+                if( this.jsonInputTextbox.Height > 10 )
+                {
+                    // https://stackoverflow.com/questions/10175400/maintain-textbox-scroll-position-while-adding-line
+                    this.jsonInputTextbox.GetCharIndexFromPosition( new Point( 3, 3 ) );
+                }
+#endif
+
+                this.jsonInputTextbox   .WordWrap = tsb.Checked;
+                this.csharpOutputTextbox.WordWrap = tsb.Checked;
+
+#if WINFORMS_TEXTBOX_GET_SCROLL_POSITION_WORKS_ARGH
+                if( firstLineCharIndex > 0 ) // Greater than zero, not -1, because `GetCharIndexFromPosition` returns a meaningless zero sometimes.
+                {
+                    this.jsonInputTextbox.SelectionStart = firstLineCharIndex;
+                    this.jsonInputTextbox.ScrollToCaret();
+                }
+#endif
+            }
+            finally
+            {
+                this.jsonInputTextbox.HideSelection = false;
+            }
         }
 
         #region WinForms Taxes

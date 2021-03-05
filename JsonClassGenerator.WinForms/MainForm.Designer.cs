@@ -53,6 +53,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.copyOutput = new System.Windows.Forms.ToolStripButton();
 			this.statusStrip = new System.Windows.Forms.StatusStrip();
 			this.ofd = new System.Windows.Forms.OpenFileDialog();
+			this.wrapText = new System.Windows.Forms.ToolStripButton();
 			((System.ComponentModel.ISupportInitialize)(this.split)).BeginInit();
 			this.split.Panel1.SuspendLayout();
 			this.split.Panel2.SuspendLayout();
@@ -162,7 +163,8 @@ namespace Xamasoft.JsonClassGenerator.WinForms
             this.optMembersMode,
             this.sep3,
             this.optImmutable,
-            this.copyOutput});
+            this.copyOutput,
+            this.wrapText});
 			this.toolStrip.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip.Name = "toolStrip";
 			this.toolStrip.Size = new System.Drawing.Size(800, 25);
@@ -181,7 +183,6 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.optsPascalCase.CheckOnClick = true;
 			this.optsPascalCase.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.optsPascalCase.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.optsPascalCase.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.optsPascalCase.Name = "optsPascalCase";
 			this.optsPascalCase.Text = "Use Pascal Case";
 			// 
@@ -235,7 +236,6 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.optMembersMode.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.optMemberProps,
             this.optMemberFields});
-			this.optMembersMode.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.optMembersMode.Name = "optMembersMode";
 			this.optMembersMode.Size = new System.Drawing.Size(99, 22);
 			this.optMembersMode.Text = "Member mode";
@@ -265,7 +265,6 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			// 
 			this.optImmutable.CheckOnClick = true;
 			this.optImmutable.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.optImmutable.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.optImmutable.Name = "optImmutable";
 			this.optImmutable.Size = new System.Drawing.Size(130, 22);
 			this.optImmutable.Text = "Use immutable classes";
@@ -284,12 +283,22 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.statusStrip.Name = "statusStrip";
 			this.statusStrip.Size = new System.Drawing.Size(800, 22);
 			this.statusStrip.TabIndex = 1;
-			this.statusStrip.Text = "statusStrip1";
+			this.statusStrip.Text = "";
 			// 
 			// ofd
 			// 
 			this.ofd.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
 			this.ofd.SupportMultiDottedExtensions = true;
+			// 
+			// wrapText
+			// 
+			this.wrapText.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+			this.wrapText.CheckOnClick = true;
+			this.wrapText.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.wrapText.Name = "wrapText";
+			this.wrapText.Size = new System.Drawing.Size(62, 22);
+			this.wrapText.Text = "Wrap text";
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -343,6 +352,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripButton openButton;
         private System.Windows.Forms.OpenFileDialog ofd;
+        private System.Windows.Forms.ToolStripButton wrapText;
     }
 }
 
