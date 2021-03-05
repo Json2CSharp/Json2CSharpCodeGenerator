@@ -1,0 +1,7 @@
+
+[*.cs]
+indent_style = space
+indent_size = 4
+
+# IDE0058: Expression value is never used
+dotnet_diagnostic.IDE0058.severity = silent
