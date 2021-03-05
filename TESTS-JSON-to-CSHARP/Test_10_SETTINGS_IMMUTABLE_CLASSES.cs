@@ -23,10 +23,12 @@ namespace TESTS_JSON_TO_CSHARP
             {
                 CodeWriter          = new CSharpCodeWriter(),
                 ImmutableClasses    = true,
-                UseJsonPropertyName = false
+                UseJsonPropertyName = false,
+                UsePascalCase       = true,
+                UseJsonAttributes   = true
             };
 
-            string returnVal      = jsonClassGenerator.GenerateClasses(input, out string errorMessage).ToString();
+            string returnVal      = jsonClassGenerator.GenerateClasses(input, errorMessage: out _).ToString();
             string resultsCompare = File.ReadAllText(resultPath);
 
             string expected = resultsCompare.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", "");

@@ -1,4 +1,4 @@
-﻿// Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);
+﻿// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
 
     public class Awesomeobject
     {
@@ -26,7 +26,7 @@
             [JsonProperty("created_at")] string createdAt,
             [JsonProperty("updated_at")] string updatedAt,
             [JsonProperty("email")] string email,
-            [JsonProperty("testanadditionalfield")] string testanadditionalfield,
+            [JsonProperty("testanadditionalfield")] string testanadditionalfield
         )
         {
             this.Id = id;
@@ -59,7 +59,7 @@
     public class Class1
     {
         public Class1(
-            [JsonProperty("id")] string id,
+            [JsonProperty("id")] int id,
             [JsonProperty("user_id")] string userId,
             [JsonProperty("awesomeobject")] Awesomeobject awesomeobject,
             [JsonProperty("created_at")] string createdAt,
@@ -72,7 +72,7 @@
             this.Awesomeobject = awesomeobject;
             this.CreatedAt = createdAt;
             this.UpdatedAt = updatedAt;
-            this.Users = users;
+            this.Users = users ?? (IReadOnlyList<User>)Array.Empty<User>();
         }
 
         [JsonProperty("id")]
