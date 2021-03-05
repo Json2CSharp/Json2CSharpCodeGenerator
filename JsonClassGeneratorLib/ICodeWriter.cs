@@ -10,7 +10,9 @@ namespace Xamasoft.JsonClassGenerator
     {
         string FileExtension { get; }
         string DisplayName { get; }
+
         string GetTypeName(JsonType type, IJsonClassGeneratorConfig config);
+
         void WriteClass(IJsonClassGeneratorConfig config, StringBuilder sw, JsonType type);
         void WriteFileStart(IJsonClassGeneratorConfig config, StringBuilder sw);
         void WriteFileEnd(IJsonClassGeneratorConfig config, StringBuilder sw);
@@ -19,7 +21,8 @@ namespace Xamasoft.JsonClassGenerator
         void WriteDeserializationComment(IJsonClassGeneratorConfig config, StringBuilder sw);
         void WriteClassMembers(IJsonClassGeneratorConfig config, StringBuilder sw, JsonType type, string prefix);
 
-        List<string> ReservedKeywords { get; }
+        IReadOnlyCollection<string> ReservedKeywords { get; }
+        bool IsReservedKeyword(string word);
     }
 
     public interface ICodeWriter

@@ -1,8 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace Xamasoft.JsonClassGenerator.CodeWriters
@@ -22,7 +19,19 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
         private const string NoRenameAttribute = "[Obfuscation(Feature = \"renaming\", Exclude = true)]";
         private const string NoPruneAttribute = "[Obfuscation(Feature = \"trigger\", Exclude = false)]";
 
-        public List<string> ReservedKeywords => new List<string>() { "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "int", "interface", "internal", "is", "lock", "long", "namespace", "new", "null", "object", "operator", "out", "override", "params", "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual", "void", "volatile", "while" };
+        private static readonly HashSet<string> _reservedKeywords = new HashSet<string>( StringComparer.Ordinal ) {
+            "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const", "continue",
+            "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false", "finally",
+            "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "int", "interface", "internal", "is", "lock", "long",
+            "namespace", "new", "null", "object", "operator", "out", "override", "params", "private", "protected", "public",
+            "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string", "struct",
+            "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using",
+            "virtual", "void", "volatile", "while"
+        };
+
+        public bool IsReservedKeyword(string word) => _reservedKeywords.Contains(word ?? string.Empty);
+
+        IReadOnlyCollection<string> ICodeBuilder.ReservedKeywords => _reservedKeywords;
 
         public string GetTypeName(JsonType type, IJsonClassGeneratorConfig config)
         {
@@ -30,32 +39,32 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
             switch (type.Type)
             {
-                case JsonTypeEnum.Anything: return "object";
-                case JsonTypeEnum.Array: return arraysAsLists ? "List<" + GetTypeName(type.InternalType, config) + ">" : GetTypeName(type.InternalType, config) + "[]";
-                case JsonTypeEnum.Dictionary: return "Dictionary<string, " + GetTypeName(type.InternalType, config) + ">";
-                case JsonTypeEnum.Boolean: return "bool";
-                case JsonTypeEnum.Float: return "double";
-                case JsonTypeEnum.Integer: return "int";
-                case JsonTypeEnum.Long: return "long";
-                case JsonTypeEnum.Date: return "DateTime";
-                case JsonTypeEnum.NonConstrained: return "object";
-                case JsonTypeEnum.NullableBoolean: return "bool?";
-                case JsonTypeEnum.NullableFloat: return "double?";
-                case JsonTypeEnum.NullableInteger: return "int?";
-                case JsonTypeEnum.NullableLong: return "long?";
-                case JsonTypeEnum.NullableDate: return "DateTime?";
+                case JsonTypeEnum.Anything         : return "object";
+                case JsonTypeEnum.Array            : return arraysAsLists ? "List<" + this.GetTypeName(type.InternalType, config) + ">" : this.GetTypeName(type.InternalType, config) + "[]";
+                case JsonTypeEnum.Dictionary       : return "Dictionary<string, " + this.GetTypeName(type.InternalType, config) + ">";
+                case JsonTypeEnum.Boolean          : return "bool";
+                case JsonTypeEnum.Float            : return "double";
+                case JsonTypeEnum.Integer          : return "int";
+                case JsonTypeEnum.Long             : return "long";
+                case JsonTypeEnum.Date             : return "DateTime";
+                case JsonTypeEnum.NonConstrained   : return "object";
+                case JsonTypeEnum.NullableBoolean  : return "bool?";
+                case JsonTypeEnum.NullableFloat    : return "double?";
+                case JsonTypeEnum.NullableInteger  : return "int?";
+                case JsonTypeEnum.NullableLong     : return "long?";
+                case JsonTypeEnum.NullableDate     : return "DateTime?";
                 case JsonTypeEnum.NullableSomething: return "object";
-                case JsonTypeEnum.Object: return type.NewAssignedName;
-                case JsonTypeEnum.String: return "string";
-                default: throw new System.NotSupportedException("Unsupported json type");
+                case JsonTypeEnum.Object           : return type.NewAssignedName;
+                case JsonTypeEnum.String           : return "string";
+                default: throw new NotSupportedException("Unsupported json type: " + type.Type);
             }
         }
-
 
         private bool ShouldApplyNoRenamingAttribute(IJsonClassGeneratorConfig config)
         {
             return config.ApplyObfuscationAttributes && !config.ExplicitDeserialization && !config.UsePascalCase;
         }
+
         private bool ShouldApplyNoPruneAttribute(IJsonClassGeneratorConfig config)
         {
             return config.ApplyObfuscationAttributes && !config.ExplicitDeserialization && config.UseFields;
@@ -110,10 +119,14 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
         public void WriteDeserializationComment(IJsonClassGeneratorConfig config, StringBuilder sw)
         {
-           if (config.UseJsonPropertyName)
+            if (config.UseJsonPropertyName)
+            {
                 sw.AppendLine("// Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);");
+            }
             else
+            {
                 sw.AppendLine("// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); ");
+            }
         }
 
         public void WriteNamespaceStart(IJsonClassGeneratorConfig config, StringBuilder sw, bool root)
@@ -139,28 +152,31 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
             var prefix = config.UseNestedClasses && !type.IsRoot ? "            " : "        ";
 
-            // var shouldSuppressWarning = config.InternalVisibility && !config.UseProperties && !config.ExplicitDeserialization;
-            // if (shouldSuppressWarning)
-            // {
-            //     sw.AppendFormat("#pragma warning disable 0649");
-            //     if (!config.UsePascalCase) sw.AppendLine();
-            // }
-            // if (config.ExplicitDeserialization)
-            // {
-            //     if (config.UseProperties) WriteClassWithPropertiesExplicitDeserialization(sw, type, prefix);
-            //     else WriteClassWithFieldsExplicitDeserialization(sw, type, prefix);
-            // }
-            // else
-            // {
-            WriteClassMembers(config, sw, type, prefix);
-            // }
-
-            // if (shouldSuppressWarning)
-            // {
-            //     sw.WriteLine();
-            //     sw.WriteLine("#pragma warning restore 0649");
-            //     sw.WriteLine();
-            // }
+#if CAN_SUPRESS
+            var shouldSuppressWarning = config.InternalVisibility && !config.UseProperties && !config.ExplicitDeserialization;
+            if (shouldSuppressWarning)
+            {
+                sw.AppendFormat("#pragma warning disable 0649");
+                if (!config.UsePascalCase) sw.AppendLine();
+            }
+            if (config.ExplicitDeserialization)
+            {
+                if (config.UseProperties) WriteClassWithPropertiesExplicitDeserialization(sw, type, prefix);
+                else WriteClassWithFieldsExplicitDeserialization(sw, type, prefix);
+            }
+            else
+#endif
+            {
+                this.WriteClassMembers(config, sw, type, prefix);
+            }
+#if CAN_SUPPRESS
+            if (shouldSuppressWarning)
+            {
+                sw.WriteLine();
+                sw.WriteLine("#pragma warning restore 0649");
+                sw.WriteLine();
+            }
+#endif
 
 
             if (config.UseNestedClasses && !type.IsRoot)
@@ -182,7 +198,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 string fieldMemberName = field.MemberName;
 
                 // Check if property is a reserved keyword
-                if (ReservedKeywords.Contains(fieldMemberName)) fieldMemberName = "@" + fieldMemberName;
+                if (this.IsReservedKeyword(fieldMemberName)) fieldMemberName = "@" + fieldMemberName;
 
                 // Check if property name starts with number
                 if (!string.IsNullOrEmpty(fieldMemberName) && char.IsDigit(fieldMemberName[0])) fieldMemberName = "_" + fieldMemberName;
