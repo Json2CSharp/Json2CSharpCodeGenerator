@@ -63,6 +63,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			// 
 			this.split.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.split.Location = new System.Drawing.Point(0, 25);
+			this.split.Size = new System.Drawing.Size(800, 200);
 			this.split.Name = "split";
 			// 
 			// split.Panel1
@@ -72,7 +73,6 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			// split.Panel2
 			// 
 			this.split.Panel2.Controls.Add(this.tableLayoutPanel2);
-			this.split.Size = new System.Drawing.Size(800, 97);
 			this.split.SplitterDistance = 400;
 			this.split.TabIndex = 0;
 			// 
@@ -88,7 +88,6 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(400, 97);
 			this.tableLayoutPanel1.TabIndex = 1;
 			// 
 			// jsonInputTextbox
@@ -101,7 +100,6 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.jsonInputTextbox.Multiline = true;
 			this.jsonInputTextbox.Name = "jsonInputTextbox";
 			this.jsonInputTextbox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.jsonInputTextbox.Size = new System.Drawing.Size(394, 398);
 			this.jsonInputTextbox.TabIndex = 0;
 			this.jsonInputTextbox.WordWrap = false;
 			// 
@@ -111,7 +109,6 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.inputLabel.Location = new System.Drawing.Point(1, 4);
 			this.inputLabel.Margin = new System.Windows.Forms.Padding(1, 4, 4, 2);
 			this.inputLabel.Name = "inputLabel";
-			this.inputLabel.Size = new System.Drawing.Size(395, 13);
 			this.inputLabel.TabIndex = 1;
 			this.inputLabel.Text = "JSON Input";
 			// 
@@ -127,7 +124,6 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.tableLayoutPanel2.RowCount = 2;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(396, 97);
 			this.tableLayoutPanel2.TabIndex = 1;
 			// 
 			// csharpOutputTextbox
@@ -138,7 +134,6 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.csharpOutputTextbox.Name = "csharpOutputTextbox";
 			this.csharpOutputTextbox.ReadOnly = true;
 			this.csharpOutputTextbox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.csharpOutputTextbox.Size = new System.Drawing.Size(390, 72);
 			this.csharpOutputTextbox.TabIndex = 0;
 			this.csharpOutputTextbox.WordWrap = false;
 			// 
@@ -148,7 +143,6 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.outputLabel.Location = new System.Drawing.Point(1, 4);
 			this.outputLabel.Margin = new System.Windows.Forms.Padding(1, 4, 4, 2);
 			this.outputLabel.Name = "outputLabel";
-			this.outputLabel.Size = new System.Drawing.Size(391, 13);
 			this.outputLabel.TabIndex = 1;
 			this.outputLabel.Text = "Generated C# Output";
 			// 
@@ -165,7 +159,6 @@ namespace Xamasoft.JsonClassGenerator.WinForms
             this.copyOutput});
 			this.toolStrip.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip.Name = "toolStrip";
-			this.toolStrip.Size = new System.Drawing.Size(800, 25);
 			this.toolStrip.TabIndex = 0;
 			// 
 			// optsPascalCase
@@ -176,7 +169,6 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.optsPascalCase.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.optsPascalCase.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.optsPascalCase.Name = "optsPascalCase";
-			this.optsPascalCase.Size = new System.Drawing.Size(94, 22);
 			this.optsPascalCase.Text = "Use Pascal Case";
 			// 
 			// sep1
@@ -276,7 +268,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(800, 122);
+			this.ClientSize = new System.Drawing.Size(800, 300);
 			this.Controls.Add(this.split);
 			this.Controls.Add(this.toolStrip);
 			this.DoubleBuffered = true;
