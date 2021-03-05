@@ -106,12 +106,11 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 }
                 else
                 {
-                     memberName = ChangeFirstChar(memberName, false);
+                    memberName = ChangeFirstChar(memberName, false);
                     if (field.JsonMemberName != memberName)
                         sw.AppendFormat(prefix + "@JsonProperty" + "(\"{0}\") {1}", field.JsonMemberName, Environment.NewLine);
                     sw.AppendFormat(prefix + "public {0} {1};{2}", field.Type.GetTypeName(), memberName, Environment.NewLine);
                 }
-
             }
         }
 
