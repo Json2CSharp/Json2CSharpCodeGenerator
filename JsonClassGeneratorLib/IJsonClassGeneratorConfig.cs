@@ -42,9 +42,9 @@ namespace Xamasoft.JsonClassGenerator
             if (config is null) throw new ArgumentNullException(nameof(config));
             if (field is null) throw new ArgumentNullException(nameof(field));
 
-            if (config.UseJsonAttributes && config.UseJsonPropertyName) throw new ArgumentException(message: "Cannot use both " + nameof(config.UseJsonPropertyName) + " and " + nameof(config.UseJsonAttributes) + ".", paramName: nameof(config));
+           // if (config.UseJsonAttributes && config.UseJsonPropertyName) throw new ArgumentException(message: "Cannot use both " + nameof(config.UseJsonPropertyName) + " and " + nameof(config.UseJsonAttributes) + ".", paramName: nameof(config));
 
-            //
+            
 
             string name = field.JsonMemberName;
 
