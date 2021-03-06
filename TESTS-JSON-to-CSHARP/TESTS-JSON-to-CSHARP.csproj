@@ -66,6 +66,7 @@
     <Compile Include="Test_6_DictionaryTest.cs" />
     <Compile Include="Test_7_DuplictedClasses.cs" />
     <Compile Include="Test_8_LargeArrayOfObjects.cs" />
+    <Compile Include="Test_10_SETTINGS_IMMUTABLE_CLASSES.cs" />
     <Compile Include="Test_9_HANDLE_NUMBERS.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -81,6 +82,8 @@
   <ItemGroup>
     <Content Include="Test_0_DIAGNOSTICS_INPUT.txt" />
     <Content Include="Test_0_DIAGNOSTICS_OUTPUT.txt" />
+    <Content Include="Test_10_SETTINGS_IMMUTABLE_CLASSES_OUTPUT.txt" />
+    <Content Include="Test_10_SETTINGS_IMMUTABLE_CLASSES_INPUT.txt" />
     <Content Include="Test_5_BASIC_SCENARIO_INPUT.txt" />
     <Content Include="Test_5_BASIC_SCENARIO_OUTPUT.txt" />
     <Content Include="Test_1_2_SETTINGS_PASCAL_INPUT.txt" />

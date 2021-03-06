@@ -18,7 +18,8 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             get { return "Java"; }
         }
 
-        public List<string> ReservedKeywords => throw new NotImplementedException();
+        IReadOnlyCollection<string> ICodeBuilder.ReservedKeywords => throw new NotImplementedException();
+        bool ICodeBuilder.IsReservedKeyword(string word) => throw new NotImplementedException();
 
         public string GetTypeName(JsonType type, IJsonClassGeneratorConfig config)
         {
