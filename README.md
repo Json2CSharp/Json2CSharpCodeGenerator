@@ -1,5 +1,10 @@
 ## Special Thanks to Our Contributors !!
- [Jehoel](https://github.com/Jehoel), [tyeth](https://github.com/tyeth), [dogac00](https://github.com/dogac00)
+
+Implemented Immutable Classes Feature <br/>
+[Jehoel](https://github.com/Jehoel) <br/>
+ 
+ Assisted in Bug Fixing <br/>
+ [tyeth](https://github.com/tyeth), [dogac00](https://github.com/dogac00)
 
 ## Contribution Guidelines
 1 - New ideas, suggestions and improvements are welcomed.  <br />
