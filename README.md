@@ -2,10 +2,10 @@
  [Jehoel](https://github.com/Jehoel), [tyeth](https://github.com/tyeth), [dogac00](https://github.com/dogac00)
 
 ## Contribution Guidelines
-1 - New ideas, suggestions and improvements are welcomed.
-2 - Create a unit test with the expected output and work from there
-3 - If you're submitting a new bug, check to see if It's already submitted. Propose a brief solution to the problem to make it easier for other people to fix.
-4 - Enjoy coding :) !
+1 - New ideas, suggestions and improvements are welcomed.  <br />
+2 - Create a unit test with the expected output and work from there  <br />
+3 - If you're submitting a new bug, check to see if It's already submitted. Propose a brief solution to the problem to make it easier for other people to fix.  <br />
+4 - Enjoy coding :) !  <br />
 
 ## Bug Fixing
 ### 1- Choose a problem from the issues labeled "Bug" or "Help Wanted"
