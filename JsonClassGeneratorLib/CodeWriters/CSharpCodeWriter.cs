@@ -36,7 +36,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
         public string GetTypeName(JsonType type, IJsonClassGeneratorConfig config)
         {
-            var arraysAsLists = !config.ExplicitDeserialization;
+            var arraysAsLists = config.ArrayAsList();
 
             switch (type.Type)
             {
@@ -360,7 +360,11 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 }
                 else
                 {
-                    sw.AppendFormat(indentMembers + "public {0} {1} {{ get; set; }}{2}", field.Type.GetTypeName(), classPropertyName, Environment.NewLine);
+                    var getterSetterPart = "{ get; set; }";
+                    if (config.NoSettersForCollections 
+                        &&  (field.Type.IsCollectionType() 
+                            && (config.ArrayAsList() && field.Type.Type == JsonTypeEnum.Array))) getterSetterPart = "{ get; } = new " + field.Type.GetTypeName() + "();";
+                    sw.AppendFormat(indentMembers + "public {0} {1} {2}{3}", field.Type.GetTypeName(), classPropertyName, getterSetterPart, Environment.NewLine);
                 }
 
                 first = false;

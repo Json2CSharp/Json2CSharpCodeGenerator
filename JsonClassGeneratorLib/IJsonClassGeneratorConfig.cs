@@ -29,6 +29,9 @@ namespace Xamasoft.JsonClassGenerator
         bool         UseNamespaces              { get; }
         bool         ExamplesInDocumentation    { get; set; }
         bool         ImmutableClasses           { get; set; }
+        bool         NoSettersForCollections    { get; set; }
+
+        bool ArrayAsList();
     }
 
     public static class JsonClassGeneratorConfigExtensions

@@ -142,6 +142,10 @@ namespace Xamasoft.JsonClassGenerator
             return InternalType.GetInnermostType();
         }
 
+        public bool IsCollectionType()
+        {
+            return Type == JsonTypeEnum.Array || Type == JsonTypeEnum.Dictionary;
+        }
 
         public string GetTypeName()
         {

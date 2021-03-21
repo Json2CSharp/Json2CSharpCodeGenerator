@@ -1,0 +1,18 @@
+// Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);
+    public class Datum
+    {
+        [JsonPropertyName("Name")]
+        public string Name { get; set; }
+
+        [JsonPropertyName("Year")]
+        public int Year { get; set; }
+    }
+
+    public class Root
+    {
+        [JsonPropertyName("Id")]
+        public long Id { get; set; }
+
+        [JsonPropertyName("Data")]
+        public List<Datum> Data { get; } = new List<Datum>();
+    }
