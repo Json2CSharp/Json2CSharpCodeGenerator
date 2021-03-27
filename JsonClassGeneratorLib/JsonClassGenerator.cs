@@ -39,6 +39,7 @@ namespace Xamasoft.JsonClassGenerator
         public bool         UseNamespaces              => !String.IsNullOrEmpty(this.Namespace);
         public bool         ExamplesInDocumentation    { get; set; }
         public bool         ImmutableClasses           { get; set; }
+        public bool         NoSettersForCollections    { get; set; }
 
         #endregion
 
@@ -370,6 +371,11 @@ namespace Xamasoft.JsonClassGenerator
             }
 
             return sb.ToString();
+        }
+
+        public bool ArrayAsList()
+        {
+            return !this.ExplicitDeserialization;
         }
     }
 }
