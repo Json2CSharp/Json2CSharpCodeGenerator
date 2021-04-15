@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+
+    <RootNamespace>Xamasoft.JsonClassGenerator.WinForms</RootNamespace>
+    <AssemblyName>Xamasoft.JsonClassGenerator.WinForms</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\lib\JsonClassGeneratorLib.csproj" />
+  </ItemGroup>
+  
+
+</Project>
+
+
