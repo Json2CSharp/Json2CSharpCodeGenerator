@@ -25,6 +25,7 @@ namespace TESTS_JSON_TO_CSHARP
             };
 
             string actual = jsonClassGenerator.GenerateClasses(input, out _).ToString();
+            // Console.WriteLine("Actual:\n" + actual);
 
             var outputFixed = output.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", "");
             var actualFixed = actual.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", "");

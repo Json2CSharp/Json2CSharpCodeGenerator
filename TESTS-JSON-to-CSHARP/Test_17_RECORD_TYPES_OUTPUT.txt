@@ -1,10 +1,10 @@
 // Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);
-public record Values(
+public record Value(
     [property: JsonPropertyName("id")] int Id,
-    [property: JsonPropertyName("real")] bool Real,
+    [property: JsonPropertyName("real")] bool Real
 );
 
 public record Root(
-    [property: JsonPropertyName("id")] string Key,
-    [property: JsonPropertyName("values")] Values[] Values
+    [property: JsonPropertyName("key")] string Key,
+    [property: JsonPropertyName("values")] IReadOnlyList<Value> Values
 );

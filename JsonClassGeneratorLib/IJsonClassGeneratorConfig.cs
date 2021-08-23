@@ -29,6 +29,7 @@ namespace Xamasoft.JsonClassGenerator
         bool         UseNamespaces              { get; }
         bool         ExamplesInDocumentation    { get; set; }
         bool         ImmutableClasses           { get; set; }
+        bool         RecordTypes                { get; set; }
         bool         NoSettersForCollections    { get; set; }
 
         bool ArrayAsList();
@@ -50,14 +51,15 @@ namespace Xamasoft.JsonClassGenerator
             
 
             string name = field.JsonMemberName;
+            string attributeTarget = config.RecordTypes ? "property:" : string.Empty;
 
             if (config.UseJsonPropertyName)
             {
-                return "[JsonPropertyName(\"" + name + "\")]";
+                return $"[{attributeTarget}JsonPropertyName(\"{name}\")]";
             }
             else if (config.UseJsonAttributes || field.ContainsSpecialChars)
             {
-                return "[JsonProperty(\"" + name + "\")]";
+                return $"[{attributeTarget}JsonProperty(\"{name}\")]";
             }
             else
             {
