@@ -92,6 +92,8 @@
     <Content Include="Test_11_NoListSetter_OUTPUT1.txt" />
     <Content Include="Test_17_RECORD_TYPES_INPUT.txt" />
     <Content Include="Test_17_RECORD_TYPES_OUTPUT.txt" />
+    <Content Include="Test_17_RECORD_TYPES_OUTPUT_NEWTONSOFT.txt" />
+    <Content Include="Test_17_RECORD_TYPES_OUTPUT_SYSTEMTEXTJSON.txt" />
     <Content Include="Test_5_BASIC_SCENARIO_INPUT.txt" />
     <Content Include="Test_5_BASIC_SCENARIO_OUTPUT.txt" />
     <Content Include="Test_1_2_SETTINGS_PASCAL_INPUT.txt" />
