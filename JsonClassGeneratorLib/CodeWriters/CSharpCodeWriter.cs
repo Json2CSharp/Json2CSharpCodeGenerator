@@ -337,7 +337,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 // this is required because every line except the last should end with a comma
                 if (config.RecordTypes && !first)
                 {
-                    sw.Append($",{Environment.NewLine}");
+                    sw.AppendLine(",");
                 }
 
                 if( !first && ( ( propertyAttribute.Length > 0 && !config.RecordTypes ) || config.ExamplesInDocumentation) )
