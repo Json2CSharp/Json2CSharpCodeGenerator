@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Xamasoft.JsonClassGenerator.CodeWriters
@@ -217,8 +216,15 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             const string visibility = "public";
 
             var className = type.AssignedName;
-            sw.AppendFormat(indentTypes + "{0} class {1}{2}", visibility, className, Environment.NewLine);
-            sw.AppendLine  (indentTypes + "{");
+            if (config.RecordTypes)
+            {
+                sw.AppendFormat(indentTypes + "{0} record {1}({2}", visibility, className, Environment.NewLine);
+            }
+            else
+            {
+                sw.AppendFormat(indentTypes + "{0} class {1}{2}", visibility, className, Environment.NewLine);
+                sw.AppendLine  (indentTypes + "{");
+            }
 
 #if CAN_SUPRESS
             var shouldSuppressWarning = config.InternalVisibility && !config.UseProperties && !config.ExplicitDeserialization;
@@ -251,7 +257,11 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             }
 #endif
 
-            if ((!config.UseNestedClasses) || (config.UseNestedClasses && !type.IsRoot))
+            if (config.RecordTypes)
+            {
+                sw.AppendLine(indentTypes + ");");
+            }
+            else if ((!config.UseNestedClasses) || (config.UseNestedClasses && !type.IsRoot))
             {
                 sw.AppendLine(indentTypes + "}");
             }
@@ -323,9 +333,17 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 string classPropertyName = this.GetCSharpPascalCaseName(field.MemberName);
                 string propertyAttribute = config.GetCSharpJsonAttributeCode(field);
 
-                if( !first && (propertyAttribute.Length > 0 || config.ExamplesInDocumentation) )
+                // If we are using record types and this is not the first iteration, add a comma and newline to the previous line
+                // this is required because every line except the last should end with a comma
+                if (config.RecordTypes && !first)
+                {
+                    sw.AppendLine(",");
+                }
+
+                if( !first && ( ( propertyAttribute.Length > 0 && !config.RecordTypes ) || config.ExamplesInDocumentation) )
                 {
                     // If rendering examples/XML comments - or property attributes - then add a newline before the property for readability's sake (except if it's the first property in the class)
+                    // For record types, we want all members to be next to each other, unless when using examples
                     sw.AppendLine();
                 }
 
@@ -340,10 +358,26 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 if (propertyAttribute.Length > 0)
                 {
                     sw.Append(indentMembers);
-                    sw.AppendLine(propertyAttribute);
+                    sw.Append(propertyAttribute);
+
+                    if (!config.RecordTypes)
+                        sw.AppendLine();
                 }
 
-                if (config.UseFields)
+                // record types is not compatible with UseFields, so it comes first
+                if (config.RecordTypes)
+                {
+                    // NOTE: not adding newlines here, that happens at the start of the loop. We need this so we can lazily add commas at the end.
+                    if(field.Type.Type == JsonTypeEnum.Array)
+                    {
+                        sw.AppendFormat(" IReadOnlyList<{0}> {1}", this.GetTypeName(field.Type.InternalType, config), classPropertyName);
+                    }
+                    else
+                    {
+                        sw.AppendFormat(" {0} {1}", field.Type.GetTypeName(), classPropertyName);
+                    }
+                }
+                else if (config.UseFields)
                 {
                     sw.AppendFormat(indentMembers + "public {0}{1} {2};{3}", config.ImmutableClasses ? "readonly " : "", field.Type.GetTypeName(), classPropertyName, Environment.NewLine);
                 }
@@ -369,6 +403,10 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
                 first = false;
             }
+
+            // emit a final newline if we're dealing with record types
+            if (config.RecordTypes)
+                sw.AppendLine();
 
         }
 

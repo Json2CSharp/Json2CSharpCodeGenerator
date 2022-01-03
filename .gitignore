@@ -261,3 +261,6 @@ webpack.config.js
 
 #OutputDir
 /Publish
+
+# IntelliJ-based IDE configuration (ie. Rider)
+/.idea

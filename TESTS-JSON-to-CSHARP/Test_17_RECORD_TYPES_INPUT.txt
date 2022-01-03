@@ -1,0 +1,13 @@
+{
+	"key": "my_key",
+	"values": [
+		{
+			"id": 123,
+			"real": true,
+		},
+		{
+			"id": 456,
+			"real": false
+		}
+	]
+}

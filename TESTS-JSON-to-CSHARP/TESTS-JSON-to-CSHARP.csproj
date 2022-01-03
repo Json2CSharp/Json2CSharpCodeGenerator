@@ -54,6 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test_0_DIAGNOSTICS.cs" />
     <Compile Include="Test_11_NoListSetter.cs" />
+    <Compile Include="Test_17_RECORD_TYPES.cs" />
     <Compile Include="Test_5_BASIC_SCENARIO.cs" />
     <Compile Include="Test_1_2_SETTINGS_PASCAL.cs" />
     <Compile Include="Test_1_3_SETTINGS_FIELDS.cs" />
@@ -89,6 +90,10 @@
     <Content Include="Test_11_NoListSetter_INPUT1.txt" />
     <Content Include="Test_11_NoListSetter_OUTPUT.txt" />
     <Content Include="Test_11_NoListSetter_OUTPUT1.txt" />
+    <Content Include="Test_17_RECORD_TYPES_INPUT.txt" />
+    <Content Include="Test_17_RECORD_TYPES_OUTPUT.txt" />
+    <Content Include="Test_17_RECORD_TYPES_OUTPUT_NEWTONSOFT.txt" />
+    <Content Include="Test_17_RECORD_TYPES_OUTPUT_SYSTEMTEXTJSON.txt" />
     <Content Include="Test_5_BASIC_SCENARIO_INPUT.txt" />
     <Content Include="Test_5_BASIC_SCENARIO_OUTPUT.txt" />
     <Content Include="Test_1_2_SETTINGS_PASCAL_INPUT.txt" />
