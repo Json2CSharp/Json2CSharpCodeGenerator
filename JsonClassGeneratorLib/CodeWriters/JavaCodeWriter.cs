@@ -18,8 +18,12 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             get { return "Java"; }
         }
 
-        IReadOnlyCollection<string> ICodeBuilder.ReservedKeywords => throw new NotImplementedException();
-        bool ICodeBuilder.IsReservedKeyword(string word) => throw new NotImplementedException();
+        private static readonly HashSet<string> _reservedKeywords = new HashSet<string>(comparer: StringComparer.Ordinal) {
+            "class"
+        };
+
+        IReadOnlyCollection<string> ICodeBuilder.ReservedKeywords => _reservedKeywords;
+        public bool IsReservedKeyword(string word) => _reservedKeywords.Contains(word ?? string.Empty);
 
         public string GetTypeName(JsonType type, IJsonClassGeneratorConfig config)
         {
@@ -74,28 +78,11 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             {
                 if (config.UsePascalCase || config.ExamplesInDocumentation) sw.AppendLine();
 
-                // if (config.UsePascalCase || config.UseJsonAttributes)
-                // {
-                // 
-                // }
-                // 
-                // 
-                // if (config.UseFields)
-                // {
-                //     sw.AppendFormat(prefix + "@JsonProperty(\"{0}\"){1}", field.JsonMemberName, Environment.NewLine);
-                // }
-                // else
-                // {
-                //     sw.AppendFormat(prefix + "@JsonProperty" + "(\"{0}\"){1}", field.JsonMemberName,Environment.NewLine);
-                //     sw.AppendFormat(prefix + "public {0} get{1}() {{ \r\t\t return this.{2} \r\t}}", field.Type.GetTypeName(), ChangeFirstChar(field.MemberName), ChangeFirstChar(field.MemberName, false));
-                //     sw.AppendFormat(prefix + "public {0} set{1}({0} {2}) {{ \r\t\t this.{2} = {2} \r\t}}", field.Type.GetTypeName(), ChangeFirstChar(field.MemberName), ChangeFirstChar(field.MemberName, false));
-                //     sw.AppendFormat(prefix + "{0} {1};", field.Type.GetTypeName(), ChangeFirstChar(field.MemberName, false));
-                //     sw.AppendLine();
-                // }
-
                 // Check if property name starts with number
                 string memberName = field.MemberName;
                 if (!string.IsNullOrEmpty(field.MemberName) && char.IsDigit(field.MemberName[0])) memberName = "_" + memberName;
+
+                if (this.IsReservedKeyword(memberName)) memberName = "my" + memberName;
 
                 if (config.UseProperties)
                 {

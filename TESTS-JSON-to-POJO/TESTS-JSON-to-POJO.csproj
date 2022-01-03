@@ -54,6 +54,7 @@
     <Compile Include="Test_0_BASIC_SCENARIO.cs" />
     <Compile Include="Test_2_HANDLE_NUMBERS.cs" />
     <Compile Include="Test_3_SETTINGS.cs" />
+    <Compile Include="Test_4_JAVA_RESERVED_KEYWORDS.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CreateTest.ps1" />
@@ -70,6 +71,8 @@
     <Content Include="Test_3_SETTINGS_ADDJSONATTRIBUTE_INPUT.txt" />
     <Content Include="Test_3_SETTINGS_USEPASCAL_OUTPUT.txt" />
     <Content Include="Test_3_SETTINGS_ADDJSONATTRIBUTE_OUTPUT.txt" />
+    <Content Include="Test_4_JAVA_RESERVED_KEYWORDS_INPUT.txt" />
+    <Content Include="Test_4_JAVA_RESERVED_KEYWORDS_OUTPUT.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JsonClassGeneratorLib\JsonClassGeneratorLib.csproj">

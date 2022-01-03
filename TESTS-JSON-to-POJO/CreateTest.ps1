@@ -1,4 +1,6 @@
-﻿$TestName = Read-Host -Prompt 'Test Name With Number: THE FORMAT IS [TESTNUMBER]_[TESTNAME], EXAMPLE : 10_TESTNAME.'
+﻿set-executionpolicy unrestricted
+
+$TestName = Read-Host -Prompt 'Test Name With Number: THE FORMAT IS [TESTNUMBER]_[TESTNAME], EXAMPLE : 10_TESTNAME.'
 # TO CHANGE $Dir TO CHANGE $Dir TO CHANGE $Dir TO CHANGE $Dir TO CHANGE $Dir TO CHANGE $Dir TO CHANGE $Dir TO CHANGE $Dir 
 
 $Dir =  ($psise.CurrentFile.FullPath -replace "CreateTest.ps1", "") 
