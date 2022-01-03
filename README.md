@@ -1,4 +1,6 @@
 ## Special Thanks to Our Contributors !!
+Implemented Immutable Classes Feature <br/>
+[Holly-HaCKer](https://github.com/HoLLy-HaCKeR) <br/>
 
 Implemented Immutable Classes Feature <br/>
 [Jehoel](https://github.com/Jehoel) <br/>
