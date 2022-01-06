@@ -1,9 +1,13 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+
+using TESTS_JSON_TO_CSHARP;
+
 using Xamasoft.JsonClassGenerator;
 using Xamasoft.JsonClassGenerator.CodeWriters;
 
@@ -27,6 +31,10 @@ namespace TESTS_JSON_to_POJO
                   string returnVal = jsonClassGenerator.GenerateClasses(input, out errorMessage).ToString();
             string resultsCompare = File.ReadAllText(resultPath); 
                 Assert.AreEqual(resultsCompare.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""), returnVal.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""));
+            string expectedOutput = resultsCompare.NormalizeOutput();
+            string actualOutput   = returnVal     .NormalizeOutput();
+
+            Assert.AreEqual(expected: expectedOutput, actual: actualOutput);
         }
     }
 }

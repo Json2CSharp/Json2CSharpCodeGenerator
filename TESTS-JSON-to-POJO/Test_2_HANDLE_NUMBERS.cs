@@ -1,51 +1,58 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+
+using TESTS_JSON_TO_CSHARP;
+
 using Xamasoft.JsonClassGenerator;
 using Xamasoft.JsonClassGenerator.CodeWriters;
 
 namespace TESTS_JSON_to_POJO
 {
-
     [TestClass]
-  public class Test_2_HANDLE_NUMBERS{
-   
+    public class Test_2_HANDLE_NUMBERS
+    {
         [TestMethod]
-        public void Run()
-        { 
-        string path = Directory.GetCurrentDirectory().Replace("bin\\Debug", "")  + @"Test_2_HANDLE_NUMBERS_INPUT.txt";
+        public void Run_camelCase()
+        {
+            string path       = Directory.GetCurrentDirectory().Replace("bin\\Debug", "")  + @"Test_2_HANDLE_NUMBERS_INPUT.txt";
+            string resultPath = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_2_HANDLE_NUMBERS_OUTPUT.txt";
+            string input      = File.ReadAllText(path);
 
-string resultPath = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_2_HANDLE_NUMBERS_OUTPUT.txt";            
-            string input = File.ReadAllText(path);
-            string errorMessage = string.Empty;
-			JavaCodeWriter javaCodeWriter = new JavaCodeWriter();
+            JavaCodeWriter javaCodeWriter = new JavaCodeWriter();
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
-			jsonClassGenerator.CodeWriter = javaCodeWriter;
-            string returnVal = jsonClassGenerator.GenerateClasses(input, out errorMessage).ToString();
-            string resultsCompare = File.ReadAllText(resultPath); 
-                Assert.AreEqual(resultsCompare.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""), returnVal.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""));
+            jsonClassGenerator.CodeWriter = javaCodeWriter;
+
+            string returnVal = jsonClassGenerator.GenerateClasses(input, out string errorMessage).ToString();
+            string resultsCompare = File.ReadAllText(resultPath);
+            Assert.AreEqual(resultsCompare.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""), returnVal.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""));
+            string expectedOutput = resultsCompare.NormalizeOutput();
+            string actualOutput   = returnVal     .NormalizeOutput();
+            Assert.AreEqual(expected: expectedOutput, actual: actualOutput);
         }
 
-
         [TestMethod]
-        public void Run2()
+        public void Run_PascalCase()
         {
-            string path = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_2_HANDLE_NUMBERS_INPUT1.txt";
-
+            string path       = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_2_HANDLE_NUMBERS_INPUT1.txt";
             string resultPath = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_2_HANDLE_NUMBERS_OUTPUT1.txt";
-            string input = File.ReadAllText(path);
-            string errorMessage = string.Empty;
+            string input      = File.ReadAllText(path);
+
             JavaCodeWriter javaCodeWriter = new JavaCodeWriter();
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
             jsonClassGenerator.CodeWriter = javaCodeWriter;
             jsonClassGenerator.UsePascalCase = true;
-            jsonClassGenerator.UseJsonAttributes = true;
-            string returnVal = jsonClassGenerator.GenerateClasses(input, out errorMessage).ToString();
+
+            string returnVal = jsonClassGenerator.GenerateClasses(input, out string errorMessage).ToString();
             string resultsCompare = File.ReadAllText(resultPath);
             Assert.AreEqual(resultsCompare.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""), returnVal.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""));
+            string expectedOutput = resultsCompare.NormalizeOutput();
+            string actualOutput   = returnVal     .NormalizeOutput();
+            Assert.AreEqual(expected: expectedOutput, actual: actualOutput);
         }
     }
 }

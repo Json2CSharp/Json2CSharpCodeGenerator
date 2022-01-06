@@ -10,11 +10,9 @@ using Xamasoft.JsonClassGenerator.CodeWriters;
 
 namespace TESTS_JSON_TO_CSHARP
 {
-
     [TestClass]
     public class Test_8_LargeArrayOfObjects
     {
-
         [TestMethod]
         public void Run()
         {
@@ -38,7 +36,7 @@ namespace TESTS_JSON_TO_CSHARP
             Assert.IsTrue(false);
 
             string resultsCompare = File.ReadAllText(resultPath);
-            //Assert.AreEqual(resultsCompare.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""), returnVal.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""));
+            //Assert.AreEqual(resultsCompare.NormalizeOutput(), returnVal.NormalizeOutput());
         }
     }
 }

@@ -25,7 +25,7 @@ namespace TESTS_JSON_TO_CSHARP
             jsonClassGenerator.UsePascalCase = true;
             string returnVal = jsonClassGenerator.GenerateClasses(input, out errorMessage).ToString();
             string resultsCompare = File.ReadAllText(resultPath);
-            Assert.AreEqual(resultsCompare.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""), returnVal.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""));
+            Assert.AreEqual(expected:resultsCompare.NormalizeOutput(), actual: returnVal.NormalizeOutput());
         }
     }
 }

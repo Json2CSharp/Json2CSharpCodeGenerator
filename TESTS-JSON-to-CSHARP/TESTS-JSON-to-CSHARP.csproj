@@ -50,8 +50,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestUtility.cs" />
     <Compile Include="Test_0_DIAGNOSTICS.cs" />
     <Compile Include="Test_11_NoListSetter.cs" />
     <Compile Include="Test_17_RECORD_TYPES.cs" />

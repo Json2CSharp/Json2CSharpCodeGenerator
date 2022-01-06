@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using Xamasoft.JsonClassGenerator;
 using Xamasoft.JsonClassGenerator.CodeWriters;
 
@@ -29,10 +30,10 @@ namespace TESTS_JSON_TO_CSHARP
 
         private static void DoTest(bool? useSystemTextJson, string outputFileSuffix = "")
         {
-            string inputPath = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_17_RECORD_TYPES_INPUT.txt";
+            string inputPath  = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_17_RECORD_TYPES_INPUT.txt";
             string outputPath = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + $@"Test_17_RECORD_TYPES_OUTPUT{outputFileSuffix}.txt";
-            string input = File.ReadAllText(inputPath);
-            string output = File.ReadAllText(outputPath);
+            string input      = File.ReadAllText(inputPath);
+            string output     = File.ReadAllText(outputPath);
 
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator
             {
@@ -45,10 +46,10 @@ namespace TESTS_JSON_TO_CSHARP
             string actual = jsonClassGenerator.GenerateClasses(input, out _).ToString();
             // Console.WriteLine("Actual:\n" + actual);
 
-            var outputFixed = output.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", "");
-            var actualFixed = actual.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", "");
+            var outputFixed = output.NormalizeOutput();
+            var actualFixed = actual.NormalizeOutput();
 
-            Assert.AreEqual(outputFixed, actualFixed);
+            Assert.AreEqual(expected: outputFixed, actual: actualFixed);
         }
     }
 }

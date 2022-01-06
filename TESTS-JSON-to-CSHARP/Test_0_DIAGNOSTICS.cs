@@ -23,15 +23,15 @@ namespace TESTS_JSON_TO_CSHARP
             CSharpCodeWriter csharpCodeWriter = new CSharpCodeWriter();
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
             jsonClassGenerator.CodeWriter = csharpCodeWriter;
-            
+
             jsonClassGenerator.UseJsonAttributes = true;
             jsonClassGenerator.UseJsonPropertyName = true;
 
             string returnVal = jsonClassGenerator.GenerateClasses(input, errorMessage: out _).ToString();
             string resultsCompare = File.ReadAllText(resultPath);
 
-            string expected = resultsCompare.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", "");
-            string actual   = returnVal     .Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", "");
+            string expected = resultsCompare.NormalizeOutput();
+            string actual   = returnVal     .NormalizeOutput();
            // Assert.AreEqual(expected, actual);
         }
     }

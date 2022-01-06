@@ -3,6 +3,6 @@
 /* ObjectMapper om = new ObjectMapper();
 Root root = om.readValue(myJsonString), Root.class); */
 public class Root{
-    public String myclass;
+    @JsonProperty("class") public String myclass;
 }
 
