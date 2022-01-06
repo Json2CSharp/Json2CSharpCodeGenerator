@@ -13,22 +13,20 @@ using TESTS_JSON_TO_CSHARP;
 
 namespace TESTS_JSON_to_POJO
 {
-
     [TestClass]
     public class Test_4_JAVA_RESERVED_KEYWORDS
     {
-
         [TestMethod]
         public void Run()
         {
-            string path = Directory.GetCurrentDirectory().Replace("bin\\Debug", "")  + @"Test_4_JAVA_RESERVED_KEYWORDS_INPUT.txt";
+            string path       = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_4_JAVA_RESERVED_KEYWORDS_INPUT.txt";
             string resultPath = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_4_JAVA_RESERVED_KEYWORDS_OUTPUT.txt";
-            string input = File.ReadAllText(path);
-            string errorMessage = string.Empty;
+            string input      = File.ReadAllText(path);
+
             JavaCodeWriter javaCodeWriter = new JavaCodeWriter();
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
             jsonClassGenerator.CodeWriter = javaCodeWriter;
-            string returnVal = jsonClassGenerator.GenerateClasses(input, out errorMessage).ToString();
+            jsonClassGenerator.MutableClasses.Members = OutputMembers.AsPublicFields;
 
             string returnVal = jsonClassGenerator.GenerateClasses(input, out string errorMessage).ToString();
             string resultsCompare = File.ReadAllText(resultPath);

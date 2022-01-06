@@ -13,24 +13,24 @@ using Xamasoft.JsonClassGenerator.CodeWriters;
 
 namespace TESTS_JSON_to_POJO
 {
-
     [TestClass]
-  public class Test_0_BASIC_SCENARIO{
-   
+    public class Test_0_BASIC_SCENARIO
+    {
         [TestMethod]
         public void Run()
-        { 
-        string path = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_0_BASIC_SCENARIO_INPUT.txt";
-            string resultPath = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_0_BASIC_SCENARIO_OUTPUT.txt";            
-            string input = File.ReadAllText(path);
-             string errorMessage = string.Empty;
-			JavaCodeWriter javaCodeWriter = new JavaCodeWriter();
-                JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
-            jsonClassGenerator.CodeWriter = javaCodeWriter;
+        {
+            string path       = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_0_BASIC_SCENARIO_INPUT.txt";
+            string resultPath = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_0_BASIC_SCENARIO_OUTPUT.txt";
+            string input      = File.ReadAllText(path);
 
-                  string returnVal = jsonClassGenerator.GenerateClasses(input, out errorMessage).ToString();
-            string resultsCompare = File.ReadAllText(resultPath); 
-                Assert.AreEqual(resultsCompare.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""), returnVal.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""));
+            JavaCodeWriter javaCodeWriter = new JavaCodeWriter();
+            JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
+            jsonClassGenerator.CodeWriter = javaCodeWriter;
+            jsonClassGenerator.MutableClasses.Members = OutputMembers.AsPublicFields;
+
+            string returnVal = jsonClassGenerator.GenerateClasses(input, out string errorMessage).ToString();
+            string resultsCompare = File.ReadAllText(resultPath);
+
             string expectedOutput = resultsCompare.NormalizeOutput();
             string actualOutput   = returnVal     .NormalizeOutput();
 

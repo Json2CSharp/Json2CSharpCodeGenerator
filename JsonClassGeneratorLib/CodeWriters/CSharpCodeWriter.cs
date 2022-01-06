@@ -17,7 +17,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
         }
 
         private const string NoRenameAttribute = "[Obfuscation(Feature = \"renaming\", Exclude = true)]";
-        private const string NoPruneAttribute = "[Obfuscation(Feature = \"trigger\", Exclude = false)]";
+        private const string NoPruneAttribute  = "[Obfuscation(Feature = \"trigger\", Exclude = false)]";
 
         private static readonly HashSet<string> _reservedKeywords = new HashSet<string>(comparer: StringComparer.Ordinal) {
             "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const", "continue",
@@ -35,51 +35,58 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
         public string GetTypeName(JsonType type, IJsonClassGeneratorConfig config)
         {
-            var arraysAsLists = config.ArrayAsList();
-
             switch (type.Type)
             {
-                case JsonTypeEnum.Anything         : return "object";
-                case JsonTypeEnum.Array            : return arraysAsLists ? "List<" + this.GetTypeName(type.InternalType, config) + ">" : this.GetTypeName(type.InternalType, config) + "[]";
-                case JsonTypeEnum.Dictionary       : return "Dictionary<string, " + this.GetTypeName(type.InternalType, config) + ">";
-                case JsonTypeEnum.Boolean          : return "bool";
-                case JsonTypeEnum.Float            : return "double";
-                case JsonTypeEnum.Integer          : return "int";
-                case JsonTypeEnum.Long             : return "long";
-                case JsonTypeEnum.Date             : return "DateTime";
-                case JsonTypeEnum.NonConstrained   : return "object";
-                case JsonTypeEnum.NullableBoolean  : return "bool?";
-                case JsonTypeEnum.NullableFloat    : return "double?";
-                case JsonTypeEnum.NullableInteger  : return "int?";
-                case JsonTypeEnum.NullableLong     : return "long?";
-                case JsonTypeEnum.NullableDate     : return "DateTime?";
-                case JsonTypeEnum.NullableSomething: return "object";
-                case JsonTypeEnum.Object           : return type.NewAssignedName;
-                case JsonTypeEnum.String           : return "string";
-                default: throw new NotSupportedException("Unsupported json type: " + type.Type);
+            case JsonTypeEnum.Anything         : return "object";
+            case JsonTypeEnum.Array            : return GetCollectionTypeName(elementTypeName: this.GetTypeName(type.InternalType, config), config.CollectionType);
+            case JsonTypeEnum.Dictionary       : return "Dictionary<string, " + this.GetTypeName(type.InternalType, config) + ">";
+            case JsonTypeEnum.Boolean          : return "bool";
+            case JsonTypeEnum.Float            : return "double";
+            case JsonTypeEnum.Integer          : return "int";
+            case JsonTypeEnum.Long             : return "long";
+            case JsonTypeEnum.Date             : return "DateTime";
+            case JsonTypeEnum.NonConstrained   : return "object";
+            case JsonTypeEnum.NullableBoolean  : return "bool?";
+            case JsonTypeEnum.NullableFloat    : return "double?";
+            case JsonTypeEnum.NullableInteger  : return "int?";
+            case JsonTypeEnum.NullableLong     : return "long?";
+            case JsonTypeEnum.NullableDate     : return "DateTime?";
+            case JsonTypeEnum.NullableSomething: return "object";
+            case JsonTypeEnum.Object           : return type.NewAssignedName;
+            case JsonTypeEnum.String           : return "string";
+            default: throw new NotSupportedException("Unsupported json type: " + type.Type);
+            }
+        }
+
+        private static string GetCollectionTypeName(string elementTypeName, OutputCollectionType type)
+        {
+            switch (type)
+            {
+            case OutputCollectionType.Array         : return elementTypeName + "[]";
+            case OutputCollectionType.MutableList   : return "List<" + elementTypeName + ">";
+            case OutputCollectionType.IReadOnlyList : return "IReadOnlyList<" + elementTypeName + ">";
+            case OutputCollectionType.ImmutableArray: return "ImmutableArray<" + elementTypeName + ">";
+
+            default:
+                throw new ArgumentOutOfRangeException(paramName: nameof(type), actualValue: type, message: "Invalid " + nameof(OutputCollectionType) + " enum value.");
             }
         }
 
         private bool ShouldApplyNoRenamingAttribute(IJsonClassGeneratorConfig config)
         {
-            return config.ApplyObfuscationAttributes && !config.ExplicitDeserialization && !config.UsePascalCase;
+            return config.ApplyObfuscationAttributes && !config.UsePascalCase;
         }
 
         private bool ShouldApplyNoPruneAttribute(IJsonClassGeneratorConfig config)
         {
-            return config.ApplyObfuscationAttributes && !config.ExplicitDeserialization && config.UseFields;
+            return config.ApplyObfuscationAttributes && (config.OutputType == OutputTypes.MutableClass && config.MutableClasses.Members == OutputMembers.AsPublicFields);
         }
 
         public void WriteFileStart(IJsonClassGeneratorConfig config, StringBuilder sw)
         {
-            if (config.UseNamespaces)
+            if (config.HasNamespace())
             {
-                // foreach (var line in JsonClassGenerator.FileHeader)
-                // {
-                //     sw.AppendFormat("// " + line);
-                // }
-
-                List<string> namespaces = new List<string>()
+                List<string> importNamespaces = new List<string>()
                 {
                     "System",
                     "System.Collections.Generic"
@@ -87,29 +94,28 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
                 if (this.ShouldApplyNoPruneAttribute(config) || this.ShouldApplyNoRenamingAttribute(config))
                 {
-                    namespaces.Add("System.Reflection");
-                }
-                if (!config.ExplicitDeserialization && config.UseJsonAttributes)
-                {
-                    namespaces.Add("Newtonsoft.Json");
-                    namespaces.Add("Newtonsoft.Json.Linq");
-                }
-                if (!config.ExplicitDeserialization && config.UseJsonPropertyName)
-                {
-                    namespaces.Add("System.Text.Json");
-                }
-                if (config.ExplicitDeserialization)
-                {
-                    namespaces.Add("JsonCSharpClassGenerator");
-                }
-                if (config.SecondaryNamespace != null && config.HasSecondaryClasses && !config.UseNestedClasses)
-                {
-                    namespaces.Add(config.SecondaryNamespace);
+                    importNamespaces.Add("System.Reflection");
                 }
 
-                namespaces.Sort(CompareNamespacesSystemFirst);
+                switch (config.AttributeLibrary)
+                {
+                case JsonLibrary.NewtonsoftJson:
+                    importNamespaces.Add("Newtonsoft.Json");
+                    importNamespaces.Add("Newtonsoft.Json.Linq");
+                    break;
+                case JsonLibrary.SystemTextJson:
+                    importNamespaces.Add("System.Text.Json");
+                    break;
+                }
 
-                foreach(string ns in namespaces) // NOTE: Using `.Distinct()` after sorting may cause out-of-order results.
+                if (!String.IsNullOrWhiteSpace(config.SecondaryNamespace) && !config.UseNestedClasses)
+                {
+                    importNamespaces.Add(config.SecondaryNamespace);
+                }
+
+                importNamespaces.Sort(CompareNamespacesSystemFirst);
+
+                foreach(string ns in importNamespaces) // NOTE: Using `.Distinct()` after sorting may cause out-of-order results.
                 {
                     sw.AppendFormat("using {0};{1}", ns, Environment.NewLine);
                 }
@@ -165,13 +171,16 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
         public void WriteDeserializationComment(IJsonClassGeneratorConfig config, StringBuilder sw)
         {
-            if (config.UseJsonPropertyName)
+            if (config.AttributeLibrary == JsonLibrary.NewtonsoftJson)
+            {
+                sw.AppendLine("// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);");
+            }
+            else if(config.AttributeLibrary == JsonLibrary.SystemTextJson)
             {
                 sw.AppendLine("// Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);");
             }
             else
             {
-                sw.AppendLine("// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); ");
             }
         }
 
@@ -216,7 +225,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             const string visibility = "public";
 
             var className = type.AssignedName;
-            if (config.RecordTypes)
+            if (config.OutputType == OutputTypes.ImmutableRecord)
             {
                 sw.AppendFormat(indentTypes + "{0} record {1}({2}", visibility, className, Environment.NewLine);
             }
@@ -241,7 +250,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             else
 #endif
             {
-                if (config.ImmutableClasses)
+                if (config.OutputType == OutputTypes.ImmutableClass)
                 {
                     this.WriteClassConstructor(config, sw, type, indentMembers: indentMembers, indentBodies: indentBodies);
                 }
@@ -257,7 +266,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             }
 #endif
 
-            if (config.RecordTypes)
+            if (config.OutputType == OutputTypes.ImmutableRecord)
             {
                 sw.AppendLine(indentTypes + ");");
             }
@@ -335,12 +344,12 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
                 // If we are using record types and this is not the first iteration, add a comma and newline to the previous line
                 // this is required because every line except the last should end with a comma
-                if (config.RecordTypes && !first)
+                if (config.OutputType == OutputTypes.ImmutableRecord && !first)
                 {
                     sw.AppendLine(",");
                 }
 
-                if( !first && ( ( propertyAttribute.Length > 0 && !config.RecordTypes ) || config.ExamplesInDocumentation) )
+                if( !first && ( ( propertyAttribute.Length > 0 && config.OutputType != OutputTypes.ImmutableRecord ) || config.ExamplesInDocumentation) )
                 {
                     // If rendering examples/XML comments - or property attributes - then add a newline before the property for readability's sake (except if it's the first property in the class)
                     // For record types, we want all members to be next to each other, unless when using examples
@@ -360,16 +369,19 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                     sw.Append(indentMembers);
                     sw.Append(propertyAttribute);
 
-                    if (!config.RecordTypes)
+                    if (config.OutputType != OutputTypes.ImmutableRecord)
+                    {
                         sw.AppendLine();
+                    }
                 }
 
                 // record types is not compatible with UseFields, so it comes first
-                if (config.RecordTypes)
+                if (config.OutputType == OutputTypes.ImmutableRecord)
                 {
                     // NOTE: not adding newlines here, that happens at the start of the loop. We need this so we can lazily add commas at the end.
                     if(field.Type.Type == JsonTypeEnum.Array)
                     {
+                        // TODO: Respect config.CollectionType
                         sw.AppendFormat(" IReadOnlyList<{0}> {1}", this.GetTypeName(field.Type.InternalType, config), classPropertyName);
                     }
                     else
@@ -377,14 +389,44 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                         sw.AppendFormat(" {0} {1}", field.Type.GetTypeName(), classPropertyName);
                     }
                 }
-                else if (config.UseFields)
+                else if(config.OutputType == OutputTypes.MutableClass)
                 {
-                    sw.AppendFormat(indentMembers + "public {0}{1} {2};{3}", config.ImmutableClasses ? "readonly " : "", field.Type.GetTypeName(), classPropertyName, Environment.NewLine);
+                    if (config.MutableClasses.Members == OutputMembers.AsPublicFields)
+                    {
+                        // Render a field like `public int Foobar;`:
+
+                        bool useReadonlyModifier = config.OutputType == OutputTypes.ImmutableClass;
+
+                        sw.AppendFormat(indentMembers + "public {0}{1} {2};{3}", useReadonlyModifier ? "readonly " : "", field.Type.GetTypeName(), classPropertyName, Environment.NewLine);
+                    }
+                    else if( config.MutableClasses.Members == OutputMembers.AsProperties )
+                    {
+                        var getterSetterPart = "{ get; set; }";
+
+                        bool addCollectionPropertyInitializer =
+                            config.MutableClasses.ReadOnlyCollectionProperties &&
+                            field.Type.IsCollectionType() &&
+                            config.CollectionType == OutputCollectionType.MutableList;
+
+                        if (addCollectionPropertyInitializer && field.Type.Type == JsonTypeEnum.Array)
+                        {
+                            getterSetterPart = "{ get; } = new " + field.Type.GetTypeName() + "();";
+                        }
+
+                        sw.AppendFormat(indentMembers + "public {0} {1} {2}{3}", field.Type.GetTypeName(), classPropertyName, getterSetterPart, Environment.NewLine);
+                    }
+                    else
+                    {
+                        const String PATH = nameof(config) + "." + nameof(config.MutableClasses) + "." + nameof(config.MutableClasses.Members);
+                        const String MSG_FMT = "Invalid " + nameof(OutputMembers) + " enum value for " + PATH + ": {0}";
+                        throw new InvalidOperationException(MSG_FMT);
+                    }
                 }
-                else if (config.ImmutableClasses)
+                else if (config.OutputType == OutputTypes.ImmutableClass)
                 {
                     if(field.Type.Type == JsonTypeEnum.Array)
                     {
+                        // TODO: Respect config.CollectionType
                         sw.AppendFormat(indentMembers + "public IReadOnlyList<{0}> {1} {{ get; }}{2}", this.GetTypeName(field.Type.InternalType, config), classPropertyName, Environment.NewLine);
                     }
                     else
@@ -394,20 +436,17 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 }
                 else
                 {
-                    var getterSetterPart = "{ get; set; }";
-                    if (config.NoSettersForCollections 
-                        &&  (field.Type.IsCollectionType() 
-                            && (config.ArrayAsList() && field.Type.Type == JsonTypeEnum.Array))) getterSetterPart = "{ get; } = new " + field.Type.GetTypeName() + "();";
-                    sw.AppendFormat(indentMembers + "public {0} {1} {2}{3}", field.Type.GetTypeName(), classPropertyName, getterSetterPart, Environment.NewLine);
+                    throw new InvalidOperationException("Invalid " + nameof(OutputTypes) + " value: " + config.OutputType);
                 }
 
                 first = false;
             }
 
             // emit a final newline if we're dealing with record types
-            if (config.RecordTypes)
+            if (config.OutputType == OutputTypes.ImmutableRecord)
+            {
                 sw.AppendLine();
-
+            }
         }
 
         private void WriteClassConstructor(IJsonClassGeneratorConfig config, StringBuilder sw, JsonType type, string indentMembers, string indentBodies)
@@ -421,13 +460,16 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
             // Constructor signature:
             {
-                if(config.UseJsonAttributes)
+                switch (config.AttributeLibrary)
                 {
+                case JsonLibrary.NewtonsoftJson:
+                case JsonLibrary.SystemTextJson: // Both libraries use the same attribute name: [JsonConstructor]
                     sw.AppendLine(indentMembers + "[JsonConstructor]");
+                    break;
                 }
 
                 sw.AppendFormat(indentMembers + "public {0}({1}", type.AssignedName, Environment.NewLine);
-                
+
                 FieldInfo lastField = type.Fields[type.Fields.Count-1];
 
                 foreach (FieldInfo field in type.Fields)
@@ -438,7 +480,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
                     bool isLast = Object.ReferenceEquals(field, lastField);
                     string comma = isLast ? "" : ",";
-                    
+
                     //
 
                     sw.Append(indentBodies);
@@ -450,6 +492,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                         sw.Append(' ');
                     }
 
+                    // e.g. `String foobar,\r\n`
                     sw.AppendFormat("{0} {1}{2}{3}", /*0:*/ field.Type.GetTypeName(), /*1:*/ ctorParameterName, /*2:*/ comma, /*3:*/ Environment.NewLine);
                 }
             }

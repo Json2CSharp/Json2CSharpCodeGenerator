@@ -8,18 +8,21 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 {
     public class JavaCodeWriter : ICodeBuilder
     {
-        public string FileExtension
-        {
-            get { return ".java"; }
-        }
+        public string FileExtension => ".java";
 
-        public string DisplayName
-        {
-            get { return "Java"; }
-        }
+        public string DisplayName => "Java";
 
         private static readonly HashSet<string> _reservedKeywords = new HashSet<string>(comparer: StringComparer.Ordinal) {
-            "class"
+            // https://en.wikipedia.org/wiki/List_of_Java_keywords
+            // `Array.from( document.querySelectorAll('dl > dt > code') ).map( e => '"' + e.textContent + '"' ).sort().join( ", " )`
+
+            "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const", "const", "continue",
+            "default", "do", "double", "else", "enum", "extends", "false", "final", "finally", "float", "for", "goto", "goto",
+            "if", "implements", "import", "instanceof", "int", "interface", "long", "native", "new", "non-sealed", "null",
+            "open", "opens", "package", "permits", "private", "protected", "provides", "public", "record", "return",
+            "sealed", "short", "static", "strictfp", "super", "switch", "synchronized",
+            "this", "throw", "throws", "to", "transient", "transitive", "true", "try",
+            "uses", "var", "void", "volatile", "while", "with", "yield"
         };
 
         IReadOnlyCollection<string> ICodeBuilder.ReservedKeywords => _reservedKeywords;
@@ -27,28 +30,44 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
         public string GetTypeName(JsonType type, IJsonClassGeneratorConfig config)
         {
-            var arraysAsLists = !config.ExplicitDeserialization;
-
             switch (type.Type)
             {
-                case JsonTypeEnum.Anything: return "Object";
-                case JsonTypeEnum.Array: return arraysAsLists ? "List<" + GetTypeName(type.InternalType, config) + ">" : GetTypeName(type.InternalType, config) + "[]";
-                case JsonTypeEnum.Dictionary: return "HashMap<String, " + GetTypeName(type.InternalType, config) + ">";
-                case JsonTypeEnum.Boolean: return "boolean";
-                case JsonTypeEnum.Float: return "double";
-                case JsonTypeEnum.Integer: return "int";
-                case JsonTypeEnum.NonConstrained: return "Object";
-                case JsonTypeEnum.NullableBoolean: return "boolean";
-                case JsonTypeEnum.NullableFloat: return "double";
-                case JsonTypeEnum.NullableInteger: return "int";
-                case JsonTypeEnum.NullableLong: return "long";
-                case JsonTypeEnum.NullableDate: return "Date";
-                case JsonTypeEnum.Long: return "long";
-                case JsonTypeEnum.Date: return "Date";
+                case JsonTypeEnum.Anything         : return "Object";
+                case JsonTypeEnum.Array            : return GetCollectionTypeName(elementTypeName: GetTypeName(type.InternalType, config), config.CollectionType);
+                case JsonTypeEnum.Dictionary       : return "HashMap<String, " + GetTypeName(type.InternalType, config) + ">";
+                case JsonTypeEnum.Boolean          : return "boolean";
+                case JsonTypeEnum.Float            : return "double";
+                case JsonTypeEnum.Integer          : return "int";
+                case JsonTypeEnum.NonConstrained   : return "Object";
+                case JsonTypeEnum.NullableBoolean  : return "boolean";
+                case JsonTypeEnum.NullableFloat    : return "double";
+                case JsonTypeEnum.NullableInteger  : return "int";
+                case JsonTypeEnum.NullableLong     : return "long";
+                case JsonTypeEnum.NullableDate     : return "Date";
+                case JsonTypeEnum.Long             : return "long";
+                case JsonTypeEnum.Date             : return "Date";
                 case JsonTypeEnum.NullableSomething: return "Object";
-                case JsonTypeEnum.Object: return type.NewAssignedName;
-                case JsonTypeEnum.String: return "String";
-                default: throw new System.NotSupportedException("Unsupported json type");
+                case JsonTypeEnum.Object           : return type.NewAssignedName;
+                case JsonTypeEnum.String           : return "String";
+
+                default:
+                throw new NotSupportedException("Unsupported json type");
+            }
+        }
+
+        private static string GetCollectionTypeName(string elementTypeName, OutputCollectionType type)
+        {
+            switch (type)
+            {
+            case OutputCollectionType.Array      : return elementTypeName + "[]";
+            case OutputCollectionType.MutableList: return "ArrayList<" + elementTypeName + ">";
+
+            case OutputCollectionType.IReadOnlyList:
+            case OutputCollectionType.ImmutableArray:
+                throw new NotSupportedException( "Java does not have in-box interfaces for read-only and immutable collections." );
+
+            default:
+                throw new ArgumentOutOfRangeException(paramName: nameof(type), actualValue: type, message: "Invalid " + nameof(OutputCollectionType) + " enum value.");
             }
         }
 
@@ -84,7 +103,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
                 if (this.IsReservedKeyword(memberName)) memberName = "my" + memberName;
 
-                if (config.UseProperties)
+                if (config.MutableClasses.Members == OutputMembers.AsProperties)
                 {
                     sw.AppendFormat(prefix + "@JsonProperty" + "(\"{0}\") {1}", field.JsonMemberName,Environment.NewLine);
                     sw.AppendFormat(prefix + "public {0} get{1}() {{ \r\t\t return this.{2}; }} {3}", field.Type.GetTypeName(), ChangeFirstChar(memberName), ChangeFirstChar(memberName, false), Environment.NewLine);
@@ -92,12 +111,18 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                     sw.AppendFormat(prefix + "{0} {1};", field.Type.GetTypeName(), ChangeFirstChar(memberName, false));
                     sw.AppendLine();
                 }
-                else
+                else if(config.MutableClasses.Members == OutputMembers.AsPublicFields)
                 {
                     memberName = ChangeFirstChar(memberName, false);
                     if (field.JsonMemberName != memberName)
+                    {
                         sw.AppendFormat(prefix + "@JsonProperty" + "(\"{0}\") {1}", field.JsonMemberName, Environment.NewLine);
+                    }
                     sw.AppendFormat(prefix + "public {0} {1};{2}", field.Type.GetTypeName(), memberName, Environment.NewLine);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Unsupported " + nameof(OutputMembers) + " value: " + config.MutableClasses.Members);
                 }
             }
         }

@@ -38,10 +38,26 @@ namespace TESTS_JSON_TO_CSHARP
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator
             {
                 CodeWriter = new CSharpCodeWriter(),
-                RecordTypes = true,
-                UseJsonPropertyName = useSystemTextJson == true,
-                UseJsonAttributes = useSystemTextJson == false,
+                OutputType = OutputTypes.ImmutableRecord
             };
+
+            if (useSystemTextJson.HasValue)
+            {
+                jsonClassGenerator.AttributeUsage = JsonPropertyAttributeUsage.Always;
+
+                if (useSystemTextJson.Value)
+                {
+                    jsonClassGenerator.AttributeLibrary = JsonLibrary.SystemTextJson;
+                }
+                else
+                {
+                    jsonClassGenerator.AttributeLibrary = JsonLibrary.NewtonsoftJson;
+                }
+            }
+            else
+            {
+                jsonClassGenerator.AttributeUsage = JsonPropertyAttributeUsage.OnlyWhenNecessary;
+            }
 
             string actual = jsonClassGenerator.GenerateClasses(input, out _).ToString();
             // Console.WriteLine("Actual:\n" + actual);

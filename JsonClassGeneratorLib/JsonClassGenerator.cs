@@ -7,8 +7,10 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+
 using Xamasoft.JsonClassGenerator.CodeWriters;
 
 namespace Xamasoft.JsonClassGenerator
@@ -17,73 +19,59 @@ namespace Xamasoft.JsonClassGenerator
     {
         #region IJsonClassGeneratorConfig
 
+        public OutputTypes                OutputType         { get; set; } = OutputTypes.MutableClass;
+        public OutputCollectionType       CollectionType     { get; set; } = OutputCollectionType.MutableList;
+        public MutableClassConfig         MutableClasses     { get;      } = new MutableClassConfig();
+        public JsonLibrary                AttributeLibrary   { get; set; } = JsonLibrary.NewtonsoftJson;
+        public JsonPropertyAttributeUsage AttributeUsage     { get; set; } = JsonPropertyAttributeUsage.OnlyWhenNecessary;
+
         public string       Namespace                  { get; set; }
         public string       SecondaryNamespace         { get; set; }
-        public bool         UseFields                  { get; set; }
+
         public bool         InternalVisibility         { get; set; }
-        public bool         ExplicitDeserialization    { get; set; }
         public bool         NoHelperClass              { get; set; }
         public string       MainClass                  { get; set; }
-        public bool         UseProperties              { get; set; }
         public bool         UsePascalCase              { get; set; }
-        public bool         UseJsonAttributes          { get; set; }
-        public bool         UseJsonPropertyName        { get; set; }
         public bool         UseNestedClasses           { get; set; }
         public bool         ApplyObfuscationAttributes { get; set; }
         public bool         SingleFile                 { get; set; }
         public ICodeBuilder CodeWriter                 { get; set; }
-        public bool         HasSecondaryClasses        => this.Types.Count > 1;
         public bool         AlwaysUseNullableValues    { get; set; }
-        public bool         UseNamespaces              => !String.IsNullOrEmpty(this.Namespace);
         public bool         ExamplesInDocumentation    { get; set; }
-        public bool         ImmutableClasses           { get; set; }
-        public bool         RecordTypes                { get; set; }
-        public bool         NoSettersForCollections    { get; set; }
 
         #endregion
 
-        public string Example { get; set; }
-
-        public class SouRce
-        {
-            public List<string> includes { get; set; }
-
-        }
-
         public TextWriter OutputStream { get; set; }
 
-        private PluralizationService pluralizationService = PluralizationService.CreateService(new CultureInfo("en-us"));
-
-        private bool used = false;
+        private readonly PluralizationService pluralizationService = PluralizationService.CreateService(new CultureInfo("en-US"));
 
         public StringBuilder GenerateClasses(string jsonInput, out string errorMessage)
         {
-            errorMessage = string.Empty;
+            JObject[] examples = null;
             try
             {
-                JObject[] examples = null;
-                try
+                using (StringReader sr = new StringReader(jsonInput))
+                using (JsonTextReader reader = new JsonTextReader(sr))
                 {
-                    using (StringReader sr = new StringReader(jsonInput))
-                    using (JsonTextReader reader = new JsonTextReader(sr))
+                    JToken json = JToken.ReadFrom(reader);
+                    if (json is JArray jArray && (jArray.Count == 0 || jArray.All(el => el is JObject)))
                     {
-                        JToken json = JToken.ReadFrom(reader);
-                        if (json is JArray jArray)
-                        {
-                            examples = jArray.Cast<JObject>().ToArray();
-                        }
-                        else if (json is JObject jObject)
-                        {
-                            examples = new[] { jObject };
-                        }
+                        examples = jArray.Cast<JObject>().ToArray();
+                    }
+                    else if (json is JObject jObject)
+                    {
+                        examples = new[] { jObject };
                     }
                 }
-                catch (Exception ex)
-                {
-                    errorMessage = "Exception: " + ex.Message;
-                    return new StringBuilder();
-                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Exception: " + ex.Message;
+                return new StringBuilder();
+            }
 
+            try
+            {
                 if (this.CodeWriter == null) this.CodeWriter = new CSharpCodeWriter();
 
                 this.Types = new List<JsonType>();
@@ -98,20 +86,13 @@ namespace Xamasoft.JsonClassGenerator
                 StringBuilder builder = new StringBuilder();
                 this.WriteClassesToFile(builder, this.Types);
 
+                errorMessage = String.Empty;
                 return builder;
             }
             catch (Exception ex)
             {
-                errorMessage = ex.Message + Environment.NewLine + ex.StackTrace;
+                errorMessage = ex.ToString();
                 return new StringBuilder();
-            }
-        }
-
-        private void WriteClassesToFile(string path, IEnumerable<JsonType> types)
-        {
-            using (StreamWriter sw = new StreamWriter(path, false, Encoding.UTF8))
-            {
-                //WriteClassesToFile(sw, types);
             }
         }
 
@@ -125,18 +106,34 @@ namespace Xamasoft.JsonClassGenerator
 
             foreach (JsonType type in types)
             {
-                if (this.UseNamespaces && inNamespace && rootNamespace != type.IsRoot && this.SecondaryNamespace != null) { this.CodeWriter.WriteNamespaceEnd(this, sw, rootNamespace); inNamespace = false; }
-                if (this.UseNamespaces && !inNamespace) { this.CodeWriter.WriteNamespaceStart(this, sw, type.IsRoot); inNamespace = true; rootNamespace = type.IsRoot; }
+                if (this.HasNamespace() && inNamespace && rootNamespace != type.IsRoot && this.SecondaryNamespace != null)
+                {
+                    this.CodeWriter.WriteNamespaceEnd(this, sw, rootNamespace);
+                    inNamespace = false;
+                }
+
+                if (this.HasNamespace() && !inNamespace)
+                {
+                    this.CodeWriter.WriteNamespaceStart(this, sw, type.IsRoot);
+                    inNamespace = true;
+                    rootNamespace = type.IsRoot;
+                }
+
                 this.CodeWriter.WriteClass(this, sw, type);
             }
-            if (this.UseNamespaces && inNamespace) this.CodeWriter.WriteNamespaceEnd(this, sw, rootNamespace);
+
+            if (this.HasNamespace() && inNamespace)
+            {
+                this.CodeWriter.WriteNamespaceEnd(this, sw, rootNamespace);
+            }
+
             this.CodeWriter.WriteFileEnd(this, sw);
         }
 
         private void GenerateClass(JObject[] examples, JsonType type)
         {
-            Dictionary<String, JsonType> jsonFields = new Dictionary<string, JsonType>();
-            Dictionary<String, List<Object>> fieldExamples = new Dictionary<string,List<object>>();
+            Dictionary<string, JsonType> jsonFields = new Dictionary<string, JsonType>();
+            Dictionary<string, List<object>> fieldExamples = new Dictionary<string,List<object>>();
 
             Boolean first = true;
 
@@ -150,7 +147,6 @@ namespace Xamasoft.JsonClassGenerator
 
                     if (jsonFields.TryGetValue(propName, out fieldType))
                     {
-
                         JsonType commonType = fieldType.GetCommonType(currentType);
 
                         jsonFields[propName] = commonType;
@@ -160,6 +156,7 @@ namespace Xamasoft.JsonClassGenerator
                         JsonType commonType = currentType;
                         if (first) commonType = commonType.MaybeMakeNullable(this);
                         else commonType = commonType.GetCommonType(JsonType.GetNull(this));
+
                         jsonFields.Add(propName, commonType);
                         fieldExamples[propName] = new List<object>();
                     }
@@ -226,43 +223,20 @@ namespace Xamasoft.JsonClassGenerator
                         JToken value;
                         if (obj.TryGetValue(field.Key, out value))
                         {
-                            if (value.Type == JTokenType.Array)
+                            if (value is JArray jArray)
                             {
-                                if (value.Count() > 50)
-                                {
-                                    JArray takeABunchOfItems = (JArray)value; // Take like 30 items from the array this will increase the chance of getting all the objects accuralty while not analyzing all the data
-                                    int count = 0;
-                                    foreach (JToken item in (JArray)takeABunchOfItems)
-                                    {
-                                        if (count > 50)
-                                            break;
+                                const int MAX_JSON_ARRAY_ITEMS = 50; // Take like 30 items from the array this will increase the chance of getting all the objects accuralty while not analyzing all the data
 
-                                        // if (!(item is JObject)) throw new NotSupportedException("Arrays of non-objects are not supported yet.");
-                                        if (( item is JObject ))
-                                            subexamples.Add((JObject)item);
-                                        ++count;
-                                    }
-                                }
-                                else
-                                {
-                                    foreach (JToken item in (JArray)value)
-                                    {
-                                        // if (!(item is JObject)) throw new NotSupportedException("Arrays of non-objects are not supported yet.");
-                                        if (( item is JObject ))
-                                        {
-                                            subexamples.Add((JObject)item);
-                                        }
-                                    }
-                                }
+                                subexamples.AddRange(jArray.OfType<JObject>().Take(MAX_JSON_ARRAY_ITEMS));
                             }
-                            else if (value.Type == JTokenType.Object) //TODO J2C : ONLY LOOP OVER 50 OBJECT AND NOT THE WHOLE THING
+                            else if (value is JObject jObject) //TODO J2C : ONLY LOOP OVER 50 OBJECT AND NOT THE WHOLE THING
                             {
-                                foreach (KeyValuePair<String, JToken> item in (JObject)value)
+                                foreach (KeyValuePair<String, JToken> jsonObjectProperty in jObject)
                                 {
                                     // if (!(item.Value is JObject)) throw new NotSupportedException("Arrays of non-objects are not supported yet.");
-                                    if (( item.Value is JObject ))
+                                    if (jsonObjectProperty.Value is JObject innerObject)
                                     {
-                                        subexamples.Add((JObject)item.Value);
+                                        subexamples.Add(innerObject);
                                     }
                                 }
                             }
@@ -277,28 +251,35 @@ namespace Xamasoft.JsonClassGenerator
                 }
             }
 
-            type.Fields = jsonFields.Select(x => new FieldInfo(this, x.Key, x.Value, this.UsePascalCase, this.UseJsonAttributes, this.UseJsonPropertyName, fieldExamples[x.Key])).ToList();
+            type.Fields = jsonFields
+                .Select(x => new FieldInfo(
+                    generator          : this,
+                    jsonMemberName     : x.Key,
+                    type               : x.Value,
+                    usePascalCase      : this.UsePascalCase || this.AttributeUsage == JsonPropertyAttributeUsage.Always,
+                    examples           : fieldExamples[x.Key])
+                )
+                .ToList();
 
             if (!string.IsNullOrEmpty(type.AssignedName))
+            {
                 this.Types.Add(type);
+            }
         }
 
-        /// <summary>
-        /// Checks if there are any duplicate classes in the input, and merges its corresponding properties (TEST CASE 7)
-        /// </summary>
-        /// <param name="types"></param>
-        /// <returns></returns>
+        /// <summary>Checks if there are any duplicate classes in the input, and merges its corresponding properties (TEST CASE 7)</summary>
         private IList<JsonType> HandleDuplicateClasses(IList<JsonType> types)
         {
+            // TODO: This is currently O(n*n) because it iterates through List<T> on every loop iteration. This can be optimized.
 
             List<JsonType> typesWithNoDuplicates = new List<JsonType>();
 
             foreach (JsonType type in types)
             {
-
                 if (!typesWithNoDuplicates.Exists(p => p.OriginalName == type.OriginalName))
+                {
                     typesWithNoDuplicates.Add(type);
-                // Handle duplication
+                }
                 else
                 {
                     JsonType duplicatedType = typesWithNoDuplicates.FirstOrDefault(p => p.OriginalName == type.OriginalName);
@@ -307,10 +288,13 @@ namespace Xamasoft.JsonClassGenerator
                     foreach (FieldInfo field in type.Fields)
                     {
                         if (!duplicatedType.Fields.ToList().Exists(x => x.JsonMemberName == field.JsonMemberName))
+                        {
                             duplicatedType.Fields.Add(field);
+                        }
                     }
                 }
             }
+
             return typesWithNoDuplicates;
         }
 
@@ -357,9 +341,13 @@ namespace Xamasoft.JsonClassGenerator
                 if (char.IsLetterOrDigit(c))
                 {
                     if (string.IsNullOrEmpty(specialCaseFirstCharIsNumber))
+                    {
                         sb.Append(flag ? char.ToUpper(c) : c);
+                    }
                     else
+                    {
                         sb.Append(flag ? specialCaseFirstCharIsNumber.ToUpper() : specialCaseFirstCharIsNumber);
+                    }
 
                     flag = false;
                 }
@@ -370,11 +358,6 @@ namespace Xamasoft.JsonClassGenerator
             }
 
             return sb.ToString();
-        }
-
-        public bool ArrayAsList()
-        {
-            return !this.ExplicitDeserialization;
         }
     }
 }

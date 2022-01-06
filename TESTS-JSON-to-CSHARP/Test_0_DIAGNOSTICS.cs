@@ -24,8 +24,7 @@ namespace TESTS_JSON_TO_CSHARP
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
             jsonClassGenerator.CodeWriter = csharpCodeWriter;
 
-            jsonClassGenerator.UseJsonAttributes = true;
-            jsonClassGenerator.UseJsonPropertyName = true;
+            jsonClassGenerator.AttributeLibrary = JsonLibrary.SystemTextJson;
 
             string returnVal = jsonClassGenerator.GenerateClasses(input, errorMessage: out _).ToString();
             string resultsCompare = File.ReadAllText(resultPath);

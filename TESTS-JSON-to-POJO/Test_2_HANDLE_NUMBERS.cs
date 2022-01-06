@@ -26,10 +26,11 @@ namespace TESTS_JSON_to_POJO
             JavaCodeWriter javaCodeWriter = new JavaCodeWriter();
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
             jsonClassGenerator.CodeWriter = javaCodeWriter;
+            jsonClassGenerator.MutableClasses.Members = OutputMembers.AsPublicFields;
 
             string returnVal = jsonClassGenerator.GenerateClasses(input, out string errorMessage).ToString();
             string resultsCompare = File.ReadAllText(resultPath);
-            Assert.AreEqual(resultsCompare.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""), returnVal.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""));
+
             string expectedOutput = resultsCompare.NormalizeOutput();
             string actualOutput   = returnVal     .NormalizeOutput();
             Assert.AreEqual(expected: expectedOutput, actual: actualOutput);
@@ -45,11 +46,12 @@ namespace TESTS_JSON_to_POJO
             JavaCodeWriter javaCodeWriter = new JavaCodeWriter();
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
             jsonClassGenerator.CodeWriter = javaCodeWriter;
+            jsonClassGenerator.MutableClasses.Members = OutputMembers.AsPublicFields;
             jsonClassGenerator.UsePascalCase = true;
 
             string returnVal = jsonClassGenerator.GenerateClasses(input, out string errorMessage).ToString();
             string resultsCompare = File.ReadAllText(resultPath);
-            Assert.AreEqual(resultsCompare.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""), returnVal.Replace(Environment.NewLine, "").Replace(" ", "").Replace("\t", ""));
+
             string expectedOutput = resultsCompare.NormalizeOutput();
             string actualOutput   = returnVal     .NormalizeOutput();
             Assert.AreEqual(expected: expectedOutput, actual: actualOutput);

@@ -23,38 +23,53 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
         public string GetTypeName(JsonType type, IJsonClassGeneratorConfig config)
         {
-            var arraysAsLists = config.ExplicitDeserialization;
-
             switch (type.Type)
             {
-                case JsonTypeEnum.Anything: return "Object";
-                case JsonTypeEnum.Array: return arraysAsLists ? "IList(Of " + GetTypeName(type.InternalType, config) + ")" : GetTypeName(type.InternalType, config) + "()";
-                case JsonTypeEnum.Dictionary: return "Dictionary(Of String, " + GetTypeName(type.InternalType, config) + ")";
-                case JsonTypeEnum.Boolean: return "Boolean";
-                case JsonTypeEnum.Float: return "Double";
-                case JsonTypeEnum.Integer: return "Integer";
-                case JsonTypeEnum.Long: return "Long";
-                case JsonTypeEnum.Date: return "DateTime";
-                case JsonTypeEnum.NonConstrained: return "Object";
-                case JsonTypeEnum.NullableBoolean: return "Boolean?";
-                case JsonTypeEnum.NullableFloat: return "Double?";
-                case JsonTypeEnum.NullableInteger: return "Integer?";
-                case JsonTypeEnum.NullableLong: return "Long?";
-                case JsonTypeEnum.NullableDate: return "DateTime?";
+                case JsonTypeEnum.Anything         : return "Object";
+                case JsonTypeEnum.Array            : return GetCollectionTypeName(GetTypeName(type.InternalType, config), config.CollectionType);
+                case JsonTypeEnum.Dictionary       : return "Dictionary(Of String, " + GetTypeName(type.InternalType, config) + ")";
+                case JsonTypeEnum.Boolean          : return "Boolean";
+                case JsonTypeEnum.Float            : return "Double";
+                case JsonTypeEnum.Integer          : return "Integer";
+                case JsonTypeEnum.Long             : return "Long";
+                case JsonTypeEnum.Date             : return "DateTime";
+                case JsonTypeEnum.NonConstrained   : return "Object";
+                case JsonTypeEnum.NullableBoolean  : return "Boolean?";
+                case JsonTypeEnum.NullableFloat    : return "Double?";
+                case JsonTypeEnum.NullableInteger  : return "Integer?";
+                case JsonTypeEnum.NullableLong     : return "Long?";
+                case JsonTypeEnum.NullableDate     : return "DateTime?";
                 case JsonTypeEnum.NullableSomething: return "Object";
-                case JsonTypeEnum.Object: return type.AssignedName;
-                case JsonTypeEnum.String: return "String";
-                default: throw new System.NotSupportedException("Unsupported json type");
+                case JsonTypeEnum.Object           : return type.AssignedName;
+                case JsonTypeEnum.String           : return "String";
+
+                default:
+                    throw new NotSupportedException("Unsupported json type");
+            }
+        }
+
+        private static string GetCollectionTypeName(string elementTypeName, OutputCollectionType type)
+        {
+            switch (type)
+            {
+            case OutputCollectionType.Array         : return elementTypeName + "()";
+            case OutputCollectionType.MutableList   : return "List(Of" + elementTypeName + ")";
+            case OutputCollectionType.IReadOnlyList : return "IReadOnlyList(Of" + elementTypeName + ")";
+            case OutputCollectionType.ImmutableArray: return "ImmutableArray(Of" + elementTypeName + ")";
+
+            default:
+                throw new ArgumentOutOfRangeException(paramName: nameof(type), actualValue: type, message: "Invalid " + nameof(OutputCollectionType) + " enum value.");
             }
         }
 
         private bool ShouldApplyNoRenamingAttribute(IJsonClassGeneratorConfig config)
         {
-            return config.ApplyObfuscationAttributes && !config.ExplicitDeserialization && !config.UsePascalCase;
+            return config.ApplyObfuscationAttributes && !config.UsePascalCase;
         }
+
         private bool ShouldApplyNoPruneAttribute(IJsonClassGeneratorConfig config)
         {
-            return config.ApplyObfuscationAttributes && !config.ExplicitDeserialization && config.UseFields;
+            return config.ApplyObfuscationAttributes && (config.OutputType == OutputTypes.MutableClass && config.MutableClasses.Members == OutputMembers.AsPublicFields);
         }
 
         public void WriteClass(IJsonClassGeneratorConfig config, TextWriter sw, JsonType type)
@@ -67,7 +82,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 if (!type.IsRoot)
                 {
                     if (ShouldApplyNoRenamingAttribute(config)) sw.WriteLine("        " + NoRenameAttribute);
-                    if (ShouldApplyNoPruneAttribute(config)) sw.WriteLine("        " + NoPruneAttribute);
+                    if (ShouldApplyNoPruneAttribute(config)   ) sw.WriteLine("        " + NoPruneAttribute);
                     sw.WriteLine("        {0} Class {1}", visibility, type.AssignedName);
                 }
             }
@@ -93,6 +108,8 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
         private void WriteClassMembers(IJsonClassGeneratorConfig config, TextWriter sw, JsonType type, string prefix)
         {
+
+
             foreach (var field in type.Fields)
             {
                 if (config.UsePascalCase || config.ExamplesInDocumentation) sw.WriteLine();
@@ -104,13 +121,12 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                     sw.WriteLine(prefix + "''' </summary>");
                 }
 
-
                 if (config.UsePascalCase)
                 {
                     sw.WriteLine(prefix + "<JsonProperty(\"{0}\")>", field.JsonMemberName);
                 }
 
-                if (config.UseFields)
+                if (config.MutableClasses.Members == OutputMembers.AsProperties)
                 {
                     sw.WriteLine(prefix + "Public Property {1} As {0}", field.Type.GetTypeName(), field.MemberName);
                 }
@@ -122,22 +138,28 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
         }
 
-
-
-
-
         public void WriteFileStart(IJsonClassGeneratorConfig config, TextWriter sw)
         {
-            
             sw.WriteLine();
             sw.WriteLine("Imports System");
             sw.WriteLine("Imports System.Collections.Generic");
+
             if (ShouldApplyNoRenamingAttribute(config) || ShouldApplyNoPruneAttribute(config))
+            {
                 sw.WriteLine("Imports System.Reflection");
-            if (config.UsePascalCase)
+            }
+
+            if (config.AttributeLibrary == JsonLibrary.NewtonsoftJson)
+            {
                 sw.WriteLine("Imports Newtonsoft.Json");
-            sw.WriteLine("Imports Newtonsoft.Json.Linq");
-            if (config.SecondaryNamespace != null && config.HasSecondaryClasses && !config.UseNestedClasses)
+                sw.WriteLine("Imports Newtonsoft.Json.Linq");
+            }
+            else if (config.AttributeLibrary == JsonLibrary.SystemTextJson)
+            {
+                sw.WriteLine("Imports System.Text.Json");
+            }
+
+            if (!String.IsNullOrWhiteSpace(config.SecondaryNamespace) && !config.UseNestedClasses)
             {
                 sw.WriteLine("Imports {0}", config.SecondaryNamespace);
             }

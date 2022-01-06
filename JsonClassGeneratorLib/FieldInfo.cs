@@ -16,8 +16,6 @@ namespace Xamasoft.JsonClassGenerator
             string                    jsonMemberName,
             JsonType                  type,
             bool                      usePascalCase,
-            bool                      useJsonAttributes,
-            bool                      useJsonPropertyName,
             IReadOnlyList<object>     examples
         )
         {
@@ -26,11 +24,11 @@ namespace Xamasoft.JsonClassGenerator
             this.MemberName            = jsonMemberName;
             this.ContainsSpecialChars  = IsContainsSpecialChars(this.MemberName);
 
-            if (usePascalCase || useJsonAttributes || useJsonPropertyName || this.ContainsSpecialChars)
+            if (usePascalCase || this.ContainsSpecialChars)
             {
                 this.MemberName = JsonClassGenerator.ToTitleCase(this.MemberName);
             }
-            
+
             this.Type     = type ?? throw new ArgumentNullException(nameof(type));
             this.Examples = examples ?? Array.Empty<object>();
         }

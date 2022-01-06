@@ -23,9 +23,13 @@ namespace TESTS_JSON_TO_CSHARP
             CSharpCodeWriter csharpCodeWriter = new CSharpCodeWriter();
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator()
             {
-                NoSettersForCollections = true,
-                UseJsonPropertyName     = true,
-                UsePascalCase           = true
+                MutableClasses =
+                {
+                    ReadOnlyCollectionProperties = true
+                },
+                AttributeLibrary = JsonLibrary.SystemTextJson,
+                AttributeUsage   = JsonPropertyAttributeUsage.Always,
+                UsePascalCase    = true
             };
 
             jsonClassGenerator.CodeWriter = csharpCodeWriter;
@@ -46,10 +50,14 @@ namespace TESTS_JSON_TO_CSHARP
             CSharpCodeWriter csharpCodeWriter = new CSharpCodeWriter();
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator()
             {
-                NoSettersForCollections = true,
-                UseJsonPropertyName     = true,
-                UsePascalCase           = true,
-                ExplicitDeserialization = true
+                MutableClasses =
+                {
+                    ReadOnlyCollectionProperties = true
+                },
+                CollectionType   = OutputCollectionType.Array,
+                AttributeLibrary = JsonLibrary.SystemTextJson,
+                AttributeUsage   = JsonPropertyAttributeUsage.Always,
+                UsePascalCase    = true
             };
 
             jsonClassGenerator.CodeWriter = csharpCodeWriter;

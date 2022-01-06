@@ -21,10 +21,10 @@ namespace TESTS_JSON_TO_CSHARP
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator()
             {
                 CodeWriter          = new CSharpCodeWriter(),
-                ImmutableClasses    = true,
-                UseJsonPropertyName = false,
+                OutputType          = OutputTypes.ImmutableClass,
+                AttributeLibrary    = JsonLibrary.NewtonsoftJson,
+                AttributeUsage      = JsonPropertyAttributeUsage.Always,
                 UsePascalCase       = true,
-                UseJsonAttributes   = true
             };
 
             string returnVal      = jsonClassGenerator.GenerateClasses(input, errorMessage: out _).ToString();

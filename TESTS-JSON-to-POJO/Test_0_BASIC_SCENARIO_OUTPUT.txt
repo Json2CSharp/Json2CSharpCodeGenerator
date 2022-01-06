@@ -3,9 +3,9 @@
 /* ObjectMapper om = new ObjectMapper();
 Root root = om.readValue(myJsonString), Root.class); */
 public class Awesomeobject{
-    @JsonProperty("SomeProps1") 
+    @JsonProperty("SomeProps1")
     public int someProps1;
-    @JsonProperty("SomeProps2") 
+    @JsonProperty("SomeProps2")
     public String someProps2;
 }
 
@@ -24,18 +24,18 @@ public class Class1{
     public Awesomeobject awesomeobject;
     public String created_at;
     public String updated_at;
-    public List<User> users;
+    public ArrayList<User> users;
 }
 
 public class Class2{
-    @JsonProperty("SomePropertyOfClass2") 
+    @JsonProperty("SomePropertyOfClass2")
     public String somePropertyOfClass2;
 }
 
 public class Root{
-    @JsonProperty("Class1") 
+    @JsonProperty("Class1")
     public Class1 class1;
-    @JsonProperty("Class2") 
+    @JsonProperty("Class2")
     public Class2 class2;
 }
 
