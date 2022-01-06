@@ -29,6 +29,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.split = new System.Windows.Forms.SplitContainer();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.jsonInputTextbox = new System.Windows.Forms.TextBox();
@@ -43,17 +44,19 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.optsAttributeMode = new System.Windows.Forms.ToolStripDropDownButton();
 			this.optAttribJP = new System.Windows.Forms.ToolStripMenuItem();
 			this.optAttribJpn = new System.Windows.Forms.ToolStripMenuItem();
-			this.optAttribNone = new System.Windows.Forms.ToolStripMenuItem();
 			this.sep2 = new System.Windows.Forms.ToolStripSeparator();
 			this.optMembersMode = new System.Windows.Forms.ToolStripDropDownButton();
 			this.optMemberProps = new System.Windows.Forms.ToolStripMenuItem();
 			this.optMemberFields = new System.Windows.Forms.ToolStripMenuItem();
 			this.sep3 = new System.Windows.Forms.ToolStripSeparator();
-			this.optImmutable = new System.Windows.Forms.ToolStripButton();
 			this.copyOutput = new System.Windows.Forms.ToolStripButton();
+			this.wrapText = new System.Windows.Forms.ToolStripButton();
+			this.optTypesMode = new System.Windows.Forms.ToolStripDropDownButton();
+			this.optTypesMutablePoco = new System.Windows.Forms.ToolStripMenuItem();
+			this.optTypesImmutablePoco = new System.Windows.Forms.ToolStripMenuItem();
+			this.optTypesRecords = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip = new System.Windows.Forms.StatusStrip();
 			this.ofd = new System.Windows.Forms.OpenFileDialog();
-			this.wrapText = new System.Windows.Forms.ToolStripButton();
 			((System.ComponentModel.ISupportInitialize)(this.split)).BeginInit();
 			this.split.Panel1.SuspendLayout();
 			this.split.Panel2.SuspendLayout();
@@ -67,7 +70,6 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			// 
 			this.split.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.split.Location = new System.Drawing.Point(0, 25);
-			this.split.Size = new System.Drawing.Size(800, 200);
 			this.split.Name = "split";
 			// 
 			// split.Panel1
@@ -77,7 +79,8 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			// split.Panel2
 			// 
 			this.split.Panel2.Controls.Add(this.tableLayoutPanel2);
-			this.split.SplitterDistance = 400;
+			this.split.Size = new System.Drawing.Size(1288, 253);
+			this.split.SplitterDistance = 644;
 			this.split.TabIndex = 0;
 			// 
 			// tableLayoutPanel1
@@ -93,6 +96,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(644, 253);
 			this.tableLayoutPanel1.TabIndex = 1;
 			// 
 			// jsonInputTextbox
@@ -101,10 +105,11 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.jsonInputTextbox.AcceptsTab = true;
 			this.jsonInputTextbox.AllowDrop = true;
 			this.jsonInputTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.jsonInputTextbox.Location = new System.Drawing.Point(3, 22);
+			this.jsonInputTextbox.Location = new System.Drawing.Point(3, 32);
 			this.jsonInputTextbox.Multiline = true;
 			this.jsonInputTextbox.Name = "jsonInputTextbox";
 			this.jsonInputTextbox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			this.jsonInputTextbox.Size = new System.Drawing.Size(638, 218);
 			this.jsonInputTextbox.TabIndex = 0;
 			this.jsonInputTextbox.WordWrap = false;
 			// 
@@ -114,7 +119,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.inputLabel.Location = new System.Drawing.Point(1, 4);
 			this.inputLabel.Margin = new System.Windows.Forms.Padding(1, 4, 4, 2);
 			this.inputLabel.Name = "inputLabel";
-			this.inputLabel.Size = new System.Drawing.Size(395, 23);
+			this.inputLabel.Size = new System.Drawing.Size(639, 23);
 			this.inputLabel.TabIndex = 1;
 			this.inputLabel.Text = "Paste JSON Input or drag and drop a *.json file:";
 			// 
@@ -130,16 +135,18 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.tableLayoutPanel2.RowCount = 2;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(640, 253);
 			this.tableLayoutPanel2.TabIndex = 1;
 			// 
 			// csharpOutputTextbox
 			// 
 			this.csharpOutputTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.csharpOutputTextbox.Location = new System.Drawing.Point(3, 22);
+			this.csharpOutputTextbox.Location = new System.Drawing.Point(3, 32);
 			this.csharpOutputTextbox.Multiline = true;
 			this.csharpOutputTextbox.Name = "csharpOutputTextbox";
 			this.csharpOutputTextbox.ReadOnly = true;
 			this.csharpOutputTextbox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			this.csharpOutputTextbox.Size = new System.Drawing.Size(634, 218);
 			this.csharpOutputTextbox.TabIndex = 0;
 			this.csharpOutputTextbox.WordWrap = false;
 			// 
@@ -149,6 +156,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.outputLabel.Location = new System.Drawing.Point(1, 4);
 			this.outputLabel.Margin = new System.Windows.Forms.Padding(1, 4, 4, 2);
 			this.outputLabel.Name = "outputLabel";
+			this.outputLabel.Size = new System.Drawing.Size(635, 23);
 			this.outputLabel.TabIndex = 1;
 			this.outputLabel.Text = "Generated C# output:";
 			// 
@@ -162,12 +170,12 @@ namespace Xamasoft.JsonClassGenerator.WinForms
             this.sep2,
             this.optMembersMode,
             this.sep3,
-            this.optImmutable,
             this.copyOutput,
-            this.wrapText});
+            this.wrapText,
+            this.optTypesMode});
 			this.toolStrip.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip.Name = "toolStrip";
-			this.toolStrip.Size = new System.Drawing.Size(800, 25);
+			this.toolStrip.Size = new System.Drawing.Size(1288, 25);
 			this.toolStrip.TabIndex = 0;
 			// 
 			// openButton
@@ -184,6 +192,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.optsPascalCase.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.optsPascalCase.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.optsPascalCase.Name = "optsPascalCase";
+			this.optsPascalCase.Size = new System.Drawing.Size(94, 22);
 			this.optsPascalCase.Text = "Use Pascal Case";
 			// 
 			// sep1
@@ -196,8 +205,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.optsAttributeMode.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.optsAttributeMode.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.optAttribJP,
-            this.optAttribJpn,
-            this.optAttribNone});
+            this.optAttribJpn});
 			this.optsAttributeMode.Name = "optsAttributeMode";
 			this.optsAttributeMode.Size = new System.Drawing.Size(106, 22);
 			this.optsAttributeMode.Text = "Attributes mode";
@@ -217,13 +225,6 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.optAttribJpn.Name = "optAttribJpn";
 			this.optAttribJpn.Size = new System.Drawing.Size(204, 22);
 			this.optAttribJpn.Text = "Use [JsonPropertyName]";
-			// 
-			// optAttribNone
-			// 
-			this.optAttribNone.CheckOnClick = true;
-			this.optAttribNone.Name = "optAttribNone";
-			this.optAttribNone.Size = new System.Drawing.Size(204, 22);
-			this.optAttribNone.Text = "No attributes";
 			// 
 			// sep2
 			// 
@@ -246,28 +247,20 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.optMemberProps.CheckOnClick = true;
 			this.optMemberProps.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.optMemberProps.Name = "optMemberProps";
-			this.optMemberProps.Size = new System.Drawing.Size(149, 22);
+			this.optMemberProps.Size = new System.Drawing.Size(180, 22);
 			this.optMemberProps.Text = "Use properties";
 			// 
 			// optMemberFields
 			// 
 			this.optMemberFields.CheckOnClick = true;
 			this.optMemberFields.Name = "optMemberFields";
-			this.optMemberFields.Size = new System.Drawing.Size(149, 22);
+			this.optMemberFields.Size = new System.Drawing.Size(180, 22);
 			this.optMemberFields.Text = "Use fields";
 			// 
 			// sep3
 			// 
 			this.sep3.Name = "sep3";
 			this.sep3.Size = new System.Drawing.Size(6, 25);
-			// 
-			// optImmutable
-			// 
-			this.optImmutable.CheckOnClick = true;
-			this.optImmutable.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.optImmutable.Name = "optImmutable";
-			this.optImmutable.Size = new System.Drawing.Size(130, 22);
-			this.optImmutable.Text = "Use immutable classes";
 			// 
 			// copyOutput
 			// 
@@ -276,19 +269,6 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.copyOutput.Name = "copyOutput";
 			this.copyOutput.Size = new System.Drawing.Size(167, 22);
 			this.copyOutput.Text = "Copy C# Output to Clipboard";
-			// 
-			// statusStrip
-			// 
-			this.statusStrip.Location = new System.Drawing.Point(0, 278);
-			this.statusStrip.Name = "statusStrip";
-			this.statusStrip.Size = new System.Drawing.Size(800, 22);
-			this.statusStrip.TabIndex = 1;
-			this.statusStrip.Text = "";
-			// 
-			// ofd
-			// 
-			this.ofd.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
-			this.ofd.SupportMultiDottedExtensions = true;
 			// 
 			// wrapText
 			// 
@@ -299,11 +279,59 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 			this.wrapText.Size = new System.Drawing.Size(62, 22);
 			this.wrapText.Text = "Wrap text";
 			// 
+			// optTypesMode
+			// 
+			this.optTypesMode.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.optTypesMode.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.optTypesMutablePoco,
+            this.optTypesImmutablePoco,
+            this.optTypesRecords});
+			this.optTypesMode.Image = ((System.Drawing.Image)(resources.GetObject("optTypesMode.Image")));
+			this.optTypesMode.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.optTypesMode.Name = "optTypesMode";
+			this.optTypesMode.Size = new System.Drawing.Size(89, 22);
+			this.optTypesMode.Text = "Output types";
+			// 
+			// optTypesMutablePoco
+			// 
+			this.optTypesMutablePoco.Checked = true;
+			this.optTypesMutablePoco.CheckOnClick = true;
+			this.optTypesMutablePoco.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.optTypesMutablePoco.Name = "optTypesMutablePoco";
+			this.optTypesMutablePoco.Size = new System.Drawing.Size(208, 22);
+			this.optTypesMutablePoco.Text = "Mutable POCO classes";
+			// 
+			// optTypesImmutablePoco
+			// 
+			this.optTypesImmutablePoco.CheckOnClick = true;
+			this.optTypesImmutablePoco.Name = "optTypesImmutablePoco";
+			this.optTypesImmutablePoco.Size = new System.Drawing.Size(208, 22);
+			this.optTypesImmutablePoco.Text = "Immutable POCO classes";
+			// 
+			// optTypesRecords
+			// 
+			this.optTypesRecords.CheckOnClick = true;
+			this.optTypesRecords.Name = "optTypesRecords";
+			this.optTypesRecords.Size = new System.Drawing.Size(208, 22);
+			this.optTypesRecords.Text = "Immutable record classes";
+			// 
+			// statusStrip
+			// 
+			this.statusStrip.Location = new System.Drawing.Point(0, 278);
+			this.statusStrip.Name = "statusStrip";
+			this.statusStrip.Size = new System.Drawing.Size(1288, 22);
+			this.statusStrip.TabIndex = 1;
+			// 
+			// ofd
+			// 
+			this.ofd.Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*";
+			this.ofd.SupportMultiDottedExtensions = true;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(800, 300);
+			this.ClientSize = new System.Drawing.Size(1288, 300);
 			this.Controls.Add(this.split);
 			this.Controls.Add(this.statusStrip);
 			this.Controls.Add(this.toolStrip);
@@ -336,7 +364,6 @@ namespace Xamasoft.JsonClassGenerator.WinForms
         private System.Windows.Forms.ToolStripDropDownButton optMembersMode;
         private System.Windows.Forms.ToolStripMenuItem optMemberProps;
         private System.Windows.Forms.ToolStripMenuItem optMemberFields;
-        private System.Windows.Forms.ToolStripButton optImmutable;
         private System.Windows.Forms.TextBox jsonInputTextbox;
         private System.Windows.Forms.TextBox csharpOutputTextbox;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
@@ -353,6 +380,10 @@ namespace Xamasoft.JsonClassGenerator.WinForms
         private System.Windows.Forms.ToolStripButton openButton;
         private System.Windows.Forms.OpenFileDialog ofd;
         private System.Windows.Forms.ToolStripButton wrapText;
+        private System.Windows.Forms.ToolStripDropDownButton optTypesMode;
+        private System.Windows.Forms.ToolStripMenuItem optTypesMutablePoco;
+        private System.Windows.Forms.ToolStripMenuItem optTypesImmutablePoco;
+        private System.Windows.Forms.ToolStripMenuItem optTypesRecords;
     }
 }
 

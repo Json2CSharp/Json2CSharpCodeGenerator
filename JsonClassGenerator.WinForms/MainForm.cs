@@ -32,15 +32,18 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 
             this.openButton.Click += this.OpenButton_Click;
 
-            this.optAttribJP    .CheckedChanged += this.OnAttributesModeCheckedChanged;
-            this.optAttribJpn   .CheckedChanged += this.OnAttributesModeCheckedChanged;
-            this.optAttribNone  .CheckedChanged += this.OnAttributesModeCheckedChanged;
+            this.optAttribJP          .CheckedChanged += this.OnAttributesModeCheckedChanged;
+            this.optAttribJpn         .CheckedChanged += this.OnAttributesModeCheckedChanged;
+            this.optAttribNone        .CheckedChanged += this.OnAttributesModeCheckedChanged;
 
-            this.optMemberFields.CheckedChanged += this.OnMemberModeCheckedChanged;
-            this.optMemberProps .CheckedChanged += this.OnMemberModeCheckedChanged;
+            this.optMemberFields      .CheckedChanged += this.OnMemberModeCheckedChanged;
+            this.optMemberProps       .CheckedChanged += this.OnMemberModeCheckedChanged;
 
-            this.optImmutable   .CheckedChanged += this.OnOptionsChanged;
-            this.optsPascalCase .CheckedChanged += this.OnOptionsChanged;
+            this.optTypesMutablePoco  .CheckedChanged += this.OnOutputTypeModeCheckedChanged;
+            this.optTypesImmutablePoco.CheckedChanged += this.OnOutputTypeModeCheckedChanged;
+            this.optTypesRecords      .CheckedChanged += this.OnOutputTypeModeCheckedChanged;
+
+            this.optsPascalCase       .CheckedChanged += this.OnOptionsChanged;
 
             this.wrapText.CheckedChanged += this.WrapText_CheckedChanged;
 
@@ -48,16 +51,18 @@ namespace Xamasoft.JsonClassGenerator.WinForms
             this.copyOutput.Enabled = false;
 
             this.jsonInputTextbox.TextChanged += this.JsonInputTextbox_TextChanged;
-            this.jsonInputTextbox.DragDrop += this.JsonInputTextbox_DragDrop;
-            this.jsonInputTextbox.DragOver += this.JsonInputTextbox_DragOver;
+            this.jsonInputTextbox.DragDrop    += this.JsonInputTextbox_DragDrop;
+            this.jsonInputTextbox.DragOver    += this.JsonInputTextbox_DragOver;
             //this.jsonInputTextbox.paste // annoyingly, it isn't (easily) feasible to hook/detect TextBox paste events, even globally... grrr.
 
             // Invoke event-handlers to set initial toolstrip text:
             this.optsAttributeMode.Tag = this.optsAttributeMode.Text + ": {0}";
             this.optMembersMode   .Tag = this.optMembersMode   .Text + ": {0}";
+            this.optTypesMode     .Tag = this.optTypesMode     .Text + ": {0}";
 
-            this.OnAttributesModeCheckedChanged( this.optAttribJP   , EventArgs.Empty );
-            this.OnMemberModeCheckedChanged    ( this.optMemberProps, EventArgs.Empty );
+            this.OnAttributesModeCheckedChanged( this.optAttribJP        , EventArgs.Empty );
+            this.OnMemberModeCheckedChanged    ( this.optMemberProps     , EventArgs.Empty );
+            this.OnOutputTypeModeCheckedChanged( this.optTypesMutablePoco, EventArgs.Empty );
         }
 
         private void WrapText_CheckedChanged(Object sender, EventArgs e)
@@ -156,7 +161,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             base.OnFormClosing(e);
-            
+
             if( !e.Cancel )
             {
                 SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(SystemEvents_UserPreferenceChanged);
@@ -165,24 +170,30 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 
         #endregion
 
-        #region Highlander: There can only be one!
+        #region Methods to ensure only a single checkbox-style menu item is checked at-a-time, and that the ToolStripDropDownButton's text indicates the currently selected option:
 
         private void OnAttributesModeCheckedChanged(Object sender, EventArgs e)
         {
-            this.WhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohh( (ToolStripMenuItem)sender, defaultItem: this.optAttribJP, parent: this.optsAttributeMode );
+            this.EnsureSingleCheckedDropDownItemAndUpdateToolStripItemText( (ToolStripMenuItem)sender, defaultItem: this.optAttribJP, parent: this.optsAttributeMode );
 
             this.GenerateCSharp();
         }
 
         private void OnMemberModeCheckedChanged(Object sender, EventArgs e)
         {
-            this.WhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohh( (ToolStripMenuItem)sender, defaultItem: this.optMemberProps, parent: this.optMembersMode );
+            this.EnsureSingleCheckedDropDownItemAndUpdateToolStripItemText( (ToolStripMenuItem)sender, defaultItem: this.optMemberProps, parent: this.optMembersMode );
 
             this.GenerateCSharp();
         }
 
-        /// <summary>https://www.youtube.com/watch?v=Qy1J_i32wTg</summary>
-        private void WhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohhWhoaohohohh(ToolStripMenuItem subject, ToolStripMenuItem defaultItem, ToolStripDropDownButton parent)
+        private void OnOutputTypeModeCheckedChanged(Object sender, EventArgs e)
+        {
+            this.EnsureSingleCheckedDropDownItemAndUpdateToolStripItemText( (ToolStripMenuItem)sender, defaultItem: this.optTypesMutablePoco, parent: this.optTypesMode );
+
+            this.GenerateCSharp();
+        }
+
+        private void EnsureSingleCheckedDropDownItemAndUpdateToolStripItemText(ToolStripMenuItem subject, ToolStripMenuItem defaultItem, ToolStripDropDownButton parent)
         {
             if( this.preventReentrancy ) return;
             try
@@ -262,7 +273,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 
         private void JsonInputTextbox_DragOver(Object sender, DragEventArgs e)
         {
-            bool acceptable = 
+            bool acceptable =
                 e.Data.GetDataPresent( DataFormats.FileDrop ) ||
 //              e.Data.GetDataPresent( DataFormats.Text ) ||
 //              e.Data.GetDataPresent( DataFormats.OemText ) ||
@@ -395,39 +406,43 @@ namespace Xamasoft.JsonClassGenerator.WinForms
         private void ConfigureGenerator( IJsonClassGeneratorConfig config )
         {
             config.UsePascalCase = this.optsPascalCase.Checked;
-            
+
             //
 
             if( this.optAttribJP.Checked )
             {
-                config.UseJsonAttributes   = true;
-                config.UseJsonPropertyName = false;
+                config.AttributeLibrary = JsonLibrary.NewtonsoftJson;
             }
-            else if( this.optAttribJpn.Checked )
+            else// implicit: ( this.optAttribJpn.Checked )
             {
-                config.UseJsonAttributes   = false;
-                config.UseJsonPropertyName = true;
-            }
-            else// implicit: ( this.optAttribNone.Checked )
-            {
-                config.UseJsonAttributes   = false;
-                config.UseJsonPropertyName = false;
+                config.AttributeLibrary = JsonLibrary.SystemTextJson;
             }
 
             //
 
             if( this.optMemberProps.Checked )
             {
-                config.UseProperties = true;
-                config.UseFields     = false;
+                config.MutableClasses.Members = OutputMembers.AsProperties;
             }
             else// implicit: ( this.optMemberFields.Checked )
             {
-                config.UseProperties = false;
-                config.UseFields     = true;
+                config.MutableClasses.Members = OutputMembers.AsPublicFields;
             }
 
-            config.ImmutableClasses = this.optImmutable.Checked;
+            //
+
+            if( this.optTypesImmutablePoco.Checked )
+            {
+                config.OutputType = OutputTypes.ImmutableClass;
+            }
+            else if( this.optTypesMutablePoco.Checked )
+            {
+                config.OutputType = OutputTypes.MutableClass;
+            }
+            else// implicit: ( this.optTypesRecords.Checked )
+            {
+                config.OutputType = OutputTypes.ImmutableRecord;
+            }
         }
 
         private void JsonInputTextbox_TextChanged(Object sender, EventArgs e)
