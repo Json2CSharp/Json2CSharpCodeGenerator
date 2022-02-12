@@ -174,7 +174,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             sw.AppendLine("// import com.fasterxml.jackson.databind.ObjectMapper; // version 2.11.1");
             sw.AppendLine("// import com.fasterxml.jackson.annotation.JsonProperty; // version 2.11.1");
             sw.AppendLine("/* ObjectMapper om = new ObjectMapper();");
-            sw.AppendLine("Root root = om.readValue(myJsonString), Root.class); */");
+            sw.AppendLine("Root root = om.readValue(myJsonString, Root.class); */");
         }
     }
 }
