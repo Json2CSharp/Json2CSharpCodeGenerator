@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodeWriters\JavaCodeWriter.cs" />
+    <Compile Include="CodeWriters\PythonCodeWriter.cs" />
     <Compile Include="CodeWriters\TypeScriptCodeWriter.cs" />
     <Compile Include="CodeWriters\VisualBasicCodeWriter.cs" />
     <Compile Include="CodeWriters\CSharpCodeWriter.cs" />
