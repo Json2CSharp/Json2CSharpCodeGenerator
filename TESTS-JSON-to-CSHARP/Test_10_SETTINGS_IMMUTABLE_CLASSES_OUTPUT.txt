@@ -19,45 +19,6 @@
         public string SomeProps2 { get; }
     }
 
-    public class User
-    {
-        [JsonConstructor]
-        public User(
-            [JsonProperty("id")] string id,
-            [JsonProperty("name")] string name,
-            [JsonProperty("created_at")] string createdAt,
-            [JsonProperty("updated_at")] string updatedAt,
-            [JsonProperty("email")] string email,
-            [JsonProperty("testanadditionalfield")] string testanadditionalfield
-        )
-        {
-            this.Id = id;
-            this.Name = name;
-            this.CreatedAt = createdAt;
-            this.UpdatedAt = updatedAt;
-            this.Email = email;
-            this.Testanadditionalfield = testanadditionalfield;
-        }
-
-        [JsonProperty("id")]
-        public string Id { get; }
-
-        [JsonProperty("name")]
-        public string Name { get; }
-
-        [JsonProperty("created_at")]
-        public string CreatedAt { get; }
-
-        [JsonProperty("updated_at")]
-        public string UpdatedAt { get; }
-
-        [JsonProperty("email")]
-        public string Email { get; }
-
-        [JsonProperty("testanadditionalfield")]
-        public string Testanadditionalfield { get; }
-    }
-
     public class Class1
     {
         [JsonConstructor]
@@ -111,7 +72,7 @@
         public string SomePropertyOfClass2 { get; }
     }
 
-    public class Root
+        public class Root
     {
         [JsonConstructor]
         public Root(
@@ -128,5 +89,46 @@
 
         [JsonProperty("Class2")]
         public Class2 Class2 { get; }
+    }
+
+
+
+    public class User
+    {
+        [JsonConstructor]
+        public User(
+            [JsonProperty("id")] string id,
+            [JsonProperty("name")] string name,
+            [JsonProperty("created_at")] string createdAt,
+            [JsonProperty("updated_at")] string updatedAt,
+            [JsonProperty("email")] string email,
+            [JsonProperty("testanadditionalfield")] string testanadditionalfield
+        )
+        {
+            this.Id = id;
+            this.Name = name;
+            this.CreatedAt = createdAt;
+            this.UpdatedAt = updatedAt;
+            this.Email = email;
+            this.Testanadditionalfield = testanadditionalfield;
+        }
+
+        [JsonProperty("id")]
+        public string Id { get; }
+
+        [JsonProperty("name")]
+        public string Name { get; }
+
+        [JsonProperty("created_at")]
+        public string CreatedAt { get; }
+
+        [JsonProperty("updated_at")]
+        public string UpdatedAt { get; }
+
+        [JsonProperty("email")]
+        public string Email { get; }
+
+        [JsonProperty("testanadditionalfield")]
+        public string Testanadditionalfield { get; }
     }
 

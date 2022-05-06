@@ -1,0 +1,144 @@
+    <p>There are many ways you can convert a Json object to Python classes. This tools uses one of these ways which uses static functions to map dictionary key values to type safe Python properties and classes. Here are the steps to convert Json to Python classes:&nbsp;</p>
+    <h3><strong>1. Create a DataClass for each Json Root Node</strong></h3>
+    <p>Let's take the below JSON string as example and work with it during the steps:</p>
+    <pre><code>{
+    ""Test"":<br />         {
+        ""id"":4,
+        ""userid"":""user_id_value"",
+        ""users"":[
+            {
+                ""id"":""2"",
+                ""name"":""Test""
+            },
+            {
+                ""id"":""6"",
+                ""name"":""Test Child 1""
+            }
+                ]
+            }
+    }</code></pre>
+    <p>We can see that we need to create two classes : ""Test"" and ""User"" since ""users"" property is an array of object with ""id"" and ""name"".</p>
+    <p>We can write our Python class along with Its properties as such:/p&gt;</p>
+    <pre><code>
+    from dataclasses import dataclass
+    from typing import List
+
+    @@dataclass
+    class User:
+        id: str
+        name: str
+        
+    @@dataclass
+    class Test:
+        id: int
+        userid: str
+        users: List[User]
+    </code></pre>
+    <p>In Python, It's really easy to load a json string to a dictionary and access the values by calling the dictionary keys. This can be done using</p>
+    <p>x = json.loads(my_json_string)</p>
+    <p>and accessing the dictionary values by using x[""my_json_key""]</p>
+    <p>However, translating these dictionary items to type safe Python properties require a few additional steps that we need to do.</p>
+    <h3><strong>2. Map each Json Attribute to a Type Safe Python Property</strong></h3>
+    <p>The next step that needs to be done is mapping each Json node and attributes to Python classes and properties. We can do so by creating a static method in our Python classes that's responsible for mapping our dictionary to our Python properties. The Python script will look like this:</p>
+    <pre><code>
+    from dataclasses import dataclass
+    from typing import Any, List
+
+    @@dataclass
+    class User:
+        id: str
+        name: str
+
+        @@staticmethod
+        def from_dict(obj: Any) -&gt; 'User':
+        _id = int(obj.get(""id""))
+        _name = str(obj.get(""name""))
+        return User(_id, _name)
+
+    @@dataclass
+    class Test:
+        id: int
+        userid: str
+        users: List[User]
+
+        @@staticmethod
+        def from_dict(obj: Any) -&gt; 'Test':
+            _id = int(obj.get(""id""))
+            _userid = str(obj.get(""userid""))
+            _users = [User.from_dict(y) for y in obj.get(""users"")]
+            return Test(_id, _userid, _users)
+    </code></pre>
+    <p>We create a static method called ""from_dic"" and inside this method we created local properties (""_id, _name"") and for each property we are calling our dictionary supplying the keys found in our Json string.</p>
+    <p>Note that for Arrays and Lists, what we're doing is we are creating a list of Users and for each user, we are calling the ""from_dict"" method so that the User properties will be mapped as well. This can be seen in the line below:&nbsp;</p>
+    <p><code>        _users = [User.from_dict(y) for y in obj.get(""users"")]</code>&nbsp;</p>
+    <p>Finally, we are returning a mapped object as seen in the last lines of the ""fom_dict"" method:</p>
+    <p><code>     return Test(_id, _userid, _users)</code></p>
+    <h3><strong>3. Wrap your Python Object with a Root Class</strong></h3>
+    <p>You can optionally wrap your Python objects with a root class, and this is in case you have multiple classes in the root node of your Json string.&nbsp;</p>
+    <p>We can achieve this by adding the below code to your Python Script:</p>
+    <pre><code>@@dataclass
+    class Root:
+        Test: Test
+
+        @@staticmethod
+        def from_dict(obj: Any) -&gt; 'Root':
+            _Test = Test.from_dict(obj.get(""Test""))
+            return Root(_Test)</code></pre>
+    <h3><strong>4. Call the Mapping Function at the Root Class&nbsp;</strong></h3>
+    <p>Finally, in order to use our mapping functions, we need to call the Root mapping function ""from_dict"" as such :&nbsp;</p>
+    <pre><code># Load the json string to a variable
+    output = json.load(open('data.json'))<br />
+    # Call the mapping function
+    result = Root.from_dict(output)<br />
+    # Access your Python properties
+    result.Test.userid
+    <br /></code></pre>
+    <h3><strong>5. Use the Online Tool Above to Generate Python Classes from Json Strings</strong></h3>
+    <p>You always use the online tool above to achieve what we did in this example. Just paste your Json in the left text area, hit that convert button, and you will have your python classes with their mappings created automagically !</p>
+    <p>The full Python script will look like this:</p>
+    <pre><code>
+    from dataclasses import dataclass
+    from typing import Any, List
+    import json
+
+    @@dataclass
+    class User:
+        id: str
+        name: str
+
+        @@staticmethod
+        def from_dict(obj: Any) -&gt; 'User':
+        _id = int(obj.get(""id""))
+        _name = str(obj.get(""name""))
+        return User(_id, _name)
+
+    @@dataclass
+    class Test:
+        id: int
+        userid: str
+        users: List[User]
+
+        @@staticmethod
+        def from_dict(obj: Any) -&gt; 'Test':
+            _id = int(obj.get(""id""))
+            _userid = str(obj.get(""userid""))
+            _users = [User.from_dict(y) for y in obj.get(""users"")]
+            return Test(_id, _userid, _users)
+
+    @@dataclass
+    class Root:
+        Test: Test
+
+        @@staticmethod
+        def from_dict(obj: Any) -&gt; 'Root':
+            _Test = Test.from_dict(obj.get(""Test""))
+            return Root(_Test)
+
+
+    # Load the json string to a variable
+    output = json.load(open('data.json'))
+    # Call the mapping function
+    result = Root.from_dict(output)
+    # Access your Python properties
+    result.Test.userid
+    </code></pre>

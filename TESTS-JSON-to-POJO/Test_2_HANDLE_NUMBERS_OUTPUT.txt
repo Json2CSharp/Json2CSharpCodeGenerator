@@ -2,6 +2,8 @@
 // import com.fasterxml.jackson.annotation.JsonProperty; // version 2.11.1
 /* ObjectMapper om = new ObjectMapper();
 Root root = om.readValue(myJsonString, Root.class); */
+
+
 public class _1TEST{
     @JsonProperty("1_star") 
     public int _1_star;
@@ -14,9 +16,10 @@ public class _1TEST{
     @JsonProperty("5_star") 
     public int _5_star;
 }
-
 public class Root{
     @JsonProperty("1_TEST") 
     public _1TEST _1_TEST;
 }
+
+
 

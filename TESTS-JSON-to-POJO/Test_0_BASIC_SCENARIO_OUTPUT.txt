@@ -9,15 +9,6 @@ public class Awesomeobject{
     public String someProps2;
 }
 
-public class User{
-    public String id;
-    public String name;
-    public String created_at;
-    public String updated_at;
-    public String email;
-    public String testanadditionalfield;
-}
-
 public class Class1{
     public int id;
     public String user_id;
@@ -38,4 +29,15 @@ public class Root{
     @JsonProperty("Class2")
     public Class2 class2;
 }
+
+public class User{
+    public String id;
+    public String name;
+    public String created_at;
+    public String updated_at;
+    public String email;
+    public String testanadditionalfield;
+}
+
+
 

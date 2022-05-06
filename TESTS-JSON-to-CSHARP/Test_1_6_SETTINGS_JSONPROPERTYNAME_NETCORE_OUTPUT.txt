@@ -7,26 +7,6 @@
         public string SomeProps2 { get; set; } 
     }
 
-    public class User    {
-        [JsonPropertyName("id")]
-        public string Id { get; set; } 
-
-        [JsonPropertyName("name")]
-        public string Name { get; set; } 
-
-        [JsonPropertyName("created_at")]
-        public string CreatedAt { get; set; } 
-
-        [JsonPropertyName("updated_at")]
-        public string UpdatedAt { get; set; } 
-
-        [JsonPropertyName("email")]
-        public string Email { get; set; } 
-
-        [JsonPropertyName("testanadditionalfield")]
-        public string Testanadditionalfield { get; set; } 
-    }
-
     public class Class1    {
         [JsonPropertyName("id")]
         public int Id { get; set; } 
@@ -58,5 +38,27 @@
 
         [JsonPropertyName("Class2")]
         public Class2 Class2 { get; set; } 
+    }
+
+
+    
+    public class User    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; } 
+
+        [JsonPropertyName("name")]
+        public string Name { get; set; } 
+
+        [JsonPropertyName("created_at")]
+        public string CreatedAt { get; set; } 
+
+        [JsonPropertyName("updated_at")]
+        public string UpdatedAt { get; set; } 
+
+        [JsonPropertyName("email")]
+        public string Email { get; set; } 
+
+        [JsonPropertyName("testanadditionalfield")]
+        public string Testanadditionalfield { get; set; } 
     }
 

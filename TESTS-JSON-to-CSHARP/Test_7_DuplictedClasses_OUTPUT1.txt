@@ -1,10 +1,11 @@
 // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
-    public class Teststringbla    {
-        [JsonProperty("testinginner")]
-        public int Testinginner { get; set; } 
+ 
+     public class Root    {
+        [JsonProperty("testobject")]
+        public List<Testobject> Testobject { get; set; } 
 
-        [JsonProperty("testingdd")]
-        public int Testingdd { get; set; } 
+        [JsonProperty("testparent")]
+        public Testparent Testparent { get; set; } 
     }
 
     public class Testobject    {
@@ -18,16 +19,20 @@
         public Teststringbla Teststringbla { get; set; } 
     }
 
-    public class Testparent    {
+      public class Testparent    {
         [JsonProperty("testobject")]
         public List<Testobject> Testobject { get; set; } 
     }
 
-    public class Root    {
-        [JsonProperty("testobject")]
-        public List<Testobject> Testobject { get; set; } 
 
-        [JsonProperty("testparent")]
-        public Testparent Testparent { get; set; } 
+ public class Teststringbla    {
+        [JsonProperty("testinginner")]
+        public int Testinginner { get; set; } 
+
+        [JsonProperty("testingdd")]
+        public int Testingdd { get; set; } 
     }
 
+
+
+  

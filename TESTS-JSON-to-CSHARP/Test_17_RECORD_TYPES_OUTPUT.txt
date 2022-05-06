@@ -1,10 +1,12 @@
 // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
-public record Value(
-    int id,
-    bool real
-);
 
 public record Root(
     string key,
     IReadOnlyList<Value> values
 );
+
+public record Value(
+    int id,
+    bool real
+);
+

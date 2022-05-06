@@ -273,7 +273,7 @@ namespace Xamasoft.JsonClassGenerator
             // TODO: This is currently O(n*n) because it iterates through List<T> on every loop iteration. This can be optimized.
 
             List<JsonType> typesWithNoDuplicates = new List<JsonType>();
-
+            types = types.OrderBy(p => p.AssignedName).ToList();
             foreach (JsonType type in types)
             {
                 if (!typesWithNoDuplicates.Exists(p => p.OriginalName == type.OriginalName))

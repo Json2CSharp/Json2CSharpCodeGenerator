@@ -55,6 +55,7 @@
     <Compile Include="Test_0_DIAGNOSTICS.cs" />
     <Compile Include="Test_11_NoListSetter.cs" />
     <Compile Include="Test_17_RECORD_TYPES.cs" />
+    <Compile Include="Test_18_WRONG_NAME_RECURSIVE_BUG78.cs" />
     <Compile Include="Test_5_BASIC_SCENARIO.cs" />
     <Compile Include="Test_1_2_SETTINGS_PASCAL.cs" />
     <Compile Include="Test_1_3_SETTINGS_FIELDS.cs" />
@@ -94,6 +95,8 @@
     <Content Include="Test_17_RECORD_TYPES_OUTPUT.txt" />
     <Content Include="Test_17_RECORD_TYPES_OUTPUT_NEWTONSOFT.txt" />
     <Content Include="Test_17_RECORD_TYPES_OUTPUT_SYSTEMTEXTJSON.txt" />
+    <Content Include="Test_18_WRONG_NAME_RECURSIVE_BUG78_INPUT.txt" />
+    <Content Include="Test_18_WRONG_NAME_RECURSIVE_BUG78_OUTPUT.txt" />
     <Content Include="Test_5_BASIC_SCENARIO_INPUT.txt" />
     <Content Include="Test_5_BASIC_SCENARIO_OUTPUT.txt" />
     <Content Include="Test_1_2_SETTINGS_PASCAL_INPUT.txt" />

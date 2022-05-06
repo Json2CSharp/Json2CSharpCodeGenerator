@@ -1,0 +1,19 @@
+// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
+    public class Attrs
+    {
+        public string id { get; set; }
+    }
+
+    public class Element
+    {
+        public string name { get; set; }
+        public Attrs attrs { get; set; }
+        public List<Element> elements { get; set; }
+    }
+
+    public class Root
+    {
+        public int number { get; set; }
+        public List<Element> elements { get; set; }
+    }
+

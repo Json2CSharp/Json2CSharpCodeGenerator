@@ -90,7 +90,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 string classPropertyName = field.MemberName;
                 string propertyAttribute = field.JsonMemberName;
                 string internalPropertyAttribute = "_" + propertyAttribute;
-                sw.AppendFormat("   {0}: {1}{2}", propertyAttribute, field.Type.GetTypeName(), Environment.NewLine);
+                sw.AppendFormat("    {0}: {1}{2}", propertyAttribute, field.Type.GetTypeName(), Environment.NewLine);
                 
                 string mappingFragment = string.Format("obj.get(\"{0}\")", propertyAttribute);
                 string mappingFragment2 = string.Format(GetTypeFunctionName(field.Type, config), mappingFragment);
@@ -105,8 +105,8 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             
             // Write Dictionnary Mapping Functions
             sw.AppendLine();
-            sw.AppendLine("   @staticmethod");
-            sw.AppendLine(string.Format("   def from_dict(obj: Any) -> '{0}':", type.AssignedName));
+            sw.AppendLine("    @staticmethod");
+            sw.AppendLine(string.Format("    def from_dict(obj: Any) -> '{0}':", type.AssignedName));
             sw.Append(mappingFunction.ToString());
             sw.AppendLine(string.Format("        return {0}({1})", type.AssignedName, fields.ToString()));
         }

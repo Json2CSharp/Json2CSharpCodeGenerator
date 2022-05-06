@@ -2,17 +2,10 @@
 // import com.fasterxml.jackson.annotation.JsonProperty; // version 2.11.1
 /* ObjectMapper om = new ObjectMapper();
 Root root = om.readValue(myJsonString, Root.class); */
-public class TestTest{
-
-    @JsonProperty("1test_test_test") 
-    public int _1testTestTest;
-
-    @JsonProperty("test_test_test") 
-    public int testTestTest;
-}
 
 public class _12testTest{
 }
+
 
 public class Root{
 
@@ -21,5 +14,15 @@ public class Root{
 
     @JsonProperty("12test_test") 
     public _12testTest _12testTest;
+}
+
+
+public class TestTest{
+
+    @JsonProperty("1test_test_test") 
+    public int _1testTestTest;
+
+    @JsonProperty("test_test_test") 
+    public int testTestTest;
 }
 

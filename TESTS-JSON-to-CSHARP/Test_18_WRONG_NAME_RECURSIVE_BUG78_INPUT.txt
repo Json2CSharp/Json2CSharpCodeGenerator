@@ -1,0 +1,22 @@
+{
+	"number": 1,
+	"elements": [{
+		"name": "node1",
+		"attrs": {
+			"id": "1"
+		},
+		"elements": [{
+				"name": "node2",
+				"attrs": {
+					"id": "2"
+				},
+				"elements": [{
+					"name": "node3",
+					"attrs": {
+						"id": "3"
+					}
+				}]
+			}
+		]
+	}]
+}

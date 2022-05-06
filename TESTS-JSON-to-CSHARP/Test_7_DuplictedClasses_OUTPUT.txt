@@ -1,21 +1,25 @@
 // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
-    public class Teststringbla    {
-        public int testinginner { get; set; } 
-        public int testingdd { get; set; } 
+   
+      public class Root    {
+        public List<Testobject> testobject { get; set; } 
+        public Testparent testparent { get; set; } 
     }
 
-    public class Testobject    {
+        public class Testobject    {
         public int test { get; set; } 
         public string teststring { get; set; } 
         public Teststringbla teststringbla { get; set; } 
     }
 
+    
     public class Testparent    {
         public List<Testobject> testobject { get; set; } 
     }
 
-    public class Root    {
-        public List<Testobject> testobject { get; set; } 
-        public Testparent testparent { get; set; } 
+ 
+   public class Teststringbla    {
+        public int testinginner { get; set; } 
+        public int testingdd { get; set; } 
     }
+
 
