@@ -13,6 +13,8 @@ using Newtonsoft.Json.Linq;
 
 using Xamasoft.JsonClassGenerator.CodeWriters;
 
+using Humanizer;
+
 namespace Xamasoft.JsonClassGenerator
 {
     public class JsonClassGenerator : IJsonClassGeneratorConfig
@@ -43,11 +45,12 @@ namespace Xamasoft.JsonClassGenerator
 
         public TextWriter OutputStream { get; set; }
 
-        private readonly PluralizationService pluralizationService = PluralizationService.CreateService(new CultureInfo("en-US"));
+        //private readonly PluralizationService pluralizationService = PluralizationService.CreateService(new CultureInfo("en-US"));
 
         public StringBuilder GenerateClasses(string jsonInput, out string errorMessage)
         {
             JObject[] examples = null;
+            bool rootWasArray = false;
             try
             {
                 using (StringReader sr = new StringReader(jsonInput))
@@ -56,6 +59,7 @@ namespace Xamasoft.JsonClassGenerator
                     JToken json = JToken.ReadFrom(reader);
                     if (json is JArray jArray && (jArray.Count == 0 || jArray.All(el => el is JObject)))
                     {
+                        rootWasArray = true;
                         examples = jArray.Cast<JObject>().ToArray();
                     }
                     else if (json is JObject jObject)
@@ -84,7 +88,7 @@ namespace Xamasoft.JsonClassGenerator
                 this.Types = this.HandleDuplicateClasses(this.Types);
 
                 StringBuilder builder = new StringBuilder();
-                this.WriteClassesToFile(builder, this.Types);
+                this.WriteClassesToFile(builder, this.Types, rootWasArray);
 
                 errorMessage = String.Empty;
                 return builder;
@@ -96,13 +100,13 @@ namespace Xamasoft.JsonClassGenerator
             }
         }
 
-        private void WriteClassesToFile(StringBuilder sw, IEnumerable<JsonType> types)
+        private void WriteClassesToFile(StringBuilder sw, IEnumerable<JsonType> types, bool rootIsArray = false)
         {
             Boolean inNamespace = false;
             Boolean rootNamespace = false;
 
             this.CodeWriter.WriteFileStart(this, sw);
-            this.CodeWriter.WriteDeserializationComment(this, sw);
+            this.CodeWriter.WriteDeserializationComment(this, sw, rootIsArray);
 
             foreach (JsonType type in types)
             {
@@ -245,7 +249,7 @@ namespace Xamasoft.JsonClassGenerator
 
                     field.Value.InternalType.AssignOriginalName(field.Key);
                     field.Value.InternalType.AssignName(this.CreateUniqueClassNameFromPlural(field.Key));
-                    field.Value.InternalType.AssignNewAssignedName(this.pluralizationService.Singularize(ToTitleCase(field.Key)));
+                    field.Value.InternalType.AssignNewAssignedName(ToTitleCase(field.Key).Singularize(inputIsKnownToBePlural: false));
 
                     this.GenerateClass(subexamples.ToArray(), field.Value.InternalType);
                 }
@@ -321,7 +325,8 @@ namespace Xamasoft.JsonClassGenerator
         private string CreateUniqueClassNameFromPlural(string plural)
         {
             plural = ToTitleCase(plural);
-            return this.CreateUniqueClassName(this.pluralizationService.Singularize(plural));
+            var singular = plural.Singularize(inputIsKnownToBePlural: false);
+            return this.CreateUniqueClassName(singular);
         }
 
         internal static string ToTitleCase(string str)

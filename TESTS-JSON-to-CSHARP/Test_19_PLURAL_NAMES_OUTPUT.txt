@@ -1,0 +1,17 @@
+// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
+    public class OpenClose
+    {
+        public string startTimeOfDay { get; set; }
+        public string endTimeOfDay { get; set; }
+    }
+
+    public class Root
+    {
+        public TimeWindowDetails timeWindowDetails { get; set; }
+    }
+
+    public class TimeWindowDetails
+    {
+        public List<OpenClose> openCloses { get; set; }
+    }
+

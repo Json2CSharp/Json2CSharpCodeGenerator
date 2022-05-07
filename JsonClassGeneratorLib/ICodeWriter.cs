@@ -18,7 +18,7 @@ namespace Xamasoft.JsonClassGenerator
         void WriteFileEnd(IJsonClassGeneratorConfig config, StringBuilder sw);
         void WriteNamespaceStart(IJsonClassGeneratorConfig config, StringBuilder sw, bool root);
         void WriteNamespaceEnd(IJsonClassGeneratorConfig config, StringBuilder sw, bool root);
-        void WriteDeserializationComment(IJsonClassGeneratorConfig config, StringBuilder sw);
+        void WriteDeserializationComment(IJsonClassGeneratorConfig config, StringBuilder sw, bool rootIsArray = false);
         void WriteClassMembers(IJsonClassGeneratorConfig config, StringBuilder sw, JsonType type, string prefix);
 
         IReadOnlyCollection<string> ReservedKeywords { get; }

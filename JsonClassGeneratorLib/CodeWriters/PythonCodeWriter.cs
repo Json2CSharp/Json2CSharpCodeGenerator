@@ -111,7 +111,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             sw.AppendLine(string.Format("        return {0}({1})", type.AssignedName, fields.ToString()));
         }
 
-        public void WriteDeserializationComment(IJsonClassGeneratorConfig config, StringBuilder sw)
+        public void WriteDeserializationComment(IJsonClassGeneratorConfig config, StringBuilder sw, bool rootIsArray = false)
         {
             return;
         }

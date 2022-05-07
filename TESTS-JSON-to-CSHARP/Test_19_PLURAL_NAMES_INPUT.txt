@@ -1,0 +1,10 @@
+{
+	"timeWindowDetails": {
+		"openCloses": [
+			{
+				"startTimeOfDay": "",
+				"endTimeOfDay": ""
+			}
+		]
+	}
+}

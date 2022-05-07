@@ -169,12 +169,20 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             sw.AppendLine("}");
         }
 
-        public void WriteDeserializationComment(IJsonClassGeneratorConfig config, StringBuilder sw)
+        public void WriteDeserializationComment(IJsonClassGeneratorConfig config, StringBuilder sw, bool rootIsArray = false)
         {
             sw.AppendLine("// import com.fasterxml.jackson.databind.ObjectMapper; // version 2.11.1");
             sw.AppendLine("// import com.fasterxml.jackson.annotation.JsonProperty; // version 2.11.1");
             sw.AppendLine("/* ObjectMapper om = new ObjectMapper();");
-            sw.AppendLine("Root root = om.readValue(myJsonString, Root.class); */");
+
+            if (rootIsArray)
+            {
+                sw.AppendLine("Root[] root = om.readValue(myJsonString, Root[].class); */");
+            }
+            else
+            {
+                sw.AppendLine("Root root = om.readValue(myJsonString, Root.class); */");
+            }
         }
     }
 }
