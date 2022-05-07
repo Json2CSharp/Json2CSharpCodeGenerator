@@ -37,24 +37,24 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
         {
             switch (type.Type)
             {
-                case JsonTypeEnum.Anything: return "object";
-                case JsonTypeEnum.Array: return GetCollectionTypeName(elementTypeName: this.GetTypeName(type.InternalType, config), config.CollectionType);
-                case JsonTypeEnum.Dictionary: return "Dictionary<string, " + this.GetTypeName(type.InternalType, config) + ">";
-                case JsonTypeEnum.Boolean: return "bool";
-                case JsonTypeEnum.Float: return "double";
-                case JsonTypeEnum.Integer: return "int";
-                case JsonTypeEnum.Long: return "long";
-                case JsonTypeEnum.Date: return "DateTime";
-                case JsonTypeEnum.NonConstrained: return "object";
-                case JsonTypeEnum.NullableBoolean: return "bool?";
-                case JsonTypeEnum.NullableFloat: return "double?";
-                case JsonTypeEnum.NullableInteger: return "int?";
-                case JsonTypeEnum.NullableLong: return "long?";
-                case JsonTypeEnum.NullableDate: return "DateTime?";
-                case JsonTypeEnum.NullableSomething: return "object";
-                case JsonTypeEnum.Object: return type.NewAssignedName;
-                case JsonTypeEnum.String: return "string";
-                default: throw new NotSupportedException("Unsupported json type: " + type.Type);
+            case JsonTypeEnum.Anything         : return "object";
+            case JsonTypeEnum.Array            : return GetCollectionTypeName(elementTypeName: this.GetTypeName(type.InternalType, config), config.CollectionType);
+            case JsonTypeEnum.Dictionary       : return "Dictionary<string, " + this.GetTypeName(type.InternalType, config) + ">";
+            case JsonTypeEnum.Boolean          : return "bool";
+            case JsonTypeEnum.Float            : return "double";
+            case JsonTypeEnum.Integer          : return "int";
+            case JsonTypeEnum.Long             : return "long";
+            case JsonTypeEnum.Date             : return "DateTime";
+            case JsonTypeEnum.NonConstrained   : return "object";
+            case JsonTypeEnum.NullableBoolean  : return "bool?";
+            case JsonTypeEnum.NullableFloat    : return "double?";
+            case JsonTypeEnum.NullableInteger  : return "int?";
+            case JsonTypeEnum.NullableLong     : return "long?";
+            case JsonTypeEnum.NullableDate     : return "DateTime?";
+            case JsonTypeEnum.NullableSomething: return "object";
+            case JsonTypeEnum.Object           : return type.NewAssignedName;
+            case JsonTypeEnum.String           : return "string";
+            default: throw new NotSupportedException("Unsupported json type: " + type.Type);
             }
         }
 
@@ -62,13 +62,13 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
         {
             switch (type)
             {
-                case OutputCollectionType.Array: return elementTypeName + "[]";
-                case OutputCollectionType.MutableList: return "List<" + elementTypeName + ">";
-                case OutputCollectionType.IReadOnlyList: return "IReadOnlyList<" + elementTypeName + ">";
-                case OutputCollectionType.ImmutableArray: return "ImmutableArray<" + elementTypeName + ">";
+            case OutputCollectionType.Array         : return elementTypeName + "[]";
+            case OutputCollectionType.MutableList   : return "List<" + elementTypeName + ">";
+            case OutputCollectionType.IReadOnlyList : return "IReadOnlyList<" + elementTypeName + ">";
+            case OutputCollectionType.ImmutableArray: return "ImmutableArray<" + elementTypeName + ">";
 
-                default:
-                    throw new ArgumentOutOfRangeException(paramName: nameof(type), actualValue: type, message: "Invalid " + nameof(OutputCollectionType) + " enum value.");
+            default:
+                throw new ArgumentOutOfRangeException(paramName: nameof(type), actualValue: type, message: "Invalid " + nameof(OutputCollectionType) + " enum value.");
             }
         }
 
@@ -79,7 +79,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
         private bool ShouldApplyNoPruneAttribute(IJsonClassGeneratorConfig config)
         {
-            return config.ApplyObfuscationAttributes && ( config.OutputType == OutputTypes.MutableClass && config.MutableClasses.Members == OutputMembers.AsPublicFields );
+            return config.ApplyObfuscationAttributes && (config.OutputType == OutputTypes.MutableClass && config.MutableClasses.Members == OutputMembers.AsPublicFields);
         }
 
         public void WriteFileStart(IJsonClassGeneratorConfig config, StringBuilder sw)
@@ -99,13 +99,13 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
                 switch (config.AttributeLibrary)
                 {
-                    case JsonLibrary.NewtonsoftJson:
-                        importNamespaces.Add("Newtonsoft.Json");
-                        importNamespaces.Add("Newtonsoft.Json.Linq");
-                        break;
-                    case JsonLibrary.SystemTextJson:
-                        importNamespaces.Add("System.Text.Json");
-                        break;
+                case JsonLibrary.NewtonsoftJson:
+                    importNamespaces.Add("Newtonsoft.Json");
+                    importNamespaces.Add("Newtonsoft.Json.Linq");
+                    break;
+                case JsonLibrary.SystemTextJson:
+                    importNamespaces.Add("System.Text.Json");
+                    break;
                 }
 
                 if (!String.IsNullOrWhiteSpace(config.SecondaryNamespace) && !config.UseNestedClasses)
@@ -115,7 +115,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
                 importNamespaces.Sort(CompareNamespacesSystemFirst);
 
-                foreach (string ns in importNamespaces) // NOTE: Using `.Distinct()` after sorting may cause out-of-order results.
+                foreach(string ns in importNamespaces) // NOTE: Using `.Distinct()` after sorting may cause out-of-order results.
                 {
                     sw.AppendFormat("using {0};{1}", ns, Environment.NewLine);
                 }
@@ -131,14 +131,14 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
         private static int CompareNamespacesSystemFirst(string x, string y)
         {
             if (x == "System") return -1;
-            if (y == "System") return 1;
+            if (y == "System") return  1;
 
             if (x.StartsWith("System.", StringComparison.Ordinal))
             {
                 if (y.StartsWith("System.", StringComparison.Ordinal))
                 {
                     // Both start with "System." - so compare them normally.
-                    return StringComparer.Ordinal.Compare(x, y);
+                    return StringComparer.Ordinal.Compare(x,y);
                 }
                 else
                 {
@@ -156,7 +156,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 else
                 {
                     // Neither are "System." namespaces - so compare them normally.
-                    return StringComparer.Ordinal.Compare(x, y);
+                    return StringComparer.Ordinal.Compare(x,y);
                 }
             }
         }
@@ -192,7 +192,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
         public void WriteNamespaceStart(IJsonClassGeneratorConfig config, StringBuilder sw, bool root)
         {
             sw.AppendLine();
-            sw.AppendFormat("namespace {0}", root && !config.UseNestedClasses ? config.Namespace : ( config.SecondaryNamespace ?? config.Namespace ));
+            sw.AppendFormat("namespace {0}", root && !config.UseNestedClasses ? config.Namespace : (config.SecondaryNamespace ?? config.Namespace));
             sw.AppendLine("{");
             sw.AppendLine();
         }
@@ -237,7 +237,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             else
             {
                 sw.AppendFormat(indentTypes + "{0} class {1}{2}", visibility, className, Environment.NewLine);
-                sw.AppendLine(indentTypes + "{");
+                sw.AppendLine  (indentTypes + "{");
             }
 
 #if CAN_SUPRESS
@@ -275,7 +275,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             {
                 sw.AppendLine(indentTypes + ");");
             }
-            else if (( !config.UseNestedClasses ) || ( config.UseNestedClasses && !type.IsRoot ))
+            else if ((!config.UseNestedClasses) || (config.UseNestedClasses && !type.IsRoot))
             {
                 sw.AppendLine(indentTypes + "}");
             }
@@ -333,7 +333,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 name = name.ToLowerInvariant();
             }
 
-            if (!Char.IsLetter(name[0])) name = "_" + name;
+            if      (!Char.IsLetter(name[0]))      name = "_" + name;
             else if (this.IsReservedKeyword(name)) name = "@" + name;
 
             return name;
@@ -354,7 +354,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                     sw.AppendLine(",");
                 }
 
-                if (!first && ( ( propertyAttribute.Length > 0 && config.OutputType != OutputTypes.ImmutableRecord ) || config.ExamplesInDocumentation ))
+                if( !first && ( ( propertyAttribute.Length > 0 && config.OutputType != OutputTypes.ImmutableRecord ) || config.ExamplesInDocumentation) )
                 {
                     // If rendering examples/XML comments - or property attributes - then add a newline before the property for readability's sake (except if it's the first property in the class)
                     // For record types, we want all members to be next to each other, unless when using examples
@@ -384,7 +384,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 if (config.OutputType == OutputTypes.ImmutableRecord)
                 {
                     // NOTE: not adding newlines here, that happens at the start of the loop. We need this so we can lazily add commas at the end.
-                    if (field.Type.Type == JsonTypeEnum.Array)
+                    if(field.Type.Type == JsonTypeEnum.Array)
                     {
                         // TODO: Respect config.CollectionType
                         sw.AppendFormat(" IReadOnlyList<{0}> {1}", this.GetTypeName(field.Type.InternalType, config), classPropertyName);
@@ -394,7 +394,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                         sw.AppendFormat(" {0} {1}", field.Type.GetTypeName(), classPropertyName);
                     }
                 }
-                else if (config.OutputType == OutputTypes.MutableClass)
+                else if(config.OutputType == OutputTypes.MutableClass)
                 {
                     if (config.MutableClasses.Members == OutputMembers.AsPublicFields)
                     {
@@ -404,7 +404,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
                         sw.AppendFormat(indentMembers + "public {0}{1} {2};{3}", useReadonlyModifier ? "readonly " : "", field.Type.GetTypeName(), classPropertyName, Environment.NewLine);
                     }
-                    else if (config.MutableClasses.Members == OutputMembers.AsProperties)
+                    else if( config.MutableClasses.Members == OutputMembers.AsProperties )
                     {
                         var getterSetterPart = "{ get; set; }";
 
@@ -429,7 +429,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 }
                 else if (config.OutputType == OutputTypes.ImmutableClass)
                 {
-                    if (field.Type.Type == JsonTypeEnum.Array)
+                    if(field.Type.Type == JsonTypeEnum.Array)
                     {
                         // TODO: Respect config.CollectionType
                         sw.AppendFormat(indentMembers + "public IReadOnlyList<{0}> {1} {{ get; }}{2}", this.GetTypeName(field.Type.InternalType, config), classPropertyName, Environment.NewLine);
@@ -457,7 +457,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
         private void WriteClassConstructor(IJsonClassGeneratorConfig config, StringBuilder sw, JsonType type, string indentMembers, string indentBodies)
         {
             // Write an empty constructor on a single-line:
-            if (type.Fields.Count == 0)
+            if(type.Fields.Count == 0)
             {
                 sw.AppendFormat(indentMembers + "public {0}() {{}}{1}", type.AssignedName, Environment.NewLine);
                 return;
@@ -467,10 +467,10 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             {
                 switch (config.AttributeLibrary)
                 {
-                    case JsonLibrary.NewtonsoftJson:
-                    case JsonLibrary.SystemTextJson: // Both libraries use the same attribute name: [JsonConstructor]
-                        sw.AppendLine(indentMembers + "[JsonConstructor]");
-                        break;
+                case JsonLibrary.NewtonsoftJson:
+                case JsonLibrary.SystemTextJson: // Both libraries use the same attribute name: [JsonConstructor]
+                    sw.AppendLine(indentMembers + "[JsonConstructor]");
+                    break;
                 }
 
                 sw.AppendFormat(indentMembers + "public {0}({1}", type.AssignedName, Environment.NewLine);
@@ -491,7 +491,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                     sw.Append(indentBodies);
 
                     string attribute = config.GetCSharpJsonAttributeCode(field);
-                    if (attribute.Length > 0)
+                    if(attribute.Length > 0)
                     {
                         sw.Append(attribute);
                         sw.Append(' ');
