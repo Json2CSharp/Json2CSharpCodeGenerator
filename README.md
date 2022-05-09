@@ -1,4 +1,7 @@
 ## Special Thanks to Our Contributors !!
+Updated Pluralization Package & Test cleanup
+[marblekirby](https://github.com/marblekirby) <br/> 
+
 Implemented Immutable Classes Feature <br/>
 [Holly-HaCKer](https://github.com/HoLLy-HaCKeR) <br/>
 
