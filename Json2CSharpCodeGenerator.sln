@@ -17,7 +17,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonClassGenerator.WinForms", "JsonClassGenerator.WinForms\JsonClassGenerator.WinForms.csproj", "{70704174-F6FD-496B-A316-EFD91DB1EFEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TESTS-JSON-TO-PYTHON", "TESTS-JSON-TO-PYTHON\TESTS-JSON-TO-PYTHON.csproj", "{15977082-AEAD-45F3-8446-C227073F8FB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TESTS-JSON-TO-PYTHON", "TESTS-JSON-TO-PYTHON\TESTS-JSON-TO-PYTHON.csproj", "{15977082-AEAD-45F3-8446-C227073F8FB0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ObjectInitializerGenerator", "ObjectInitializerGenerator\ObjectInitializerGenerator.csproj", "{AE1A7AFA-5BDE-4E7A-8E12-2D4DBF386975}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{15977082-AEAD-45F3-8446-C227073F8FB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15977082-AEAD-45F3-8446-C227073F8FB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15977082-AEAD-45F3-8446-C227073F8FB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE1A7AFA-5BDE-4E7A-8E12-2D4DBF386975}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE1A7AFA-5BDE-4E7A-8E12-2D4DBF386975}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE1A7AFA-5BDE-4E7A-8E12-2D4DBF386975}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE1A7AFA-5BDE-4E7A-8E12-2D4DBF386975}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

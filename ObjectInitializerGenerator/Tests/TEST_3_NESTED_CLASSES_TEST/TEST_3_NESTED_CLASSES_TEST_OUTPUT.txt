@@ -1,0 +1,27 @@
+﻿            TestClass testclass = new TestClass()
+            {
+                TestGuid = Guid.NewGuid(),
+                TestBoolean = true,
+                TestChildClass = new ChildClass()
+                {
+                    TestInt = 1,
+                    TestChildChildClass = new ChildChildClass()
+                    {
+                        TestBool = true,
+                    },
+                },
+            };
+
+            ChildClass childclass = new ChildClass()
+            {
+                TestInt = 1,
+                TestChildChildClass = new ChildChildClass()
+                {
+                    TestBool = true,
+                },
+            };
+
+            ChildChildClass childchildclass = new ChildChildClass()
+            {
+                TestBool = true,
+            };

@@ -1,0 +1,12 @@
+﻿TestClass testclass = new TestClass() { 
+TestByteArray = new byte[]{1},
+TestIntArray = new int[]{1},
+TestStringList = new List<string>(),
+TestIEnumerableList = new List<string>(),
+TestDictionary = new Dictionary<string, string>(),
+TestChildList = new List<TestChild>(),
+TestChildClass = new TestChild_2(),
+};
+TestChild testchild = new TestChild() { 
+TestInt = 1,
+};

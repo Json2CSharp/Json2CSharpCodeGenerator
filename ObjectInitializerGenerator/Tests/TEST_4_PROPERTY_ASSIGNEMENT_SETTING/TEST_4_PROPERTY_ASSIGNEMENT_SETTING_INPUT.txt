@@ -1,0 +1,20 @@
+﻿public class TestClass
+{
+    public bool TestBool { get; set; }
+    public Boolean TestBoolean { get; set; }
+    public string TestString { get; set; }
+    public String TestString_2 { get; set; }
+    public Guid TestGuid { get; set; }
+    public DateTime TestDateTime { get; set; }
+    public DateTimeOffset TestDateTimeOffset { get; set; }
+    public char TestChar { get; set; }
+    public int? NullableTestInt { get; set; }
+    public bool? NullableTestBoolean { get; set; }
+    public DateTime? NullableTestDateTime { get; set; }
+    public DateTimeOffset? NullableTestDateTimeOffset { get; set; }
+    public byte[] TestByteArray { get; set; }
+    public int[] TestIntArray { get; set; }
+    public List<string> TestStringList { get; set; }
+    public IEnumerable<string> TestIEnumerableList{ get; set; }
+    public Dictionary<string, string> TestDictionary { get; set; }
+}

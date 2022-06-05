@@ -1,0 +1,15 @@
+﻿            TestClass testclass = new TestClass();
+            testclass.TestGuid = Guid.NewGuid();
+            testclass.TestBoolean = true;
+            testclass.TestChildClass = new ChildClass();
+            testclass.TestChildClass.TestInt = 1;
+            testclass.TestChildClass.TestChildChildClass = new ChildChildClass();
+            testclass.TestChildClass.TestChildChildClass.TestBool = true;
+
+            ChildClass childclass = new ChildClass();
+            childclass.TestInt = 1;
+            childclass.TestChildChildClass = new ChildChildClass();
+            childclass.TestChildChildClass.TestBool = true;
+
+            ChildChildClass childchildclass = new ChildChildClass();
+            childchildclass.TestBool = true;

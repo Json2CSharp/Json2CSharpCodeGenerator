@@ -1,0 +1,14 @@
+﻿TestClass testclass = new TestClass() { 
+TestBool = true,
+TestBoolean = true,
+TestString = "",
+TestString_2 = "",
+TestGuid = Guid.NewGuid(),
+TestDateTime = DateTime.Now,
+TestDateTimeOffset = DateTimeOffset.Now,
+TestChar = 'c',
+NullableTestInt = 1,
+NullableTestBoolean = true,
+NullableTestDateTime = DateTime.Now,
+NullableTestDateTimeOffset = DateTimeOffset.Now,
+};

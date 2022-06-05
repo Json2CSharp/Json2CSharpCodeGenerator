@@ -1,0 +1,15 @@
+﻿public class TestClass
+{
+    public byte[] TestByteArray { get; set; }
+    public int[] TestIntArray { get; set; }
+    public List<string> TestStringList { get; set; }
+    public IEnumerable<string> TestIEnumerableList{ get; set; }
+    public Dictionary<string, string> TestDictionary { get; set; }
+    public List<TestChild> TestChildList { get; set; }
+    public TestChild_2 TestChildClass {get; set; }
+}
+
+public class TestChild {
+    public int TestInt { get; set; }
+
+}

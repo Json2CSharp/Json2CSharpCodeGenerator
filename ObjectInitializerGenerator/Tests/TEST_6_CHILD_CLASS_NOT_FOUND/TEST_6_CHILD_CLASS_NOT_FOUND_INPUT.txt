@@ -1,0 +1,7 @@
+﻿public class TestClass
+{
+    public Guid TestGuid {get; set;}
+    public Boolean  TestBoolean {get; set;}
+    public ChildClass  TestChildClass {get; set;}
+}
+
