@@ -39,6 +39,9 @@ namespace Xamasoft.JsonClassGenerator
         public ICodeBuilder CodeWriter                 { get; set; }
         public bool         AlwaysUseNullableValues    { get; set; }
         public bool         ExamplesInDocumentation    { get; set; }
+        public bool         RemoveToJson    { get; set; }
+        public bool         RemoveFromJson { get; set; }
+        public bool         RemoveConstructors { get; set; }
 
         #endregion
 

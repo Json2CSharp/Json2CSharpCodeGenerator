@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TESTS-JSON-TO-PYTHON", "TES
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ObjectInitializerGenerator", "ObjectInitializerGenerator\ObjectInitializerGenerator.csproj", "{AE1A7AFA-5BDE-4E7A-8E12-2D4DBF386975}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TESTS-JSON-TO-DART", "TESTS-JSON-TO-DART\TESTS-JSON-TO-DART.csproj", "{909B70A1-53CD-4A00-9A3A-6EFBC885CA3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{AE1A7AFA-5BDE-4E7A-8E12-2D4DBF386975}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE1A7AFA-5BDE-4E7A-8E12-2D4DBF386975}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE1A7AFA-5BDE-4E7A-8E12-2D4DBF386975}.Release|Any CPU.Build.0 = Release|Any CPU
+		{909B70A1-53CD-4A00-9A3A-6EFBC885CA3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{909B70A1-53CD-4A00-9A3A-6EFBC885CA3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{909B70A1-53CD-4A00-9A3A-6EFBC885CA3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{909B70A1-53CD-4A00-9A3A-6EFBC885CA3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

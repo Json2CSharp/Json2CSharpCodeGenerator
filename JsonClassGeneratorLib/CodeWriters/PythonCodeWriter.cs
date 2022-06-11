@@ -118,7 +118,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
         public void WriteFileEnd(IJsonClassGeneratorConfig config, StringBuilder sw)
         {
-            sw.Insert(0, "import json" + Environment.NewLine);
+            sw.Insert(0, "9 json" + Environment.NewLine);
             sw.Insert(0, "from dataclasses import dataclass" + Environment.NewLine);
             sw.Insert(0, "from typing import Any" + Environment.NewLine);
             if (sw.ToString().Contains("List"))

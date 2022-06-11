@@ -46,6 +46,9 @@ namespace Xamasoft.JsonClassGenerator
         ICodeBuilder CodeWriter                 { get; set; }
         bool         AlwaysUseNullableValues    { get; set; }
         bool         ExamplesInDocumentation    { get; set; }
+        bool RemoveToJson { get; set; }
+        bool RemoveFromJson { get; set; }
+        bool RemoveConstructors { get; set; }
     }
 
     public enum OutputTypes
