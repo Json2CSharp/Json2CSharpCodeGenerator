@@ -49,8 +49,12 @@
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.2.1.2\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,6 +65,8 @@
     <Compile Include="Test_18_WRONG_NAME_RECURSIVE_BUG78.cs" />
     <Compile Include="Test_19_PLURAL_NAMES.cs" />
     <Compile Include="Test_20_ROOT_ARRAY.cs" />
+    <Compile Include="Test_21_ADD_TWO_ATTRIBUTELIBRAIRY.cs" />
+    <Compile Include="Test_22_SUPPORT_FOR_NULLABLES.cs" />
     <Compile Include="Test_5_BASIC_SCENARIO.cs" />
     <Compile Include="Test_1_2_SETTINGS_PASCAL.cs" />
     <Compile Include="Test_1_3_SETTINGS_FIELDS.cs" />
@@ -106,6 +112,10 @@
     <Content Include="Test_19_PLURAL_NAMES_OUTPUT.txt" />
     <Content Include="Test_20_ROOT_ARRAY_INPUT.txt" />
     <Content Include="Test_20_ROOT_ARRAY_OUTPUT.txt" />
+    <Content Include="Test_21_ADD_TWO_ATTRIBUTELIBRAIRY_INPUT.txt" />
+    <Content Include="Test_21_ADD_TWO_ATTRIBUTELIBRAIRY_OUTPUT.txt" />
+    <Content Include="Test_22_SUPPORT_FOR_NULLABLES_INPUT.txt" />
+    <Content Include="Test_22_SUPPORT_FOR_NULLABLES_OUTPUT.txt" />
     <Content Include="Test_5_BASIC_SCENARIO_INPUT.txt" />
     <Content Include="Test_5_BASIC_SCENARIO_OUTPUT.txt" />
     <Content Include="Test_1_2_SETTINGS_PASCAL_INPUT.txt" />

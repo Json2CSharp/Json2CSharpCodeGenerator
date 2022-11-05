@@ -14,25 +14,6 @@ class Awesomeobject:
         return Awesomeobject(_SomeProps1, _SomeProps2)
 
 @dataclass
-class User:
-    id: str
-    name: str
-    created_at: str
-    updated_at: str
-    email: str
-    testanadditionalfield: str
-
-    @staticmethod
-    def from_dict(obj: Any) -> 'User':
-        _id = str(obj.get("id"))
-        _name = str(obj.get("name"))
-        _created_at = str(obj.get("created_at"))
-        _updated_at = str(obj.get("updated_at"))
-        _email = str(obj.get("email"))
-        _testanadditionalfield = str(obj.get("testanadditionalfield"))
-        return User(_id, _name, _created_at, _updated_at, _email, _testanadditionalfield)
-
-@dataclass
 class Class1:
     id: int
     user_id: str
@@ -70,6 +51,25 @@ class Root:
         _Class1 = Class1.from_dict(obj.get("Class1"))
         _Class2 = Class2.from_dict(obj.get("Class2"))
         return Root(_Class1, _Class2)
+
+@dataclass
+class User:
+    id: str
+    name: str
+    created_at: str
+    updated_at: str
+    email: str
+    testanadditionalfield: str
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'User':
+        _id = str(obj.get("id"))
+        _name = str(obj.get("name"))
+        _created_at = str(obj.get("created_at"))
+        _updated_at = str(obj.get("updated_at"))
+        _email = str(obj.get("email"))
+        _testanadditionalfield = str(obj.get("testanadditionalfield"))
+        return User(_id, _name, _created_at, _updated_at, _email, _testanadditionalfield)
 
 # Example Usage
 # jsonstring = json.loads(myjsonstring)

@@ -1,6 +1,8 @@
-﻿#Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned -Confirm:$false -Force;
+﻿Set-ExecutionPolicy Unrestricted
+
 $TestName = Read-Host -Prompt 'Test Name With Number: THE FORMAT IS [TESTNUMBER]_[TESTNAME], EXAMPLE : 10_TESTNAME.'
-$Dir =  ($psise.CurrentFile.FullPath -replace "CreateTest.ps1", "") 
+#$Dir =  ($psise.CurrentFile.FullPath -replace "CreateTest.ps1", "") 
+$Dir = "C:\Users\Hilal\OneDrive\Desktop\Json2CSharpCodeGenerator\TESTS-JSON-to-CSHARP"
 $fullPath = $Dir + "Test_" + $TestName + ".cs"
 $fullPathInput = $Dir + "Test_" + $TestName + "_INPUT"+ ".txt"
 $fullPathOutput = $Dir + "Test_" + $TestName + "_OUTPUT"+".txt"

@@ -31,7 +31,6 @@ namespace TESTS_JSON_TO_DART
 
             string expectedOutput = resultsCompare.NormalizeOutput();
             string actualOutput   = returnVal     .NormalizeOutput();
-
             Assert.AreEqual(expected: expectedOutput, actual: actualOutput);
         }
     }

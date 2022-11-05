@@ -8,44 +8,44 @@ namespace Xamasoft.JsonClassGenerator
         /// The C# <c>namespace</c> or Java <c>package</c> that the generated types will reside in.<br />
         /// <see langword="null"/> by default. If null/empty/whitespace then no enclosing namespace will be written in the output.
         /// </summary>
-        string       Namespace                  { get; set; }
+        string Namespace { get; set; }
 
         /// <summary>
         /// The C# <c>namespace</c> or Java <c>package</c> that &quot;secondary&quot; generated types will reside in.<br />
         /// <see langword="null"/> by default.
         /// </summary>
-        string       SecondaryNamespace         { get; set; }
+        string SecondaryNamespace { get; set; }
 
-        OutputTypes          OutputType         { get; set; }
-        OutputCollectionType CollectionType     { get; set; }
+        OutputTypes OutputType { get; set; }
+        OutputCollectionType CollectionType { get; set; }
 
         /// <summary>Options contained within are only respected when <see cref="IJsonClassGeneratorConfig.OutputType"/> == <see cref="OutputTypes.MutableClass"/>.</summary>
-        MutableClassConfig   MutableClasses     { get; }
+        MutableClassConfig MutableClasses { get; }
 
-        JsonLibrary                AttributeLibrary { get; set; }
-        JsonPropertyAttributeUsage AttributeUsage   { get; set; }
+        JsonLibrary AttributeLibrary { get; set; }
+        JsonPropertyAttributeUsage AttributeUsage { get; set; }
 
-        bool         InternalVisibility         { get; set; }
-        bool         NoHelperClass              { get; set; }
+        bool InternalVisibility { get; set; }
+        bool NoHelperClass { get; set; }
 
         /// <summary>
         /// When true, then the generated C# and VB.NET classes will have PascalCase property names, which means that <c>[JsonProperty]</c> or <c>[JsonPropertyName]</c> will be applied to all properties if the source JSON uses camelCase names, regardless of <see cref="AttributeUsage"/>.<br />
         /// When false, then the generated C# and VB.NET classes' property names will use the same names as the source JSON (except when a JSON property name cannot be represented by a C# identifier).
         /// </summary>
-        bool         UsePascalCase              { get; set; }
+        bool UsePascalCase { get; set; }
 
-        bool         UseNestedClasses           { get; set; }
+        bool UseNestedClasses { get; set; }
 
         /// <summary>Name of the outer class. Only used when <c><see cref="UseNestedClasses"/> == <see langword="true"/></c>.</summary>
-        string       MainClass                  { get; set; }
+        string MainClass { get; set; }
 
         /// <summary>When <see langword="true"/>, then <see cref="System.Reflection.ObfuscationAttribute"/> will be applied to generated types.</summary>
-        bool         ApplyObfuscationAttributes { get; set; }
+        bool ApplyObfuscationAttributes { get; set; }
 
-        bool         SingleFile                 { get; set; }
-        ICodeBuilder CodeWriter                 { get; set; }
-        bool         AlwaysUseNullableValues    { get; set; }
-        bool         ExamplesInDocumentation    { get; set; }
+        bool SingleFile { get; set; }
+        ICodeBuilder CodeWriter { get; set; }
+        bool AlwaysUseNullableValues { get; set; }
+        bool ExamplesInDocumentation { get; set; }
         bool RemoveToJson { get; set; }
         bool RemoveFromJson { get; set; }
         bool RemoveConstructors { get; set; }
@@ -105,7 +105,7 @@ namespace Xamasoft.JsonClassGenerator
         /// <summary>C# and VB.NET: Uses auto-properties. Java: uses getter/setter methods.</summary>
         AsProperties,
         AsPublicFields,
-//      AsPublicPropertiesOverPrivateFields // TODO
+        //      AsPublicPropertiesOverPrivateFields // TODO
     }
 
     public enum JsonLibrary
@@ -114,7 +114,10 @@ namespace Xamasoft.JsonClassGenerator
         NewtonsoftJson,
 
         /// <summary>Use the <c>[JsonPropertyName]</c> attribute on generated C# class properties.</summary>
-        SystemTextJson
+        SystemTextJson,
+
+        /// <summary>Use the <c>[JsonPropertyName]</c> and <c>[JsonProperty]</c>  attribute on generated C# class properties.</summary>
+        NewtonsoftAndSystemTextJson
     }
 
     public enum JsonPropertyAttributeUsage
@@ -165,16 +168,19 @@ namespace Xamasoft.JsonClassGenerator
                 bool usingRecordTypes = config.OutputType == OutputTypes.ImmutableRecord;
                 string attributeTarget = usingRecordTypes ? "property: " : string.Empty;
 
-                switch(config.AttributeLibrary)
+                switch (config.AttributeLibrary)
                 {
-                case JsonLibrary.NewtonsoftJson:
-                    return $"[{attributeTarget}JsonProperty(\"{field.JsonMemberName}\")]";
+                    case JsonLibrary.NewtonsoftJson:
+                        return $"[{attributeTarget}JsonProperty(\"{field.JsonMemberName}\")]";
 
-                case JsonLibrary.SystemTextJson:
-                    return $"[{attributeTarget}JsonPropertyName(\"{field.JsonMemberName}\")]";
+                    case JsonLibrary.SystemTextJson:
+                        return $"[{attributeTarget}JsonPropertyName(\"{field.JsonMemberName}\")]";
 
-                default:
-                    throw new InvalidOperationException("Unrecognized " + nameof(config.AttributeLibrary) + " value: " + config.AttributeLibrary);
+                    case JsonLibrary.NewtonsoftAndSystemTextJson:
+                        return $"[{attributeTarget}JsonProperty(\"{field.JsonMemberName}\")]\r\n" +
+                            $"        [{attributeTarget}JsonPropertyName(\"{field.JsonMemberName}\")]";
+                    default:
+                        throw new InvalidOperationException("Unrecognized " + nameof(config.AttributeLibrary) + " value: " + config.AttributeLibrary);
                 }
             }
             else
@@ -187,14 +193,14 @@ namespace Xamasoft.JsonClassGenerator
         {
             switch (config.AttributeUsage)
             {
-            case JsonPropertyAttributeUsage.Always:
-                return true;
+                case JsonPropertyAttributeUsage.Always:
+                    return true;
 
-            case JsonPropertyAttributeUsage.OnlyWhenNecessary:
-                return field.ContainsSpecialChars;
+                case JsonPropertyAttributeUsage.OnlyWhenNecessary:
+                    return field.ContainsSpecialChars;
 
-            default:
-                throw new InvalidOperationException("Unrecognized " + nameof(config.AttributeUsage) + " value: " + config.AttributeUsage);
+                default:
+                    throw new InvalidOperationException("Unrecognized " + nameof(config.AttributeUsage) + " value: " + config.AttributeUsage);
             }
         }
 

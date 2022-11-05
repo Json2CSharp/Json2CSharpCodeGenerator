@@ -33,6 +33,7 @@ namespace TESTS_JSON_TO_PYTHON
             string actualOutput   = returnVal     .NormalizeOutput();
 
             Assert.AreEqual(expected: expectedOutput, actual: actualOutput);
+
         }
     }
 }

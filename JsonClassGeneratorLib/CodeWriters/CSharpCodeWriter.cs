@@ -106,6 +106,12 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 case JsonLibrary.SystemTextJson:
                     importNamespaces.Add("System.Text.Json");
                     break;
+                case JsonLibrary.NewtonsoftAndSystemTextJson:
+                        importNamespaces.Add("Newtonsoft.Json");
+                        importNamespaces.Add("Newtonsoft.Json.Linq");
+                        importNamespaces.Add("System.Text.Json");
+                    break;
+
                 }
 
                 if (!String.IsNullOrWhiteSpace(config.SecondaryNamespace) && !config.UseNestedClasses)

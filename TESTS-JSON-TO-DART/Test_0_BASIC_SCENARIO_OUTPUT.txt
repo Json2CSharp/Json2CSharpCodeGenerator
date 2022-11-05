@@ -1,76 +1,126 @@
-from typing import List
-from typing import Any
-from dataclasses import dataclass
-import json
-@dataclass
-class Awesomeobject:
-    SomeProps1: int
-    SomeProps2: str
+/* 
+// Example Usage
+Map<String, dynamic> map = jsonDecode(<myJSONString>);
+var myRootNode = Root.fromJson(map);
+*/ 
+class Awesomeobject {
+    int? someProps1;
+    String? someProps2;
 
-    @staticmethod
-    def from_dict(obj: Any) -> 'Awesomeobject':
-        _SomeProps1 = int(obj.get("SomeProps1"))
-        _SomeProps2 = str(obj.get("SomeProps2"))
-        return Awesomeobject(_SomeProps1, _SomeProps2)
+    Awesomeobject({this.someProps1, this.someProps2}); 
 
-@dataclass
-class User:
-    id: str
-    name: str
-    created_at: str
-    updated_at: str
-    email: str
-    testanadditionalfield: str
+    Awesomeobject.fromJson(Map<String, dynamic> json) {
+        someProps1 = json['SomeProps1'];
+        someProps2 = json['SomeProps2'];
+    }
 
-    @staticmethod
-    def from_dict(obj: Any) -> 'User':
-        _id = str(obj.get("id"))
-        _name = str(obj.get("name"))
-        _created_at = str(obj.get("created_at"))
-        _updated_at = str(obj.get("updated_at"))
-        _email = str(obj.get("email"))
-        _testanadditionalfield = str(obj.get("testanadditionalfield"))
-        return User(_id, _name, _created_at, _updated_at, _email, _testanadditionalfield)
+    Map<String, dynamic> toJson() {
+        final Map<String, dynamic> data = Map<String, dynamic>();
+        data['SomeProps1'] = someProps1;
+        data['SomeProps2'] = someProps2;
+        return data;
+    }
+}
 
-@dataclass
-class Class1:
-    id: int
-    user_id: str
-    awesomeobject: Awesomeobject
-    created_at: str
-    updated_at: str
-    users: List[User]
+class Class1 {
+    int? id;
+    String? userid;
+    Awesomeobject? awesomeobject;
+    String? createdat;
+    String? updatedat;
+    List<User?>? users;
 
-    @staticmethod
-    def from_dict(obj: Any) -> 'Class1':
-        _id = int(obj.get("id"))
-        _user_id = str(obj.get("user_id"))
-        _awesomeobject = Awesomeobject.from_dict(obj.get("awesomeobject"))
-        _created_at = str(obj.get("created_at"))
-        _updated_at = str(obj.get("updated_at"))
-        _users = [User.from_dict(y) for y in obj.get("users")]
-        return Class1(_id, _user_id, _awesomeobject, _created_at, _updated_at, _users)
+    Class1({this.id, this.userid, this.awesomeobject, this.createdat, this.updatedat, this.users}); 
 
-@dataclass
-class Class2:
-    SomePropertyOfClass2: str
+    Class1.fromJson(Map<String, dynamic> json) {
+        id = json['id'];
+        userid = json['user_id'];
+        awesomeobject = json['awesomeobject'] != null ? Awesomeobject?.fromJson(json['awesomeobject']) : null;
+        createdat = json['created_at'];
+        updatedat = json['updated_at'];
+        if (json['users'] != null) {
+         users = <User>[];
+         json['users'].forEach((v) {
+         users!.add(User.fromJson(v));
+        });
+      }
+    }
 
-    @staticmethod
-    def from_dict(obj: Any) -> 'Class2':
-        _SomePropertyOfClass2 = str(obj.get("SomePropertyOfClass2"))
-        return Class2(_SomePropertyOfClass2)
+    Map<String, dynamic> toJson() {
+        final Map<String, dynamic> data = Map<String, dynamic>();
+        data['id'] = id;
+        data['user_id'] = userid;
+        data['awesomeobject'] = awesomeobject!.toJson();
+        data['created_at'] = createdat;
+        data['updated_at'] = updatedat;
+        data['users'] =users != null ? users!.map((v) => v?.toJson()).toList() : null;
+        return data;
+    }
+}
 
-@dataclass
-class Root:
-    Class1: Class1
-    Class2: Class2
+class Class2 {
+    String? somePropertyOfClass2;
 
-    @staticmethod
-    def from_dict(obj: Any) -> 'Root':
-        _Class1 = Class1.from_dict(obj.get("Class1"))
-        _Class2 = Class2.from_dict(obj.get("Class2"))
-        return Root(_Class1, _Class2)
+    Class2({this.somePropertyOfClass2}); 
 
-# Example Usage
-# jsonstring = json.loads(myjsonstring)
-# root = Root.from_dict(jsonstring)
+    Class2.fromJson(Map<String, dynamic> json) {
+        somePropertyOfClass2 = json['SomePropertyOfClass2'];
+    }
+
+    Map<String, dynamic> toJson() {
+        final Map<String, dynamic> data = Map<String, dynamic>();
+        data['SomePropertyOfClass2'] = somePropertyOfClass2;
+        return data;
+    }
+}
+
+class Root {
+    Class1? class1;
+    Class2? class2;
+
+    Root({this.class1, this.class2}); 
+
+    Root.fromJson(Map<String, dynamic> json) {
+        class1 = json['class1'] != null ? Class1?.fromJson(json['class1']) : null;
+        class2 = json['Class2'] != null ? Class2?.fromJson(json['Class2']) : null;
+    }
+
+    Map<String, dynamic> toJson() {
+        final Map<String, dynamic> data = Map<String, dynamic>();
+        data['class1'] = class1!.toJson();
+        data['Class2'] = class2!.toJson();
+        return data;
+    }
+}
+
+class User {
+    String? id;
+    String? name;
+    String? createdat;
+    String? updatedat;
+    String? email;
+    String? testanadditionalfield;
+
+    User({this.id, this.name, this.createdat, this.updatedat, this.email, this.testanadditionalfield}); 
+
+    User.fromJson(Map<String, dynamic> json) {
+        id = json['id'];
+        name = json['name'];
+        createdat = json['created_at'];
+        updatedat = json['updated_at'];
+        email = json['email'];
+        testanadditionalfield = json['testanadditionalfield'];
+    }
+
+    Map<String, dynamic> toJson() {
+        final Map<String, dynamic> data = Map<String, dynamic>();
+        data['id'] = id;
+        data['name'] = name;
+        data['created_at'] = createdat;
+        data['updated_at'] = updatedat;
+        data['email'] = email;
+        data['testanadditionalfield'] = testanadditionalfield;
+        return data;
+    }
+}
+

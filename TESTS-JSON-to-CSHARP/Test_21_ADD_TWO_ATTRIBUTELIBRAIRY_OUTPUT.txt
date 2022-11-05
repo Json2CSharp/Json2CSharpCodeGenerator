@@ -1,0 +1,83 @@
+    public class Awesomeobject
+    {
+        [JsonProperty("SomeProps1")]
+        [JsonPropertyName("SomeProps1")]
+        public int SomeProps1 { get; set; }
+
+        [JsonProperty("SomeProps2")]
+        [JsonPropertyName("SomeProps2")]
+        public string SomeProps2 { get; set; }
+    }
+
+    public class Class1
+    {
+        [JsonProperty("id")]
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
+
+        [JsonProperty("user_id")]
+        [JsonPropertyName("user_id")]
+        public string UserId { get; set; }
+
+        [JsonProperty("awesomeobject")]
+        [JsonPropertyName("awesomeobject")]
+        public Awesomeobject Awesomeobject { get; set; }
+
+        [JsonProperty("created_at")]
+        [JsonPropertyName("created_at")]
+        public string CreatedAt { get; set; }
+
+        [JsonProperty("updated_at")]
+        [JsonPropertyName("updated_at")]
+        public string UpdatedAt { get; set; }
+
+        [JsonProperty("users")]
+        [JsonPropertyName("users")]
+        public List<User> Users { get; set; }
+    }
+
+    public class Class2
+    {
+        [JsonProperty("SomePropertyOfClass2")]
+        [JsonPropertyName("SomePropertyOfClass2")]
+        public string SomePropertyOfClass2 { get; set; }
+    }
+
+    public class Root
+    {
+        [JsonProperty("Class1")]
+        [JsonPropertyName("Class1")]
+        public Class1 Class1 { get; set; }
+
+        [JsonProperty("Class2")]
+        [JsonPropertyName("Class2")]
+        public Class2 Class2 { get; set; }
+    }
+
+    public class User
+    {
+        [JsonProperty("id")]
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("name")]
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("created_at")]
+        [JsonPropertyName("created_at")]
+        public string CreatedAt { get; set; }
+
+        [JsonProperty("updated_at")]
+        [JsonPropertyName("updated_at")]
+        public string UpdatedAt { get; set; }
+
+        [JsonProperty("email")]
+        [JsonPropertyName("email")]
+        public string Email { get; set; }
+
+        [JsonProperty("testanadditionalfield")]
+        [JsonPropertyName("testanadditionalfield")]
+        public string Testanadditionalfield { get; set; }
+    }
+
