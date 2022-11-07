@@ -30,7 +30,7 @@ The architecture of the project is segmented into two parts.
 ### 1- Choose a problem from the issues labeled "Bug" or "Help Wanted"
 ### 2- Clone the repository and build it
 ### 3- Create a Unit Test using "CreatTest.ps1" Powershell Script or copy paste existing unit tests and follow naming conventions
-**>>>>> Unit Test Name should be in the format of "[TestNumber]_[DescribeProblem]"**
+* Use the format to name your unit tests: "[TestNumber]_[DescribeProblem]"**
 * Run the script in Powershell
 * This will create 3 files: the csharp test, the Json Input text file, and the Output C# or JAVA etc.. file
 ![alt text](https://json2csharp.azureedge.net/images/github-repo-images/Test%20Files.png)
