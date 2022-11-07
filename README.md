@@ -25,6 +25,9 @@ The architecture of the project is segmented into two parts.
   - Finally, the *GenerateClasses* in the *JsonClassGenerator* class will return a StringBuilder instance that contains all the written classes 
 
 ## Roadmap
+- Support for dictionaries https://github.com/Json2CSharp/Json2CSharpCodeGenerator/issues/18: The tool should have the option to detect dictionaries, currently dictionaries are treated as classes. Can be done using Markov Chain approach
+- Support for nested arrays https://github.com/Json2CSharp/Json2CSharpCodeGenerator/issues/5: Currently, nested arrays return empty values
+
 
 ## Bug Fixing
 ### 1- Choose a problem from the issues labeled "Bug" or "Help Wanted"
