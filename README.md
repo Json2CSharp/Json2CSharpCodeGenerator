@@ -27,6 +27,7 @@ The architecture of the project is segmented into two parts.
 ## Roadmap
 - Support for dictionaries https://github.com/Json2CSharp/Json2CSharpCodeGenerator/issues/18: The tool should have the option to detect dictionaries, currently dictionaries are treated as classes. Can be done using Markov Chain approach
 - Support for nested arrays https://github.com/Json2CSharp/Json2CSharpCodeGenerator/issues/5: Currently, nested arrays return empty values
+- Support for datetime https://github.com/Json2CSharp/Json2CSharpCodeGenerator/issues/90 ability to detect various types of datetime formats and a setting to turn this feature off
 
 
 ## Bug Fixing
