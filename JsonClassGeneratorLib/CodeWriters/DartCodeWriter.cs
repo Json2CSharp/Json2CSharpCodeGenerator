@@ -1,25 +1,40 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamasoft.JsonClassGenerator.CodeWriterConfiguration;
+using Xamasoft.JsonClassGenerator.Models;
 
 namespace Xamasoft.JsonClassGenerator.CodeWriters
 {
     public class DartCodeWriter : ICodeBuilder
     {
-        public String FileExtension => throw new NotImplementedException();
+        private readonly DartCodeWriterConfig config;
 
-        public String DisplayName => throw new NotImplementedException();
+        public DartCodeWriter()
+        {
+            config = new DartCodeWriterConfig();
+        }
+        
+        public DartCodeWriter(DartCodeWriterConfig config)
+        {
+            this.config = config;
+        }
+
+        public String FileExtension => ".dart";
+
+        public String DisplayName => "Dart";
 
         public IReadOnlyCollection<String> ReservedKeywords => throw new NotImplementedException();
 
-        public String GetTypeName(JsonType type, IJsonClassGeneratorConfig config)
+        public string GetTypeName(JsonType type)
         {
             switch (type.Type)
             {
                 //case JsonTypeEnum.Anything: return "object"; // Later, test to do
-                case JsonTypeEnum.Array: return GetCollectionTypeName(elementTypeName: this.GetTypeName(type.InternalType, config), config.CollectionType);
+                case JsonTypeEnum.Array: return GetCollectionTypeName(elementTypeName: this.GetTypeName(type.InternalType), config.CollectionType);
                 // case JsonTypeEnum.Dictionary: return "Dictionary<string, " + this.GetTypeName(type.InternalType, config) + ">";
                 case JsonTypeEnum.Boolean: return "bool?";
                 case JsonTypeEnum.Float: return "double?";
@@ -39,7 +54,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             }
         }
 
-        public String GetTypeFunctionName(JsonType type, IJsonClassGeneratorConfig config)
+        public String GetTypeFunctionName(JsonType type)
         {
             switch (type.Type)
             {
@@ -70,17 +85,17 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             throw new NotImplementedException();
         }
 
-        public void WriteClass(IJsonClassGeneratorConfig config, StringBuilder sw, JsonType type)
+        public void WriteClass(StringBuilder sw, JsonType type)
         {
             var className = type.AssignedName;
             
             sw.AppendFormat("class {0} {{{1}", className, Environment.NewLine);
-            this.WriteClassMembers(config, sw, type, "");
+            this.WriteClassMembers(sw, type, "");
             sw.AppendLine("}");
             sw.AppendLine();
         }
 
-        public void WriteClassMembers(IJsonClassGeneratorConfig config, StringBuilder sw, JsonType type, String prefix)
+        public void WriteClassMembers(StringBuilder sw, JsonType type, String prefix)
         {
             StringBuilder fields = new StringBuilder();
             StringBuilder fromJsonMapping = new StringBuilder();
@@ -91,7 +106,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 fields.Append("{");
             }
 
-            foreach (FieldInfo field in type.Fields)
+            foreach (JsonFieldInfo field in type.Fields)
             {
                 string classPropertyName = field.MemberName;
                 string propertyAttribute = field.JsonMemberName.RemoveSpecialCharacters().ToCamelCase();
@@ -163,12 +178,12 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             }
         }
 
-        public void WriteDeserializationComment(IJsonClassGeneratorConfig config, StringBuilder sw, bool rootIsArray = false)
+        public void WriteDeserializationComment(StringBuilder sw, bool rootIsArray = false)
         {
             return;
         }
 
-        public void WriteFileEnd(IJsonClassGeneratorConfig config, StringBuilder sw)
+        public void WriteFileEnd(StringBuilder sw)
         {
             // sw.Insert(0, "import json" + Environment.NewLine);
             // sw.Insert(0, "from dataclasses import dataclass" + Environment.NewLine);
@@ -179,7 +194,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             return;
         }
 
-        public void WriteFileStart(IJsonClassGeneratorConfig config, StringBuilder sw)
+        public void WriteFileStart(StringBuilder sw)
         {
             sw.AppendLine("/* ");
             sw.AppendLine("// Example Usage");
@@ -190,13 +205,13 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             return;
         }
 
-        public void WriteNamespaceEnd(IJsonClassGeneratorConfig config, StringBuilder sw, Boolean root)
+        public void WriteNamespaceEnd(StringBuilder sw, Boolean root)
         {
          
             return;
         }
 
-        public void WriteNamespaceStart(IJsonClassGeneratorConfig config, StringBuilder sw, Boolean root)
+        public void WriteNamespaceStart(StringBuilder sw, Boolean root)
         {
             return;
         }

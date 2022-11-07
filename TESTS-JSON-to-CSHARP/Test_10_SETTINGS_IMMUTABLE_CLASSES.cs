@@ -4,7 +4,9 @@ using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Xamasoft.JsonClassGenerator;
+using Xamasoft.JsonClassGenerator.CodeWriterConfiguration;
 using Xamasoft.JsonClassGenerator.CodeWriters;
+using Xamasoft.JsonClassGenerator.Models;
 
 namespace TESTS_JSON_TO_CSHARP
 {
@@ -18,12 +20,17 @@ namespace TESTS_JSON_TO_CSHARP
             string resultPath = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_10_SETTINGS_IMMUTABLE_CLASSES_OUTPUT.txt";
             string input      = File.ReadAllText(path);
 
+            CSharpCodeWriterConfig csharpCodeWriterConfig = new CSharpCodeWriterConfig();
+            csharpCodeWriterConfig.AttributeLibrary = JsonLibrary.NewtonsoftJson;
+            csharpCodeWriterConfig.AttributeUsage = JsonPropertyAttributeUsage.Always;
+            csharpCodeWriterConfig.UsePascalCase = true;
+            csharpCodeWriterConfig.OutputType = OutputTypes.ImmutableClass;
+            CSharpCodeWriter csharpCodeWriter = new CSharpCodeWriter(csharpCodeWriterConfig);
+
+            // Hilal To Change This
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator()
             {
-                CodeWriter          = new CSharpCodeWriter(),
-                OutputType          = OutputTypes.ImmutableClass,
-                AttributeLibrary    = JsonLibrary.NewtonsoftJson,
-                AttributeUsage      = JsonPropertyAttributeUsage.Always,
+                CodeWriter          = csharpCodeWriter,
                 UsePascalCase       = true,
             };
 

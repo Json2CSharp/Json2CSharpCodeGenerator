@@ -13,42 +13,33 @@ using Newtonsoft.Json.Linq;
 using Xamasoft.JsonClassGenerator.CodeWriters;
 
 using Humanizer;
+using Xamasoft.JsonClassGenerator.Models;
 
 namespace Xamasoft.JsonClassGenerator
 {
-    public class JsonClassGenerator : IJsonClassGeneratorConfig
+    public class JsonClassGenerator
     {
-        #region IJsonClassGeneratorConfig
-
-        public OutputTypes                OutputType         { get; set; } = OutputTypes.MutableClass;
-        public OutputCollectionType       CollectionType     { get; set; } = OutputCollectionType.MutableList;
-        public MutableClassConfig         MutableClasses     { get;      } = new MutableClassConfig();
-        public JsonLibrary                AttributeLibrary   { get; set; } = JsonLibrary.NewtonsoftJson;
-        public JsonPropertyAttributeUsage AttributeUsage     { get; set; } = JsonPropertyAttributeUsage.OnlyWhenNecessary;
-
-        public string       Namespace                  { get; set; }
-        public string       SecondaryNamespace         { get; set; }
-
-        public bool         InternalVisibility         { get; set; }
-        public bool         NoHelperClass              { get; set; }
-        public string       MainClass                  { get; set; }
-        public bool         UsePascalCase              { get; set; }
-        public bool         UseNestedClasses           { get; set; }
-        public bool         ApplyObfuscationAttributes { get; set; }
-        public bool         SingleFile                 { get; set; }
-        public ICodeBuilder CodeWriter                 { get; set; }
+        #region Properties
         public bool         AlwaysUseNullableValues    { get; set; }
-        public bool         ExamplesInDocumentation    { get; set; }
-        public bool         RemoveToJson    { get; set; }
-        public bool         RemoveFromJson { get; set; }
-        public bool         RemoveConstructors { get; set; }
+        public IList<JsonType> Types { get; private set; }
+        private HashSet<string> Names = new HashSet<string>();
+        public ICodeBuilder CodeWriter                 { get; set; }
+
+
+        // HILAL TODO FIX THIS
+        // public bool HasNamespace(this IJsonClassGeneratorConfig config) => !String.IsNullOrEmpty(config.Namespace);
+        public bool HasNamespace { get; set; }
+        public bool UsePascalCase { get; set; }
 
         #endregion
 
-        public TextWriter OutputStream { get; set; }
-
-        //private readonly PluralizationService pluralizationService = PluralizationService.CreateService(new CultureInfo("en-US"));
-
+        /// <summary>
+        /// Main Method for parsing json input
+        /// </summary>
+        /// <param name="jsonInput"></param>
+        /// <param name="errorMessage"></param>
+        /// <returns></returns>
+        /// 
         public StringBuilder GenerateClasses(string jsonInput, out string errorMessage)
         {
             JObject[] examples = null;
@@ -101,41 +92,39 @@ namespace Xamasoft.JsonClassGenerator
                 return new StringBuilder();
             }
         }
-
         private void WriteClassesToFile(StringBuilder sw, IEnumerable<JsonType> types, bool rootIsArray = false)
         {
             Boolean inNamespace = false;
             Boolean rootNamespace = false;
 
-            this.CodeWriter.WriteFileStart(this, sw);
-            this.CodeWriter.WriteDeserializationComment(this, sw, rootIsArray);
+            this.CodeWriter.WriteFileStart(sw);
+            this.CodeWriter.WriteDeserializationComment(sw, rootIsArray);
 
             foreach (JsonType type in types)
             {
-                if (this.HasNamespace() && inNamespace && rootNamespace != type.IsRoot && this.SecondaryNamespace != null)
+                if (HasNamespace && inNamespace && rootNamespace != type.IsRoot )
                 {
-                    this.CodeWriter.WriteNamespaceEnd(this, sw, rootNamespace);
+                    this.CodeWriter.WriteNamespaceEnd(sw, rootNamespace);
                     inNamespace = false;
                 }
 
-                if (this.HasNamespace() && !inNamespace)
+                if (HasNamespace && !inNamespace)
                 {
-                    this.CodeWriter.WriteNamespaceStart(this, sw, type.IsRoot);
+                    this.CodeWriter.WriteNamespaceStart(sw, type.IsRoot);
                     inNamespace = true;
                     rootNamespace = type.IsRoot;
                 }
 
-                this.CodeWriter.WriteClass(this, sw, type);
+                this.CodeWriter.WriteClass(sw, type);
             }
 
-            if (this.HasNamespace() && inNamespace)
+            if (HasNamespace && inNamespace)
             {
-                this.CodeWriter.WriteNamespaceEnd(this, sw, rootNamespace);
+                this.CodeWriter.WriteNamespaceEnd(sw, rootNamespace);
             }
 
-            this.CodeWriter.WriteFileEnd(this, sw);
+            this.CodeWriter.WriteFileEnd(sw);
         }
-
         private void GenerateClass(JObject[] examples, JsonType type)
         {
             Dictionary<string, JsonType> jsonFields = new Dictionary<string, JsonType>();
@@ -188,13 +177,14 @@ namespace Xamasoft.JsonClassGenerator
                 first = false;
             }
 
-            if (this.UseNestedClasses)
-            {
-                foreach (KeyValuePair<String, JsonType> field in jsonFields)
-                {
-                    this.Names.Add(field.Key.ToLower());
-                }
-            }
+            // Remove support for nested classes for now until code is cleaned
+            // if (this.UseNestedClasses)
+            // {
+            //     foreach (KeyValuePair<String, JsonType> field in jsonFields)
+            //     {
+            //         this.Names.Add(field.Key.ToLower());
+            //     }
+            // }
 
             foreach (KeyValuePair<String, JsonType> field in jsonFields)
             {
@@ -216,7 +206,7 @@ namespace Xamasoft.JsonClassGenerator
 
                     fieldType.AssignOriginalName(field.Key);
                     fieldType.AssignName(this.CreateUniqueClassName(field.Key));
-                    fieldType.AssignNewAssignedName(ToTitleCase(field.Key));
+                    fieldType.AssignNewAssignedName(field.Key.ToTitleCase());
 
                     this.GenerateClass(subexamples.ToArray(), fieldType);
                 }
@@ -251,18 +241,18 @@ namespace Xamasoft.JsonClassGenerator
 
                     field.Value.InternalType.AssignOriginalName(field.Key);
                     field.Value.InternalType.AssignName(this.CreateUniqueClassNameFromPlural(field.Key));
-                    field.Value.InternalType.AssignNewAssignedName(ToTitleCase(field.Key).Singularize(inputIsKnownToBePlural: false));
+                    field.Value.InternalType.AssignNewAssignedName(field.Key.ToTitleCase().Singularize(inputIsKnownToBePlural: false));
 
                     this.GenerateClass(subexamples.ToArray(), field.Value.InternalType);
                 }
             }
 
             type.Fields = jsonFields
-                .Select(x => new FieldInfo(
+                .Select(x => new JsonFieldInfo(
                     generator          : this,
                     jsonMemberName     : x.Key,
                     type               : x.Value,
-                    usePascalCase      : this.UsePascalCase || this.AttributeUsage == JsonPropertyAttributeUsage.Always,
+                    usePascalCase      : UsePascalCase, // Hilal TO DO fix this, It should not use code writer settings here unless needed
                     examples           : fieldExamples[x.Key])
                 )
                 .ToList();
@@ -273,7 +263,11 @@ namespace Xamasoft.JsonClassGenerator
             }
         }
 
-        /// <summary>Checks if there are any duplicate classes in the input, and merges its corresponding properties (TEST CASE 7)</summary>
+        /// <summary>
+        /// Checks if there are any duplicate classes in the input, and merges its corresponding properties (TEST CASE 7)
+        /// </summary>
+        /// <param name="types"></param>
+        /// <returns></returns>
         private IList<JsonType> HandleDuplicateClasses(IList<JsonType> types)
         {
             // TODO: This is currently O(n*n) because it iterates through List<T> on every loop iteration. This can be optimized.
@@ -291,7 +285,7 @@ namespace Xamasoft.JsonClassGenerator
                     JsonType duplicatedType = typesWithNoDuplicates.FirstOrDefault(p => p.OriginalName == type.OriginalName);
 
                     // Rename all references of this type to the original assigned name
-                    foreach (FieldInfo field in type.Fields)
+                    foreach (JsonFieldInfo field in type.Fields)
                     {
                         if (!duplicatedType.Fields.ToList().Exists(x => x.JsonMemberName == field.JsonMemberName))
                         {
@@ -303,13 +297,9 @@ namespace Xamasoft.JsonClassGenerator
 
             return typesWithNoDuplicates;
         }
-
-        public IList<JsonType> Types { get; private set; }
-        private HashSet<string> Names = new HashSet<string>();
-
         private string CreateUniqueClassName(string name)
         {
-            name = ToTitleCase(name);
+            name = name.ToTitleCase();
 
             String finalName = name;
             Int32 i = 2;
@@ -323,48 +313,11 @@ namespace Xamasoft.JsonClassGenerator
             this.Names.Add(finalName);
             return finalName;
         }
-
         private string CreateUniqueClassNameFromPlural(string plural)
         {
-            plural = ToTitleCase(plural);
+            plural = plural.ToTitleCase();
             var singular = plural.Singularize(inputIsKnownToBePlural: false);
             return this.CreateUniqueClassName(singular);
-        }
-
-        internal static string ToTitleCase(string str)
-        {
-            StringBuilder sb = new StringBuilder(str.Length);
-            Boolean flag = true;
-
-            for (int i = 0; i < str.Length; i++)
-            {
-                Char c = str[i];
-                string specialCaseFirstCharIsNumber = string.Empty;
-
-                // Handle the case where the first character is a number
-                if (i == 0 && char.IsDigit(c))
-                    specialCaseFirstCharIsNumber = "_" + c;
-
-                if (char.IsLetterOrDigit(c))
-                {
-                    if (string.IsNullOrEmpty(specialCaseFirstCharIsNumber))
-                    {
-                        sb.Append(flag ? char.ToUpper(c) : c);
-                    }
-                    else
-                    {
-                        sb.Append(flag ? specialCaseFirstCharIsNumber.ToUpper() : specialCaseFirstCharIsNumber);
-                    }
-
-                    flag = false;
-                }
-                else
-                {
-                    flag = true;
-                }
-            }
-
-            return sb.ToString();
         }
     }
 }

@@ -67,6 +67,7 @@
     <Compile Include="Test_20_ROOT_ARRAY.cs" />
     <Compile Include="Test_21_ADD_TWO_ATTRIBUTELIBRAIRY.cs" />
     <Compile Include="Test_22_SUPPORT_FOR_NULLABLES.cs" />
+    <Compile Include="Test_23_ADD_NULLABLE_TYPES_SETTINGS.cs" />
     <Compile Include="Test_5_BASIC_SCENARIO.cs" />
     <Compile Include="Test_1_2_SETTINGS_PASCAL.cs" />
     <Compile Include="Test_1_3_SETTINGS_FIELDS.cs" />
@@ -116,6 +117,8 @@
     <Content Include="Test_21_ADD_TWO_ATTRIBUTELIBRAIRY_OUTPUT.txt" />
     <Content Include="Test_22_SUPPORT_FOR_NULLABLES_INPUT.txt" />
     <Content Include="Test_22_SUPPORT_FOR_NULLABLES_OUTPUT.txt" />
+    <Content Include="Test_23_ADD_NULLABLE_TYPES_SETTINGS_INPUT.txt" />
+    <Content Include="Test_23_ADD_NULLABLE_TYPES_SETTINGS_OUTPUT.txt" />
     <Content Include="Test_5_BASIC_SCENARIO_INPUT.txt" />
     <Content Include="Test_5_BASIC_SCENARIO_OUTPUT.txt" />
     <Content Include="Test_1_2_SETTINGS_PASCAL_INPUT.txt" />

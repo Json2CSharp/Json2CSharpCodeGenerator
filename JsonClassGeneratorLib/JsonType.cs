@@ -7,19 +7,19 @@ using System.Text;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using Xamasoft.JsonClassGenerator.Models;
 
 namespace Xamasoft.JsonClassGenerator
 {
     public class JsonType
     {
 
-
-        private JsonType(IJsonClassGeneratorConfig generator)
+        private JsonType(JsonClassGenerator generator)
         {
             this.generator = generator;
         }
 
-        public JsonType(IJsonClassGeneratorConfig generator, JToken token)
+        public JsonType(JsonClassGenerator generator, JToken token)
             : this(generator)
         {
 
@@ -32,21 +32,21 @@ namespace Xamasoft.JsonClassGenerator
             }
         }
 
-        internal static JsonType GetNull(IJsonClassGeneratorConfig generator)
+        internal static JsonType GetNull(JsonClassGenerator generator)
         {
             return new JsonType(generator, JsonTypeEnum.NullableSomething);
         }
 
-        private IJsonClassGeneratorConfig generator;
+        private JsonClassGenerator generator;
 
-        internal JsonType(IJsonClassGeneratorConfig generator, JsonTypeEnum type)
+        internal JsonType(JsonClassGenerator generator, JsonTypeEnum type)
             : this(generator)
         {
             this.Type = type;
         }
 
 
-        public static JsonType GetCommonType(IJsonClassGeneratorConfig generator, JToken[] tokens)
+        public static JsonType GetCommonType(JsonClassGenerator generator, JToken[] tokens)
         {
 
             if (tokens.Length == 0) return new JsonType(generator, JsonTypeEnum.NonConstrained);
@@ -71,7 +71,7 @@ namespace Xamasoft.JsonClassGenerator
 
         }
 
-        internal JsonType MaybeMakeNullable(IJsonClassGeneratorConfig generator)
+        internal JsonType MaybeMakeNullable(JsonClassGenerator generator)
         {
             if (!generator.AlwaysUseNullableValues) return this;
             return this.GetCommonType(JsonType.GetNull(generator));
@@ -148,7 +148,7 @@ namespace Xamasoft.JsonClassGenerator
 
         public string GetTypeName()
         {
-            return generator.CodeWriter.GetTypeName(this, generator);
+            return generator.CodeWriter.GetTypeName(this);
         }
 
         public string GetJTokenType()
@@ -358,7 +358,7 @@ namespace Xamasoft.JsonClassGenerator
         }
 
 
-        public List<FieldInfo> Fields { get; internal set; }
+        public List<JsonFieldInfo> Fields { get; internal set; }
         public bool IsRoot { get; internal set; }
     }
 }

@@ -6,7 +6,9 @@ using System.IO;
 using System.Text;
 
 using Xamasoft.JsonClassGenerator;
+using Xamasoft.JsonClassGenerator.CodeWriterConfiguration;
 using Xamasoft.JsonClassGenerator.CodeWriters;
+using Xamasoft.JsonClassGenerator.Models;
 
 namespace TESTS_JSON_TO_CSHARP
 {
@@ -20,15 +22,16 @@ namespace TESTS_JSON_TO_CSHARP
             string resultPath = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_11_NoListSetter_OUTPUT.txt";
             string input      = File.ReadAllText(path);
 
-            CSharpCodeWriter csharpCodeWriter = new CSharpCodeWriter();
+            CSharpCodeWriterConfig csharpCodeWriterConfig = new CSharpCodeWriterConfig();
+            csharpCodeWriterConfig.AttributeLibrary = JsonLibrary.SystemTextJson;
+            csharpCodeWriterConfig.AttributeUsage = JsonPropertyAttributeUsage.Always;
+            csharpCodeWriterConfig.UsePascalCase = true;
+            csharpCodeWriterConfig.ReadOnlyCollectionProperties = true;
+            CSharpCodeWriter csharpCodeWriter = new CSharpCodeWriter(csharpCodeWriterConfig);
+
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator()
             {
-                MutableClasses =
-                {
-                    ReadOnlyCollectionProperties = true
-                },
-                AttributeLibrary = JsonLibrary.SystemTextJson,
-                AttributeUsage   = JsonPropertyAttributeUsage.Always,
+                CodeWriter = csharpCodeWriter,
                 UsePascalCase    = true
             };
 
@@ -47,20 +50,17 @@ namespace TESTS_JSON_TO_CSHARP
             string resultPath = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_11_NoListSetter_OUTPUT1.txt";
             string input      = File.ReadAllText(path);
 
-            CSharpCodeWriter csharpCodeWriter = new CSharpCodeWriter();
-            JsonClassGenerator jsonClassGenerator = new JsonClassGenerator()
-            {
-                MutableClasses =
-                {
-                    ReadOnlyCollectionProperties = true
-                },
-                CollectionType   = OutputCollectionType.Array,
-                AttributeLibrary = JsonLibrary.SystemTextJson,
-                AttributeUsage   = JsonPropertyAttributeUsage.Always,
-                UsePascalCase    = true
-            };
+            CSharpCodeWriterConfig csharpCodeWriterConfig = new CSharpCodeWriterConfig();
+            csharpCodeWriterConfig.AttributeLibrary = JsonLibrary.SystemTextJson;
+            csharpCodeWriterConfig.AttributeUsage = JsonPropertyAttributeUsage.Always;
+            csharpCodeWriterConfig.UsePascalCase = true;
+            csharpCodeWriterConfig.ReadOnlyCollectionProperties = true;
+            csharpCodeWriterConfig.CollectionType = OutputCollectionType.Array;
+            CSharpCodeWriter csharpCodeWriter = new CSharpCodeWriter(csharpCodeWriterConfig);
 
+            JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
             jsonClassGenerator.CodeWriter = csharpCodeWriter;
+
             string returnVal = jsonClassGenerator.GenerateClasses(input, out string errorMessage).ToString();
             string resultsCompare = File.ReadAllText(resultPath);
 

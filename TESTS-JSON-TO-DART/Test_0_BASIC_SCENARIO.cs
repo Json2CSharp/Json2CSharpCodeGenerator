@@ -7,6 +7,7 @@ using System.IO;
 using System.Text;
 using TESTS_JSON_TO_CSHARP;
 using Xamasoft.JsonClassGenerator;
+using Xamasoft.JsonClassGenerator.CodeWriterConfiguration;
 using Xamasoft.JsonClassGenerator.CodeWriters;
 
 namespace TESTS_JSON_TO_DART
@@ -24,7 +25,6 @@ namespace TESTS_JSON_TO_DART
             DartCodeWriter dartCodeWriter = new DartCodeWriter();
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
             jsonClassGenerator.CodeWriter = dartCodeWriter;
-            jsonClassGenerator.MutableClasses.Members = OutputMembers.AsPublicFields;
 
             string returnVal = jsonClassGenerator.GenerateClasses(input, out string errorMessage).ToString();
             string resultsCompare = File.ReadAllText(resultPath);

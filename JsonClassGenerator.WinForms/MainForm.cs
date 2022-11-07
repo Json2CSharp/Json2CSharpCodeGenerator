@@ -8,6 +8,9 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 using Microsoft.Win32;
+using Xamasoft.JsonClassGenerator.CodeWriterConfiguration;
+using Xamasoft.JsonClassGenerator.CodeWriters;
+using Xamasoft.JsonClassGenerator.Models;
 
 namespace Xamasoft.JsonClassGenerator.WinForms
 {
@@ -15,6 +18,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
     {
         private bool preventReentrancy = false;
 
+        public CSharpCodeWriterConfig writerConfig { get; set; } = new CSharpCodeWriterConfig();
         public MainForm()
         {
             // `IconTitleFont` is what WinForms *should* be using by default.
@@ -403,7 +407,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 
         #endregion
 
-        private void ConfigureGenerator( IJsonClassGeneratorConfig config )
+        private void ConfigureGenerator( JsonClassGenerator config )
         {
             config.UsePascalCase = this.optsPascalCase.Checked;
 
@@ -411,37 +415,37 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 
             if( this.optAttribJP.Checked )
             {
-                config.AttributeLibrary = JsonLibrary.NewtonsoftJson;
+                writerConfig.AttributeLibrary = JsonLibrary.NewtonsoftJson;
             }
             else// implicit: ( this.optAttribJpn.Checked )
             {
-                config.AttributeLibrary = JsonLibrary.SystemTextJson;
+                writerConfig.AttributeLibrary = JsonLibrary.SystemTextJson;
             }
 
             //
 
             if( this.optMemberProps.Checked )
             {
-                config.MutableClasses.Members = OutputMembers.AsProperties;
+                writerConfig.OutputMembers = OutputMembers.AsProperties;
             }
             else// implicit: ( this.optMemberFields.Checked )
             {
-                config.MutableClasses.Members = OutputMembers.AsPublicFields;
+                writerConfig.OutputMembers = OutputMembers.AsPublicFields;
             }
 
             //
 
             if( this.optTypesImmutablePoco.Checked )
             {
-                config.OutputType = OutputTypes.ImmutableClass;
+                writerConfig.OutputType = OutputTypes.ImmutableClass;
             }
             else if( this.optTypesMutablePoco.Checked )
             {
-                config.OutputType = OutputTypes.MutableClass;
+                writerConfig.OutputType = OutputTypes.MutableClass;
             }
             else// implicit: ( this.optTypesRecords.Checked )
             {
-                config.OutputType = OutputTypes.ImmutableRecord;
+                writerConfig.OutputType = OutputTypes.ImmutableRecord;
             }
         }
 
@@ -473,6 +477,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
             }
 
             JsonClassGenerator generator = new JsonClassGenerator();
+            generator.CodeWriter = new CSharpCodeWriter(writerConfig);
             this.ConfigureGenerator( generator );
 
             try

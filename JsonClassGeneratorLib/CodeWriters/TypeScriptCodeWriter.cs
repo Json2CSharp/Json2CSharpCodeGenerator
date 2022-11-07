@@ -3,11 +3,25 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Xamasoft.JsonClassGenerator.CodeWriterConfiguration;
+using Xamasoft.JsonClassGenerator.Models;
 
 namespace Xamasoft.JsonClassGenerator.CodeWriters
 {
     public class TypeScriptCodeWriter : ICodeWriter
     {
+        private readonly TypeScriptCodeWriterConfig config;
+
+        public TypeScriptCodeWriter()
+        {
+            this.config = new TypeScriptCodeWriterConfig();
+        }
+
+        public TypeScriptCodeWriter(TypeScriptCodeWriterConfig config)
+        {
+            this.config = config;
+        }
+
         public string FileExtension
         {
             get { return ".ts"; }
@@ -18,7 +32,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             get { return "TypeScript"; }
         }
 
-        public string GetTypeName(JsonType type, IJsonClassGeneratorConfig config)
+        public string GetTypeName(JsonType type)
         {
             switch (type.Type)
             {
@@ -35,17 +49,17 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 case JsonTypeEnum.NullableBoolean: return "bool";
                 case JsonTypeEnum.NullableDate: return "Date";
                 case JsonTypeEnum.Object: return type.AssignedName;
-                case JsonTypeEnum.Array: return GetTypeName(type.InternalType, config) + "[]";
-                case JsonTypeEnum.Dictionary: return "{ [key: string]: " + GetTypeName(type.InternalType, config) + "; }";
+                case JsonTypeEnum.Array: return GetTypeName(type.InternalType) + "[]";
+                case JsonTypeEnum.Dictionary: return "{ [key: string]: " + GetTypeName(type.InternalType) + "; }";
                 case JsonTypeEnum.NullableSomething: return "any";
                 case JsonTypeEnum.NonConstrained: return "any";
                 default: throw new NotSupportedException("Unsupported type");
             }
         }
 
-        public void WriteClass(IJsonClassGeneratorConfig config, TextWriter sw, JsonType type)
+        public void WriteClass(TextWriter sw, JsonType type)
         {
-            var prefix = GetNamespace(config, type.IsRoot) != null ? "    " : "";
+            var prefix = GetNamespace(type.IsRoot) != null ? "    " : "";
             var exported = !config.InternalVisibility || config.SecondaryNamespace != null;
             sw.WriteLine(prefix + (exported ? "export " : string.Empty) + "interface " + type.AssignedName + " {");
             foreach (var field in type.Fields)
@@ -60,7 +74,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 }
 
 
-                sw.WriteLine(prefix + "    " + field.JsonMemberName + (IsNullable(field.Type.Type) ? "?" : "") + ": " + (shouldDefineNamespace ? config.SecondaryNamespace + "." : string.Empty) + GetTypeName(field.Type, config) + ";");
+                sw.WriteLine(prefix + "    " + field.JsonMemberName + (IsNullable(field.Type.Type) ? "?" : "") + ": " + (shouldDefineNamespace ? config.SecondaryNamespace + "." : string.Empty) + GetTypeName(field.Type) + ";");
             }
             sw.WriteLine(prefix + "}");
             sw.WriteLine();
@@ -77,7 +91,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 type == JsonTypeEnum.NullableSomething;
         }
 
-        public void WriteFileStart(IJsonClassGeneratorConfig config, TextWriter sw)
+        public void WriteFileStart(TextWriter sw)
         {
             // foreach (var line in JsonClassGenerator.FileHeader)
             // {
@@ -86,28 +100,28 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             // sw.WriteLine();
         }
 
-        public void WriteFileEnd(IJsonClassGeneratorConfig config, TextWriter sw)
+        public void WriteFileEnd(TextWriter sw)
         {
         }
 
-        private string GetNamespace(IJsonClassGeneratorConfig config, bool root)
+        private string GetNamespace(bool root)
         {
             return root ? config.Namespace : (config.SecondaryNamespace ?? config.Namespace);
         }
 
-        public void WriteNamespaceStart(IJsonClassGeneratorConfig config, TextWriter sw, bool root)
+        public void WriteNamespaceStart(TextWriter sw, bool root)
         {
-            if (GetNamespace(config, root) != null)
+            if (GetNamespace(root) != null)
             {
 
-                sw.WriteLine("module " + GetNamespace(config, root) + " {");
+                sw.WriteLine("module " + GetNamespace(root) + " {");
                 sw.WriteLine();
             }
         }
 
-        public void WriteNamespaceEnd(IJsonClassGeneratorConfig config, TextWriter sw, bool root)
+        public void WriteNamespaceEnd(TextWriter sw, bool root)
         {
-            if (GetNamespace(config, root) != null)
+            if (GetNamespace(root) != null)
             {
                 sw.WriteLine("}");
                 sw.WriteLine();

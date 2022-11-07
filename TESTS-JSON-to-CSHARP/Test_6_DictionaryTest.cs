@@ -8,11 +8,9 @@ using Xamasoft.JsonClassGenerator.CodeWriters;
 
 namespace TESTS_JSON_TO_CSHARP
 {
-
     [TestClass]
     public class Test_6_DictionaryTest
     {
-
         [TestMethod]
         public void Run()
         {

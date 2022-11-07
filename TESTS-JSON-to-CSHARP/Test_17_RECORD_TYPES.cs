@@ -3,7 +3,9 @@ using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Xamasoft.JsonClassGenerator;
+using Xamasoft.JsonClassGenerator.CodeWriterConfiguration;
 using Xamasoft.JsonClassGenerator.CodeWriters;
+using Xamasoft.JsonClassGenerator.Models;
 
 namespace TESTS_JSON_TO_CSHARP
 {
@@ -35,29 +37,33 @@ namespace TESTS_JSON_TO_CSHARP
             string input      = File.ReadAllText(inputPath);
             string output     = File.ReadAllText(outputPath);
 
-            JsonClassGenerator jsonClassGenerator = new JsonClassGenerator
-            {
-                CodeWriter = new CSharpCodeWriter(),
-                OutputType = OutputTypes.ImmutableRecord
-            };
+            CSharpCodeWriterConfig csharpCodeWriterConfig = new CSharpCodeWriterConfig();
+            csharpCodeWriterConfig.OutputType = OutputTypes.ImmutableRecord;
+            csharpCodeWriterConfig.UsePascalCase = true;
+
+            JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
 
             if (useSystemTextJson.HasValue)
             {
-                jsonClassGenerator.AttributeUsage = JsonPropertyAttributeUsage.Always;
+                csharpCodeWriterConfig.AttributeUsage = JsonPropertyAttributeUsage.Always;
 
                 if (useSystemTextJson.Value)
                 {
-                    jsonClassGenerator.AttributeLibrary = JsonLibrary.SystemTextJson;
+                    csharpCodeWriterConfig.AttributeLibrary = JsonLibrary.SystemTextJson;
                 }
                 else
                 {
-                    jsonClassGenerator.AttributeLibrary = JsonLibrary.NewtonsoftJson;
+                    csharpCodeWriterConfig.AttributeLibrary = JsonLibrary.NewtonsoftJson;
                 }
             }
             else
             {
-                jsonClassGenerator.AttributeUsage = JsonPropertyAttributeUsage.OnlyWhenNecessary;
+                csharpCodeWriterConfig.AttributeUsage = JsonPropertyAttributeUsage.OnlyWhenNecessary;
             }
+
+            CSharpCodeWriter csharpCodeWriter = new CSharpCodeWriter(csharpCodeWriterConfig);
+            jsonClassGenerator.CodeWriter = csharpCodeWriter;
+            jsonClassGenerator.UsePascalCase = true;
 
             string actual = jsonClassGenerator.GenerateClasses(input, out _).ToString();
             // Console.WriteLine("Actual:\n" + actual);

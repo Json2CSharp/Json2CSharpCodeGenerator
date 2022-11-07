@@ -47,17 +47,28 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeWriterConfiguration\CodeWriterConfigurationBase.cs" />
+    <Compile Include="CodeWriterConfiguration\PythonCodeWriterConfig.cs" />
+    <Compile Include="CodeWriterConfiguration\JavaCodeWriterConfig.cs" />
+    <Compile Include="CodeWriterConfiguration\CSharpCodeWriterConfig.cs" />
+    <Compile Include="CodeWriterConfiguration\DartCodeWriterConfig.cs" />
+    <Compile Include="CodeWriterConfiguration\TypeScriptCodeWriterConfig.cs" />
+    <Compile Include="CodeWriterConfiguration\VisualBasicCodeWriterConfig.cs" />
     <Compile Include="CodeWriters\JavaCodeWriter.cs" />
     <Compile Include="CodeWriters\DartCodeWriter.cs" />
     <Compile Include="CodeWriters\PythonCodeWriter.cs" />
     <Compile Include="CodeWriters\TypeScriptCodeWriter.cs" />
     <Compile Include="CodeWriters\VisualBasicCodeWriter.cs" />
     <Compile Include="CodeWriters\CSharpCodeWriter.cs" />
-    <Compile Include="FieldInfo.cs" />
-    <Compile Include="Helpers.cs" />
-    <Compile Include="ICodeWriter.cs" />
-    <Compile Include="IJsonClassGeneratorConfig.cs" />
+    <Compile Include="JsonFieldInfo.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="CodeWriters\ICodeWriter.cs" />
     <Compile Include="JsonClassGenerator.cs" />
+    <Compile Include="Models\JsonLibrairy.cs" />
+    <Compile Include="Models\JsonPropertyAttributeUsage.cs" />
+    <Compile Include="Models\OutputCollectionType.cs" />
+    <Compile Include="Models\OutputMembers.cs" />
+    <Compile Include="Models\OutputTypes.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -65,7 +76,7 @@
     </Compile>
     <None Include="JsonClassHelper.cs" />
     <Compile Include="JsonType.cs" />
-    <Compile Include="JsonTypeEnum.cs" />
+    <Compile Include="Models\JsonTypeEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="packages.config" />
   </ItemGroup>

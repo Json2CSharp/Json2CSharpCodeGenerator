@@ -3,11 +3,22 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Xamasoft.JsonClassGenerator.CodeWriterConfiguration;
+using Xamasoft.JsonClassGenerator.Models;
 
 namespace Xamasoft.JsonClassGenerator.CodeWriters
 {
     public class JavaCodeWriter : ICodeBuilder
     {
+        public JavaCodeWriter()
+        {
+            this.config = new JavaCodeWriterConfig();
+        }
+        public JavaCodeWriter(JavaCodeWriterConfig config)
+        {
+            this.config = config;
+        }
+
         public string FileExtension => ".java";
 
         public string DisplayName => "Java";
@@ -24,17 +35,18 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             "this", "throw", "throws", "to", "transient", "transitive", "true", "try",
             "uses", "var", "void", "volatile", "while", "with", "yield"
         };
+        private readonly JavaCodeWriterConfig config;
 
         IReadOnlyCollection<string> ICodeBuilder.ReservedKeywords => _reservedKeywords;
         public bool IsReservedKeyword(string word) => _reservedKeywords.Contains(word ?? string.Empty);
 
-        public string GetTypeName(JsonType type, IJsonClassGeneratorConfig config)
+        public string GetTypeName(JsonType type)
         {
             switch (type.Type)
             {
                 case JsonTypeEnum.Anything         : return "Object";
-                case JsonTypeEnum.Array            : return GetCollectionTypeName(elementTypeName: GetTypeName(type.InternalType, config), config.CollectionType);
-                case JsonTypeEnum.Dictionary       : return "HashMap<String, " + GetTypeName(type.InternalType, config) + ">";
+                case JsonTypeEnum.Array            : return GetCollectionTypeName(elementTypeName: GetTypeName(type.InternalType), config.CollectionType);
+                case JsonTypeEnum.Dictionary       : return "HashMap<String, " + GetTypeName(type.InternalType) + ">";
                 case JsonTypeEnum.Boolean          : return "boolean";
                 case JsonTypeEnum.Float            : return "double";
                 case JsonTypeEnum.Integer          : return "int";
@@ -71,7 +83,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             }
         }
 
-        public void WriteClass(IJsonClassGeneratorConfig config, StringBuilder sw, JsonType type)
+        public void WriteClass(StringBuilder sw, JsonType type)
         {
             var visibility = config.InternalVisibility ? "" : "public";
 
@@ -80,7 +92,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
             var prefix = config.UseNestedClasses && !type.IsRoot ? "" : "    ";
 
-            WriteClassMembers(config, sw, type, prefix);
+            WriteClassMembers(sw, type, prefix);
 
             if (config.UseNestedClasses && !type.IsRoot)
                 sw.AppendLine("        }");
@@ -91,7 +103,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             sw.AppendLine();
         }
 
-        public void WriteClassMembers(IJsonClassGeneratorConfig config, StringBuilder sw, JsonType type, string prefix)
+        public void WriteClassMembers(StringBuilder sw, JsonType type, string prefix)
         {
             foreach (var field in type.Fields)
             {
@@ -103,7 +115,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
                 if (this.IsReservedKeyword(memberName)) memberName = "my" + memberName;
 
-                if (config.MutableClasses.Members == OutputMembers.AsProperties)
+                if (config.OutputMembers == OutputMembers.AsProperties)
                 {
                     sw.AppendFormat(prefix + "@JsonProperty" + "(\"{0}\") {1}", field.JsonMemberName,Environment.NewLine);
                     sw.AppendFormat(prefix + "public {0} get{1}() {{ \r\t\t return this.{2}; }} {3}", field.Type.GetTypeName(), ChangeFirstChar(memberName), ChangeFirstChar(memberName, false), Environment.NewLine);
@@ -111,7 +123,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                     sw.AppendFormat(prefix + "{0} {1};", field.Type.GetTypeName(), ChangeFirstChar(memberName, false));
                     sw.AppendLine();
                 }
-                else if(config.MutableClasses.Members == OutputMembers.AsPublicFields)
+                else if(config.OutputMembers == OutputMembers.AsPublicFields)
                 {
                     memberName = ChangeFirstChar(memberName, false);
                     if (field.JsonMemberName != memberName)
@@ -122,7 +134,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 }
                 else
                 {
-                    throw new InvalidOperationException("Unsupported " + nameof(OutputMembers) + " value: " + config.MutableClasses.Members);
+                    throw new InvalidOperationException("Unsupported " + nameof(OutputMembers) + " value: " + config.OutputMembers);
                 }
             }
         }
@@ -141,7 +153,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             return sb.ToString();
         }
 
-        public void WriteFileStart(IJsonClassGeneratorConfig config, StringBuilder sw)
+        public void WriteFileStart(StringBuilder sw)
         {
             // foreach (var line in JsonClassGenerator.FileHeader)
             // {
@@ -149,7 +161,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             // }
         }
 
-        public void WriteFileEnd(IJsonClassGeneratorConfig config, StringBuilder sw)
+        public void WriteFileEnd(StringBuilder sw)
         {
             if (config.UseNestedClasses)
             {
@@ -157,19 +169,19 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             }
         }
 
-        public void WriteNamespaceStart(IJsonClassGeneratorConfig config, StringBuilder sw, bool root)
+        public void WriteNamespaceStart(StringBuilder sw, bool root)
         {
             sw.AppendLine();
             sw.AppendFormat("package {0};", root && !config.UseNestedClasses ? config.Namespace : (config.SecondaryNamespace ?? config.Namespace));
             sw.AppendLine();
         }
 
-        public void WriteNamespaceEnd(IJsonClassGeneratorConfig config, StringBuilder sw, bool root)
+        public void WriteNamespaceEnd(StringBuilder sw, bool root)
         {
             sw.AppendLine("}");
         }
 
-        public void WriteDeserializationComment(IJsonClassGeneratorConfig config, StringBuilder sw, bool rootIsArray = false)
+        public void WriteDeserializationComment(StringBuilder sw, bool rootIsArray = false)
         {
             sw.AppendLine("// import com.fasterxml.jackson.databind.ObjectMapper; // version 2.11.1");
             sw.AppendLine("// import com.fasterxml.jackson.annotation.JsonProperty; // version 2.11.1");

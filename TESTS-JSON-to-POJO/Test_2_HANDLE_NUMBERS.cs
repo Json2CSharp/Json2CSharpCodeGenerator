@@ -9,6 +9,7 @@ using System.Text;
 using TESTS_JSON_TO_CSHARP;
 
 using Xamasoft.JsonClassGenerator;
+using Xamasoft.JsonClassGenerator.CodeWriterConfiguration;
 using Xamasoft.JsonClassGenerator.CodeWriters;
 
 namespace TESTS_JSON_to_POJO
@@ -26,7 +27,6 @@ namespace TESTS_JSON_to_POJO
             JavaCodeWriter javaCodeWriter = new JavaCodeWriter();
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
             jsonClassGenerator.CodeWriter = javaCodeWriter;
-            jsonClassGenerator.MutableClasses.Members = OutputMembers.AsPublicFields;
 
             string returnVal = jsonClassGenerator.GenerateClasses(input, out string errorMessage).ToString();
             string resultsCompare = File.ReadAllText(resultPath);
@@ -43,10 +43,14 @@ namespace TESTS_JSON_to_POJO
             string resultPath = Directory.GetCurrentDirectory().Replace("bin\\Debug", "") + @"Test_2_HANDLE_NUMBERS_OUTPUT1.txt";
             string input      = File.ReadAllText(path);
 
-            JavaCodeWriter javaCodeWriter = new JavaCodeWriter();
+            JavaCodeWriterConfig config = new JavaCodeWriterConfig();
+            config.UsePascalCase = true;
+            JavaCodeWriter javaCodeWriter = new JavaCodeWriter(config);
+
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
             jsonClassGenerator.CodeWriter = javaCodeWriter;
-            jsonClassGenerator.MutableClasses.Members = OutputMembers.AsPublicFields;
+
+            // Hilal To Change this someway
             jsonClassGenerator.UsePascalCase = true;
 
             string returnVal = jsonClassGenerator.GenerateClasses(input, out string errorMessage).ToString();

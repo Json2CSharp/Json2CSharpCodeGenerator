@@ -26,7 +26,6 @@ namespace TESTS_JSON_to_POJO
             JavaCodeWriter javaCodeWriter = new JavaCodeWriter();
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
             jsonClassGenerator.CodeWriter = javaCodeWriter;
-            jsonClassGenerator.MutableClasses.Members = OutputMembers.AsPublicFields;
 
             string returnVal = jsonClassGenerator.GenerateClasses(input, out string errorMessage).ToString();
             string resultsCompare = File.ReadAllText(resultPath);

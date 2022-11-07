@@ -24,7 +24,6 @@ namespace TESTS_JSON_TO_PYTHON
             PythonCodeWriter pythonCodeWriter = new PythonCodeWriter();
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
             jsonClassGenerator.CodeWriter = pythonCodeWriter;
-            jsonClassGenerator.MutableClasses.Members = OutputMembers.AsPublicFields;
 
             string returnVal = jsonClassGenerator.GenerateClasses(input, out string errorMessage).ToString();
             string resultsCompare = File.ReadAllText(resultPath);
