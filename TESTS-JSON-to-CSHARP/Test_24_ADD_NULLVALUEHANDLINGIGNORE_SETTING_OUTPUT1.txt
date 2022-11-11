@@ -1,0 +1,83 @@
+    public class Awesomeobject
+    {
+        [JsonProperty("SomeProps1", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("SomeProps1")]
+        public int SomeProps1 { get; set; }
+
+        [JsonProperty("SomeProps2", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("SomeProps2")]
+        public string SomeProps2 { get; set; }
+    }
+
+    public class Class1
+    {
+        [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("id")]
+        public int id { get; set; }
+
+        [JsonProperty("user_id", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("user_id")]
+        public string user_id { get; set; }
+
+        [JsonProperty("awesomeobject", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("awesomeobject")]
+        public Awesomeobject awesomeobject { get; set; }
+
+        [JsonProperty("created_at", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("created_at")]
+        public string created_at { get; set; }
+
+        [JsonProperty("updated_at", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("updated_at")]
+        public string updated_at { get; set; }
+
+        [JsonProperty("users", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("users")]
+        public List<User> users { get; set; }
+    }
+
+    public class Class2
+    {
+        [JsonProperty("SomePropertyOfClass2", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("SomePropertyOfClass2")]
+        public string SomePropertyOfClass2 { get; set; }
+    }
+
+    public class Root
+    {
+        [JsonProperty("Class1", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("Class1")]
+        public Class1 Class1 { get; set; }
+
+        [JsonProperty("Class2", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("Class2")]
+        public Class2 Class2 { get; set; }
+    }
+
+    public class User
+    {
+        [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("id")]
+        public string id { get; set; }
+
+        [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("name")]
+        public string name { get; set; }
+
+        [JsonProperty("created_at", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("created_at")]
+        public string created_at { get; set; }
+
+        [JsonProperty("updated_at", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("updated_at")]
+        public string updated_at { get; set; }
+
+        [JsonProperty("email", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("email")]
+        public string email { get; set; }
+
+        [JsonProperty("testanadditionalfield", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("testanadditionalfield")]
+        public string testanadditionalfield { get; set; }
+    }
+

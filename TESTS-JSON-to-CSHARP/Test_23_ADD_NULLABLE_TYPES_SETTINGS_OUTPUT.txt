@@ -1,1 +1,7 @@
-dfasdfadfasdf
+// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
+    public class Root
+    {
+        public bool? testbool { get; set; }
+        public int? testint { get; set; }
+        public long? testlong { get; set; }
+    }

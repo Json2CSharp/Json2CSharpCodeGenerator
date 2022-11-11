@@ -363,11 +363,11 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 case JsonTypeEnum.Anything: return "object";
                 case JsonTypeEnum.Array: return GetCollectionTypeName(elementTypeName: this.GetTypeName(type.InternalType), config.CollectionType);
                 case JsonTypeEnum.Dictionary: return "Dictionary<string, " + this.GetTypeName(type.InternalType) + ">";
-                case JsonTypeEnum.Boolean: return "bool";
-                case JsonTypeEnum.Float: return "double";
-                case JsonTypeEnum.Integer: return "int";
-                case JsonTypeEnum.Long: return "long";
-                case JsonTypeEnum.Date: return "DateTime";
+                case JsonTypeEnum.Boolean: return config.AlwaysUseNullables ? "bool?" : "bool";
+                case JsonTypeEnum.Float: return config.AlwaysUseNullables ? "double?" : "double";
+                case JsonTypeEnum.Integer: return config.AlwaysUseNullables ? "int?" : "int";
+                case JsonTypeEnum.Long: return config.AlwaysUseNullables ? "long?" : "long";
+                case JsonTypeEnum.Date: return config.AlwaysUseNullables ? "DateTime?" : "DateTime";
                 case JsonTypeEnum.NonConstrained: return "object";
                 case JsonTypeEnum.NullableBoolean: return "bool?";
                 case JsonTypeEnum.NullableFloat: return "double?";
@@ -538,14 +538,25 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 switch (config.AttributeLibrary)
                 {
                     case JsonLibrary.NewtonsoftJson:
-                        return $"[{attributeTarget}JsonProperty(\"{field.JsonMemberName}\")]";
+                        {
+                            if (config.NullValueHandlingIgnore)
+                                return $"[{attributeTarget}JsonProperty(\"{field.JsonMemberName}\", NullValueHandling = NullValueHandling.Ignore)]";
+                            else
+                                return $"[{attributeTarget}JsonProperty(\"{field.JsonMemberName}\")]";
+                        }
 
                     case JsonLibrary.SystemTextJson:
                         return $"[{attributeTarget}JsonPropertyName(\"{field.JsonMemberName}\")]";
 
                     case JsonLibrary.NewtonsoftAndSystemTextJson:
-                        return $"[{attributeTarget}JsonProperty(\"{field.JsonMemberName}\")]\r\n" +
-                            $"        [{attributeTarget}JsonPropertyName(\"{field.JsonMemberName}\")]";
+                        {
+                            string newtonsoftAttribute =  $"[{attributeTarget}JsonProperty(\"{field.JsonMemberName}\")]";
+                            if (config.NullValueHandlingIgnore) {
+                                newtonsoftAttribute = $"[{attributeTarget}JsonProperty(\"{field.JsonMemberName}\", NullValueHandling = NullValueHandling.Ignore)]";
+                            }
+                                return newtonsoftAttribute + Environment.NewLine + $"        [{attributeTarget}JsonPropertyName(\"{field.JsonMemberName}\")]";
+                        }
+
                     default:
                         throw new InvalidOperationException("Unrecognized " + nameof(config.AttributeLibrary) + " value: " + config.AttributeLibrary);
                 }
