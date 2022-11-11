@@ -1,0 +1,5 @@
+{
+"testbool" : true,
+"testint" : 123,
+"testlong" : 123141243124
+}

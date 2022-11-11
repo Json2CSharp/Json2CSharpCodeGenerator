@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Xamasoft.JsonClassGenerator.CodeWriterConfiguration
 {
-    public class TypeScriptCodeWriterConfig : CodeWriterConfigurationBase
+    public class TypeScriptCodeWriterConfig : BaseCodeWriterConfiguration
     {
     }
 }

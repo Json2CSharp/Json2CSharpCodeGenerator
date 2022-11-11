@@ -7,7 +7,7 @@ using Xamasoft.JsonClassGenerator.Models;
 
 namespace Xamasoft.JsonClassGenerator.CodeWriterConfiguration
 {
-    public class CodeWriterConfigurationBase
+    public class BaseCodeWriterConfiguration
     {
         /// <summary>
         /// The C# <c>namespace</c> or Java <c>package</c> that the generated types will reside in.<br />

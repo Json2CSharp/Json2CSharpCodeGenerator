@@ -50,9 +50,6 @@ namespace TESTS_JSON_to_POJO
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
             jsonClassGenerator.CodeWriter = javaCodeWriter;
 
-            // Hilal To Change this someway
-            jsonClassGenerator.UsePascalCase = true;
-
             string returnVal = jsonClassGenerator.GenerateClasses(input, out string errorMessage).ToString();
             string resultsCompare = File.ReadAllText(resultPath);
 

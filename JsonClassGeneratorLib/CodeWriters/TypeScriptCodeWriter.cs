@@ -8,7 +8,7 @@ using Xamasoft.JsonClassGenerator.Models;
 
 namespace Xamasoft.JsonClassGenerator.CodeWriters
 {
-    public class TypeScriptCodeWriter : ICodeWriter
+    public class TypeScriptCodeWriter : ICodeWriterss
     {
         private readonly TypeScriptCodeWriterConfig config;
 

@@ -47,7 +47,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CodeWriterConfiguration\CodeWriterConfigurationBase.cs" />
+    <Compile Include="CodeWriterConfiguration\BaseCodeWriterConfiguration.cs" />
     <Compile Include="CodeWriterConfiguration\PythonCodeWriterConfig.cs" />
     <Compile Include="CodeWriterConfiguration\JavaCodeWriterConfig.cs" />
     <Compile Include="CodeWriterConfiguration\CSharpCodeWriterConfig.cs" />

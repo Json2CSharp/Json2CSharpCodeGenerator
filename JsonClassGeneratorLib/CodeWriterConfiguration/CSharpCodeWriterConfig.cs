@@ -9,7 +9,7 @@ using Xamasoft.JsonClassGenerator.Models;
 
 namespace Xamasoft.JsonClassGenerator.CodeWriterConfiguration
 {
-    public class CSharpCodeWriterConfig : CodeWriterConfigurationBase
+    public class CSharpCodeWriterConfig : BaseCodeWriterConfiguration
     {
         /// <summary>
         /// The default constructor with default property values

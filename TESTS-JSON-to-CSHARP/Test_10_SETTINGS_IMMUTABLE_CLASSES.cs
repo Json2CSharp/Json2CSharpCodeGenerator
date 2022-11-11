@@ -27,11 +27,9 @@ namespace TESTS_JSON_TO_CSHARP
             csharpCodeWriterConfig.OutputType = OutputTypes.ImmutableClass;
             CSharpCodeWriter csharpCodeWriter = new CSharpCodeWriter(csharpCodeWriterConfig);
 
-            // Hilal To Change This
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator()
             {
                 CodeWriter          = csharpCodeWriter,
-                UsePascalCase       = true,
             };
 
             string returnVal      = jsonClassGenerator.GenerateClasses(input, errorMessage: out _).ToString();

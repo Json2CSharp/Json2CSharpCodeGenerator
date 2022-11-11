@@ -31,8 +31,7 @@ namespace TESTS_JSON_TO_CSHARP
 
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator()
             {
-                CodeWriter = csharpCodeWriter,
-                UsePascalCase    = true
+                CodeWriter = csharpCodeWriter
             };
 
             jsonClassGenerator.CodeWriter = csharpCodeWriter;

@@ -8,7 +8,7 @@ using Xamasoft.JsonClassGenerator.Models;
 
 namespace Xamasoft.JsonClassGenerator.CodeWriterConfiguration
 {
-    public class PythonCodeWriterConfig : CodeWriterConfigurationBase
+    public class PythonCodeWriterConfig : BaseCodeWriterConfiguration
     {
         /// <summary>
         /// The default constructor with default property values

@@ -44,7 +44,6 @@ namespace TESTS_JSON_TO_CSHARP
             CSharpCodeWriter csharpCodeWriter = new CSharpCodeWriter(csharpCodeWriterConfig);
 
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
-            jsonClassGenerator.UsePascalCase = true;
             jsonClassGenerator.CodeWriter = csharpCodeWriter;
 
             string returnVal = jsonClassGenerator.GenerateClasses(input, out string errorMessage).ToString();

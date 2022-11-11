@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Net.Configuration;
 using System.Runtime.Serialization.Formatters;
 using System.Text;
 using Xamasoft.JsonClassGenerator.CodeWriterConfiguration;
@@ -8,11 +9,12 @@ using Xamasoft.JsonClassGenerator.Models;
 
 namespace Xamasoft.JsonClassGenerator.CodeWriters
 {
-    public class CSharpCodeWriter : ICodeBuilder
+    public class CSharpCodeWriter : ICodeWriter
     {
         public CSharpCodeWriter()
         {
             this.config = new CSharpCodeWriterConfig();
+
         }
 
         public CSharpCodeWriter(CSharpCodeWriterConfig writerConfig)
@@ -42,7 +44,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
         public bool IsReservedKeyword(string word) => _reservedKeywords.Contains(word ?? string.Empty);
 
-        IReadOnlyCollection<string> ICodeBuilder.ReservedKeywords => _reservedKeywords;
+        IReadOnlyCollection<string> ICodeWriter.ReservedKeywords => _reservedKeywords;
 
         public void WriteFileStart(StringBuilder sw)
         {
@@ -94,6 +96,40 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 sw.AppendFormat("    {0} class {1}", config.InternalVisibility ? "internal" : "public", config.MainClass);
                 sw.AppendLine("    {");
             }
+        }
+
+        public void WriteClassesToFile(StringBuilder sw, IEnumerable<JsonType> types, bool rootIsArray = false)
+        {
+            Boolean inNamespace = false;
+            Boolean rootNamespace = false;
+
+            WriteFileStart(sw);
+            WriteDeserializationComment(sw, rootIsArray);
+
+            foreach (JsonType type in types)
+            {
+                if (config.HasNamespace && inNamespace && rootNamespace != type.IsRoot)
+                {
+                    WriteNamespaceEnd(sw, rootNamespace);
+                    inNamespace = false;
+                }
+
+                if (config.HasNamespace && !inNamespace)
+                {
+                    WriteNamespaceStart(sw, type.IsRoot);
+                    inNamespace = true;
+                    rootNamespace = type.IsRoot;
+                }
+
+                WriteClass(sw, type);
+            }
+
+            if (config.HasNamespace && inNamespace)
+            {
+                WriteNamespaceEnd(sw, rootNamespace);
+            }
+
+            WriteFileEnd(sw);
         }
 
         public void WriteFileEnd(StringBuilder sw)
@@ -204,7 +240,13 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             bool first = true;
             foreach (JsonFieldInfo field in type.Fields)
             {
-                string classPropertyName = this.GetCSharpPascalCaseName(field.MemberName);
+                string classPropertyName = field.MemberName;
+
+                if (config.UsePascalCase || field.ContainsSpecialChars)
+                    classPropertyName = field.MemberName.ToTitleCase();
+
+                classPropertyName = this.CheckSyntax(classPropertyName);
+
                 string propertyAttribute = GetCSharpJsonAttributeCode(field);
 
                 // If we are using record types and this is not the first iteration, add a comma and newline to the previous line
@@ -366,7 +408,11 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
                 {
                     // Writes something like: `[JsonProperty("foobar")] string foobar,`
 
-                    string ctorParameterName = this.GetCSharpCamelCaseName(field.MemberName);
+                    string ctorParameterName = field.MemberName;
+                    if (config.UsePascalCase || field.ContainsSpecialChars)
+                        ctorParameterName = ctorParameterName.ToTitleCase();
+
+                    ctorParameterName = this.GetCSharpCamelCaseName(ctorParameterName);
 
                     bool isLast = Object.ReferenceEquals(field, lastField);
                     string comma = isLast ? "" : ",";
@@ -394,8 +440,12 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
             foreach (JsonFieldInfo field in type.Fields)
             {
-                string ctorParameterName = this.GetCSharpCamelCaseName(field.MemberName);
-                string classPropertyName = this.GetCSharpPascalCaseName(field.MemberName);
+                string classPropertyName = field.MemberName;
+                if (config.UsePascalCase || field.ContainsSpecialChars)
+                    classPropertyName = classPropertyName.ToTitleCase();
+
+                string ctorParameterName = field.MemberName.ToTitleCase();
+                ctorParameterName = this.GetCSharpCamelCaseName(ctorParameterName);
 
                 sw.AppendFormat(indentBodies + "this.{0} = {1};{2}", /*0:*/ classPropertyName, /*1:*/ ctorParameterName, /*2:*/ Environment.NewLine);
             }
@@ -550,7 +600,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             return name;
         }
         /// <summary>Converts an identifier from JSON into a C#-safe PascalCase identifier.</summary>
-        private string GetCSharpPascalCaseName(string name)
+        private string CheckSyntax(string name)
         {
             // Check if property is a reserved keyword
             if (this.IsReservedKeyword(name)) name = "@" + name;

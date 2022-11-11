@@ -8,7 +8,7 @@ using Xamasoft.JsonClassGenerator.Models;
 
 namespace Xamasoft.JsonClassGenerator.CodeWriters
 {
-    public class JavaCodeWriter : ICodeBuilder
+    public class JavaCodeWriter : ICodeWriter
     {
         public JavaCodeWriter()
         {
@@ -37,7 +37,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
         };
         private readonly JavaCodeWriterConfig config;
 
-        IReadOnlyCollection<string> ICodeBuilder.ReservedKeywords => _reservedKeywords;
+        IReadOnlyCollection<string> ICodeWriter.ReservedKeywords => _reservedKeywords;
         public bool IsReservedKeyword(string word) => _reservedKeywords.Contains(word ?? string.Empty);
 
         public string GetTypeName(JsonType type)
@@ -107,6 +107,7 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
         {
             foreach (var field in type.Fields)
             {
+                // Invalid config.UsePascalCase is not implemented yet
                 if (config.UsePascalCase || config.ExamplesInDocumentation) sw.AppendLine();
 
                 // Check if property name starts with number
@@ -159,6 +160,40 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             // {
             //     sw.WriteLine("// " + line);
             // }
+        }
+
+        public void WriteClassesToFile(StringBuilder sw, IEnumerable<JsonType> types, bool rootIsArray = false)
+        {
+            Boolean inNamespace = false;
+            Boolean rootNamespace = false;
+
+            WriteFileStart(sw);
+            WriteDeserializationComment(sw, rootIsArray);
+
+            foreach (JsonType type in types)
+            {
+                if (config.HasNamespace && inNamespace && rootNamespace != type.IsRoot)
+                {
+                    WriteNamespaceEnd(sw, rootNamespace);
+                    inNamespace = false;
+                }
+
+                if (config.HasNamespace && !inNamespace)
+                {
+                    WriteNamespaceStart(sw, type.IsRoot);
+                    inNamespace = true;
+                    rootNamespace = type.IsRoot;
+                }
+
+                WriteClass(sw, type);
+            }
+
+            if (config.HasNamespace && inNamespace)
+            {
+                WriteNamespaceEnd(sw, rootNamespace);
+            }
+
+            WriteFileEnd(sw);
         }
 
         public void WriteFileEnd(StringBuilder sw)

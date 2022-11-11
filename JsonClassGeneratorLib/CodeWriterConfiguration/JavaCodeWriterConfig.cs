@@ -9,7 +9,7 @@ using Xamasoft.JsonClassGenerator.Models;
 
 namespace Xamasoft.JsonClassGenerator.CodeWriterConfiguration
 {
-    public class JavaCodeWriterConfig : CodeWriterConfigurationBase
+    public class JavaCodeWriterConfig : BaseCodeWriterConfiguration
     {
         /// <summary>
         /// The default constructor with default property values
@@ -31,6 +31,8 @@ namespace Xamasoft.JsonClassGenerator.CodeWriterConfiguration
         }
 
         public OutputMembers OutputMembers { get; set; }
+
+        [Obsolete("Not Implemented Yet")]
         public bool UsePascalCase { get; set; }
         public bool UseNestedClasses { get; set; }
     }

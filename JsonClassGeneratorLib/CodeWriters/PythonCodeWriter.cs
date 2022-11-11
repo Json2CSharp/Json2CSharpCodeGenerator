@@ -9,7 +9,7 @@ using Xamasoft.JsonClassGenerator.Models;
 
 namespace Xamasoft.JsonClassGenerator.CodeWriters
 {
-    public class PythonCodeWriter : ICodeBuilder
+    public class PythonCodeWriter : ICodeWriter
     {
         private readonly PythonCodeWriterConfig config;
 
@@ -94,6 +94,40 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             sw.AppendFormat("class {0}:{1}", className, Environment.NewLine);
             this.WriteClassMembers(sw, type, "");
             sw.AppendLine();
+        }
+
+        public void WriteClassesToFile(StringBuilder sw, IEnumerable<JsonType> types, bool rootIsArray = false)
+        {
+            Boolean inNamespace = false;
+            Boolean rootNamespace = false;
+
+            WriteFileStart(sw);
+            WriteDeserializationComment(sw, rootIsArray);
+
+            foreach (JsonType type in types)
+            {
+                if (config.HasNamespace && inNamespace && rootNamespace != type.IsRoot)
+                {
+                    WriteNamespaceEnd(sw, rootNamespace);
+                    inNamespace = false;
+                }
+
+                if (config.HasNamespace && !inNamespace)
+                {
+                    WriteNamespaceStart(sw, type.IsRoot);
+                    inNamespace = true;
+                    rootNamespace = type.IsRoot;
+                }
+
+                WriteClass(sw, type);
+            }
+
+            if (config.HasNamespace && inNamespace)
+            {
+                WriteNamespaceEnd(sw, rootNamespace);
+            }
+
+            WriteFileEnd(sw);
         }
 
         public void WriteClassMembers(StringBuilder sw, JsonType type, String prefix)

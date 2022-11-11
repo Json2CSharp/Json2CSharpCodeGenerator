@@ -8,7 +8,7 @@ using Xamasoft.JsonClassGenerator.Models;
 
 namespace Xamasoft.JsonClassGenerator.CodeWriterConfiguration
 {
-    public class DartCodeWriterConfig : CodeWriterConfigurationBase
+    public class DartCodeWriterConfig : BaseCodeWriterConfiguration
     {
         /// <summary>
         /// The default constructor with default property values

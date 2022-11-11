@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Xamasoft.JsonClassGenerator.CodeWriters
 {
-    public interface ICodeBuilder
+    public interface ICodeWriter
     {
         string FileExtension { get; }
         string DisplayName { get; }
@@ -16,13 +16,15 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
         void WriteFileEnd(StringBuilder sw);
         void WriteDeserializationComment(StringBuilder sw, bool rootIsArray = false);
         void WriteNamespaceStart(StringBuilder sw, bool root);
+        void WriteClassesToFile(StringBuilder sw, IEnumerable<JsonType> types, bool rootIsArray = false);
         void WriteNamespaceEnd(StringBuilder sw, bool root);
         void WriteClassMembers(StringBuilder sw, JsonType type, string prefix);
         void WriteClass(StringBuilder sw, JsonType type);
         bool IsReservedKeyword(string word);
     }
 
-    public interface ICodeWriter
+    [Obsolete("Use ICodeWriter using the StringBuilder class instead of TextWriter")]
+    public interface ICodeWriterss
     {
         string FileExtension { get; }
         string DisplayName { get; }

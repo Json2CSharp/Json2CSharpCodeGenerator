@@ -15,20 +15,13 @@ namespace Xamasoft.JsonClassGenerator
             JsonClassGenerator generator,
             string                    jsonMemberName,
             JsonType                  type,
-            bool                      usePascalCase,
             IReadOnlyList<object>     examples
         )
         {
             this.generator             = generator       ?? throw new ArgumentNullException(nameof(generator));
             this.JsonMemberName        = jsonMemberName  ?? throw new ArgumentNullException(nameof(jsonMemberName));
             this.MemberName            = jsonMemberName;
-            this.ContainsSpecialChars  = IsContainsSpecialChars(this.MemberName);
-
-            if (usePascalCase || this.ContainsSpecialChars)
-            {
-                this.MemberName = this.MemberName.ToTitleCase();
-            }
-
+            this.ContainsSpecialChars  = IsContainsSpecialChars(this.MemberName);        
             this.Type     = type ?? throw new ArgumentNullException(nameof(type));
             this.Examples = examples ?? Array.Empty<object>();
         }

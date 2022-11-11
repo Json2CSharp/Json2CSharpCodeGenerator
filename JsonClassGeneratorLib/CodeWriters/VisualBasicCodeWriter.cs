@@ -8,7 +8,7 @@ using Xamasoft.JsonClassGenerator.Models;
 
 namespace Xamasoft.JsonClassGenerator.CodeWriters
 {
-    public class VisualBasicCodeWriter : ICodeWriter
+    public class VisualBasicCodeWriter : ICodeWriterss
     {
         public VisualBasicCodeWriter()
         {

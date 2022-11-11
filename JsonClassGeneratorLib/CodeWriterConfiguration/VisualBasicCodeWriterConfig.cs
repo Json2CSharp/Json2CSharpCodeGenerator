@@ -7,7 +7,7 @@ using Xamasoft.JsonClassGenerator.Models;
 
 namespace Xamasoft.JsonClassGenerator.CodeWriterConfiguration
 {
-    public class VisualBasicCodeWriterConfig : CodeWriterConfigurationBase
+    public class VisualBasicCodeWriterConfig : BaseCodeWriterConfiguration
     {
         public VisualBasicCodeWriterConfig()
         {

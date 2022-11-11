@@ -409,9 +409,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 
         private void ConfigureGenerator( JsonClassGenerator config )
         {
-            config.UsePascalCase = this.optsPascalCase.Checked;
-
-            //
+            writerConfig.UsePascalCase = this.optsPascalCase.Checked;
 
             if( this.optAttribJP.Checked )
             {

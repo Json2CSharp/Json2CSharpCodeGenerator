@@ -63,7 +63,6 @@ namespace TESTS_JSON_TO_CSHARP
 
             CSharpCodeWriter csharpCodeWriter = new CSharpCodeWriter(csharpCodeWriterConfig);
             jsonClassGenerator.CodeWriter = csharpCodeWriter;
-            jsonClassGenerator.UsePascalCase = true;
 
             string actual = jsonClassGenerator.GenerateClasses(input, out _).ToString();
             // Console.WriteLine("Actual:\n" + actual);

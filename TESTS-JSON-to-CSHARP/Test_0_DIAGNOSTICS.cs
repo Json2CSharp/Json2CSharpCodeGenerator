@@ -24,19 +24,22 @@ namespace TESTS_JSON_TO_CSHARP
             string input = File.ReadAllText(path);
 
             CSharpCodeWriterConfig csharpCodeWriterConfig = new CSharpCodeWriterConfig();
-            csharpCodeWriterConfig.AttributeLibrary = JsonLibrary.SystemTextJson;
+            csharpCodeWriterConfig.UsePascalCase = true;
+
             CSharpCodeWriter csharpCodeWriter = new CSharpCodeWriter(csharpCodeWriterConfig);
 
             JsonClassGenerator jsonClassGenerator = new JsonClassGenerator();
             jsonClassGenerator.CodeWriter = csharpCodeWriter;
-
 
             string returnVal = jsonClassGenerator.GenerateClasses(input, errorMessage: out _).ToString();
             string resultsCompare = File.ReadAllText(resultPath);
 
             string expected = resultsCompare.NormalizeOutput();
             string actual   = returnVal     .NormalizeOutput();
-           // Assert.AreEqual(expected, actual);
+
+            Assert.Inconclusive(message: "This test is just to diagnose issues.");
+
+            // Assert.AreEqual(expected, actual);
         }
     }
 }

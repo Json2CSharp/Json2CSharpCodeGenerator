@@ -51,7 +51,9 @@ namespace Xamasoft.JsonClassGenerator
 
             if (tokens.Length == 0) return new JsonType(generator, JsonTypeEnum.NonConstrained);
 
-            var common = new JsonType(generator, tokens[0]).MaybeMakeNullable(generator);
+            // Automatically Detect Nullables
+            //var common = new JsonType(generator, tokens[0]).MaybeMakeNullable(generator);
+            var common = new JsonType(generator, tokens[0]);
 
             for (int i = 1; i < tokens.Length; i++)
             {
@@ -71,18 +73,23 @@ namespace Xamasoft.JsonClassGenerator
 
         }
 
-        internal JsonType MaybeMakeNullable(JsonClassGenerator generator)
-        {
-            if (!generator.AlwaysUseNullableValues) return this;
-            return this.GetCommonType(JsonType.GetNull(generator));
-        }
-
+        // Automatically detect nullables ? Do Later ? Issue 
+        // internal JsonType MaybeMakeNullable(JsonClassGenerator generator)
+        // {
+        //     if (!generator.AlwaysUseNullableValues) return this;
+        //     return this.GetCommonType(JsonType.GetNull(generator));
+        // }
 
         public JsonTypeEnum Type { get; private set; }
         public JsonType InternalType { get; private set; }
         public string AssignedName { get; private set; }
         public string OriginalName { get; private set; }
         public string NewAssignedName { get; private set; }
+        
+        /// <summary>
+        /// Check if a json field can be nullable, example in an array of objects, one property in one object can have value while in an another object this property is null.
+        /// </summary>
+        public string IsNullable { get; private set; }
 
         public void AssignName(string name)
         {
@@ -96,7 +103,6 @@ namespace Xamasoft.JsonClassGenerator
         {
            NewAssignedName = name;
         }
-
 
         public bool MustCache
         {
@@ -181,8 +187,6 @@ namespace Xamasoft.JsonClassGenerator
 
         public JsonType GetCommonType(JsonType type2)
         {
-            
-
             var commonType = GetCommonTypeEnum(this.Type, type2);
 
             if (commonType == JsonTypeEnum.Array)
@@ -193,7 +197,11 @@ namespace Xamasoft.JsonClassGenerator
                 JsonType commonInternalType;
                 if (InternalType == null && type2.InternalType != null) // Handling the case Test_4 where the first array is an empty object
                     commonInternalType = type2.InternalType;
-                else commonInternalType = InternalType.GetCommonType(type2.InternalType).MaybeMakeNullable(generator);
+                else {
+                    // Automatically detect nullables
+                    // commonInternalType = InternalType.GetCommonType(type2.InternalType).MaybeMakeNullable(generator);
+                    commonInternalType = InternalType.GetCommonType(type2.InternalType);
+                } 
 
                 if (commonInternalType != InternalType) return new JsonType(generator, JsonTypeEnum.Array) { InternalType = commonInternalType };
             }
@@ -207,15 +215,16 @@ namespace Xamasoft.JsonClassGenerator
 
 
             if (this.Type == commonType) return this;
-            return new JsonType(generator, commonType).MaybeMakeNullable(generator);
-        }
 
+            // Automatically detect nullables
+            // return new JsonType(generator, commonType).MaybeMakeNullable(generator);
+            return new JsonType(generator, commonType);
+        }
 
         private static bool IsNull(JsonTypeEnum type)
         {
             return type == JsonTypeEnum.NullableSomething;
         }
-
 
 
         private JsonTypeEnum GetCommonTypeEnum(JsonTypeEnum type1, JsonType type2json)

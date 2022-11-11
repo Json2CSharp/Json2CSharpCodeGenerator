@@ -68,6 +68,7 @@
     <Content Include="Test_0_BASIC_SCENARIO_OUTPUT.txt" />
     <Content Include="Test_2_HANDLE_NUMBERS_INPUT1.txt" />
     <Content Include="Test_2_HANDLE_NUMBERS_INPUT.txt" />
+    <Content Include="Test_2_HANDLE_NUMBERS_OUTPUT1 Deprecated.txt" />
     <Content Include="Test_2_HANDLE_NUMBERS_OUTPUT1.txt" />
     <Content Include="Test_2_HANDLE_NUMBERS_OUTPUT.txt" />
     <Content Include="Test_3_SETTINGS_USEPASCAL_INPUT.txt" />

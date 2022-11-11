@@ -9,7 +9,7 @@ using Xamasoft.JsonClassGenerator.Models;
 
 namespace Xamasoft.JsonClassGenerator.CodeWriters
 {
-    public class DartCodeWriter : ICodeBuilder
+    public class DartCodeWriter : ICodeWriter
     {
         private readonly DartCodeWriterConfig config;
 
@@ -192,6 +192,40 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             //     sw.Insert(0, string.Format("from typing import List{0}", Environment.NewLine));
 
             return;
+        }
+
+        public void WriteClassesToFile(StringBuilder sw, IEnumerable<JsonType> types, bool rootIsArray = false)
+        {
+            Boolean inNamespace = false;
+            Boolean rootNamespace = false;
+
+            WriteFileStart(sw);
+            WriteDeserializationComment(sw, rootIsArray);
+
+            foreach (JsonType type in types)
+            {
+                if (config.HasNamespace && inNamespace && rootNamespace != type.IsRoot)
+                {
+                    WriteNamespaceEnd(sw, rootNamespace);
+                    inNamespace = false;
+                }
+
+                if (config.HasNamespace && !inNamespace)
+                {
+                    WriteNamespaceStart(sw, type.IsRoot);
+                    inNamespace = true;
+                    rootNamespace = type.IsRoot;
+                }
+
+                WriteClass(sw, type);
+            }
+
+            if (config.HasNamespace && inNamespace)
+            {
+                WriteNamespaceEnd(sw, rootNamespace);
+            }
+
+            WriteFileEnd(sw);
         }
 
         public void WriteFileStart(StringBuilder sw)

@@ -19,18 +19,13 @@ namespace Xamasoft.JsonClassGenerator
 {
     public class JsonClassGenerator
     {
+        #region Dependencies
+        public ICodeWriter CodeWriter                 { get; set; }
+        #endregion
+
         #region Properties
-        public bool         AlwaysUseNullableValues    { get; set; }
-        public IList<JsonType> Types { get; private set; }
+        internal IList<JsonType> Types { get; private set; }
         private HashSet<string> Names = new HashSet<string>();
-        public ICodeBuilder CodeWriter                 { get; set; }
-
-
-        // HILAL TODO FIX THIS
-        // public bool HasNamespace(this IJsonClassGeneratorConfig config) => !String.IsNullOrEmpty(config.Namespace);
-        public bool HasNamespace { get; set; }
-        public bool UsePascalCase { get; set; }
-
         #endregion
 
         /// <summary>
@@ -39,7 +34,6 @@ namespace Xamasoft.JsonClassGenerator
         /// <param name="jsonInput"></param>
         /// <param name="errorMessage"></param>
         /// <returns></returns>
-        /// 
         public StringBuilder GenerateClasses(string jsonInput, out string errorMessage)
         {
             JObject[] examples = null;
@@ -81,7 +75,7 @@ namespace Xamasoft.JsonClassGenerator
                 this.Types = this.HandleDuplicateClasses(this.Types);
 
                 StringBuilder builder = new StringBuilder();
-                this.WriteClassesToFile(builder, this.Types, rootWasArray);
+                CodeWriter.WriteClassesToFile(builder, this.Types, rootWasArray);
 
                 errorMessage = String.Empty;
                 return builder;
@@ -91,39 +85,6 @@ namespace Xamasoft.JsonClassGenerator
                 errorMessage = ex.ToString();
                 return new StringBuilder();
             }
-        }
-        private void WriteClassesToFile(StringBuilder sw, IEnumerable<JsonType> types, bool rootIsArray = false)
-        {
-            Boolean inNamespace = false;
-            Boolean rootNamespace = false;
-
-            this.CodeWriter.WriteFileStart(sw);
-            this.CodeWriter.WriteDeserializationComment(sw, rootIsArray);
-
-            foreach (JsonType type in types)
-            {
-                if (HasNamespace && inNamespace && rootNamespace != type.IsRoot )
-                {
-                    this.CodeWriter.WriteNamespaceEnd(sw, rootNamespace);
-                    inNamespace = false;
-                }
-
-                if (HasNamespace && !inNamespace)
-                {
-                    this.CodeWriter.WriteNamespaceStart(sw, type.IsRoot);
-                    inNamespace = true;
-                    rootNamespace = type.IsRoot;
-                }
-
-                this.CodeWriter.WriteClass(sw, type);
-            }
-
-            if (HasNamespace && inNamespace)
-            {
-                this.CodeWriter.WriteNamespaceEnd(sw, rootNamespace);
-            }
-
-            this.CodeWriter.WriteFileEnd(sw);
         }
         private void GenerateClass(JObject[] examples, JsonType type)
         {
@@ -149,7 +110,13 @@ namespace Xamasoft.JsonClassGenerator
                     else
                     {
                         JsonType commonType = currentType;
-                        if (first) commonType = commonType.MaybeMakeNullable(this);
+
+
+                        if (first) { 
+                            // Automatically detect nullables
+                            // commonType = commonType.MaybeMakeNullable(this);
+                            commonType = commonType;
+                        }
                         else commonType = commonType.GetCommonType(JsonType.GetNull(this));
 
                         jsonFields.Add(propName, commonType);
@@ -252,7 +219,6 @@ namespace Xamasoft.JsonClassGenerator
                     generator          : this,
                     jsonMemberName     : x.Key,
                     type               : x.Value,
-                    usePascalCase      : UsePascalCase, // Hilal TO DO fix this, It should not use code writer settings here unless needed
                     examples           : fieldExamples[x.Key])
                 )
                 .ToList();
