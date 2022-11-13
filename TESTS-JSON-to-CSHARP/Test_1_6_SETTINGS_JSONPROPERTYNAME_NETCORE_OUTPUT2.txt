@@ -1,0 +1,29 @@
+// Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);
+public class Root
+{
+    [JsonConstructor]
+    public Root(
+        string user_id,
+        string _1user_id,
+        string created_at,
+        string updated_at
+    )
+    {
+        this.user_id = user_id;
+        this._1user_id = _1user_id;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
+    }
+
+    [JsonPropertyName("user_id")]
+    public string user_id { get; }
+
+    [JsonPropertyName("1user_id")]
+    public string _1user_id { get; }
+
+    [JsonPropertyName("created_at")]
+    public string created_at { get; }
+
+    [JsonPropertyName("updated_at")]
+    public string updated_at { get; }
+}

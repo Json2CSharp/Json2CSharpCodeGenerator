@@ -42,10 +42,12 @@ namespace Xamasoft.JsonClassGenerator
             for (int i = 0; i < text.Length; i++)
             {
                 char c = text[i];
-                if (!char.IsLetterOrDigit(c) && c != '_')
-                {
+                int number;
+                if (i == 0 && int.TryParse(c.ToString(), out number))
                     return true;
-                }
+
+                if (!char.IsLetterOrDigit(c) && c != '_')
+                    return true;
             }
 
             return false;

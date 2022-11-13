@@ -5,7 +5,7 @@
         public string test;
 
         [JsonProperty("test-test")]
-        public string TestTest;
+        public string testtest;
 
         [JsonProperty("continue")]
         public string @continue;

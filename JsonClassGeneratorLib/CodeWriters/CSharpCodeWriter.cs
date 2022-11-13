@@ -242,9 +242,9 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
             {
                 string classPropertyName = field.MemberName;
 
-                if (config.UsePascalCase || field.ContainsSpecialChars)
+                if (config.UsePascalCase)
                     classPropertyName = field.MemberName.ToTitleCase();
-
+                
                 classPropertyName = this.CheckSyntax(classPropertyName);
 
                 string propertyAttribute = GetCSharpJsonAttributeCode(field);
@@ -406,23 +406,25 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
                 foreach (JsonFieldInfo field in type.Fields)
                 {
-                    // Writes something like: `[JsonProperty("foobar")] string foobar,`
-
                     string ctorParameterName = field.MemberName;
-                    if (config.UsePascalCase || field.ContainsSpecialChars)
+                    if (config.UsePascalCase) { 
+                    
                         ctorParameterName = ctorParameterName.ToTitleCase();
+                        ctorParameterName = this.GetCSharpCamelCaseName(ctorParameterName);
+                    }
+                    else if(field.ContainsSpecialChars)
+                    {
+                        ctorParameterName = this.GetCSharpCamelCaseName(ctorParameterName);
+                    }
 
-                    ctorParameterName = this.GetCSharpCamelCaseName(ctorParameterName);
 
                     bool isLast = Object.ReferenceEquals(field, lastField);
                     string comma = isLast ? "" : ",";
 
-                    //
-
                     sw.Append(indentBodies);
 
                     string attribute = GetCSharpJsonAttributeCode(field);
-                    if (attribute.Length > 0)
+                    if (!string.IsNullOrEmpty(attribute) && config.AttributeLibrary == JsonLibrary.NewtonsoftJson)
                     {
                         sw.Append(attribute);
                         sw.Append(' ');
@@ -440,14 +442,21 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
 
             foreach (JsonFieldInfo field in type.Fields)
             {
-                string classPropertyName = field.MemberName;
-                if (config.UsePascalCase || field.ContainsSpecialChars)
-                    classPropertyName = classPropertyName.ToTitleCase();
+                string ctorName = field.MemberName;
+                string classMemberName = field.MemberName;
+                if (config.UsePascalCase) {
 
-                string ctorParameterName = field.MemberName.ToTitleCase();
-                ctorParameterName = this.GetCSharpCamelCaseName(ctorParameterName);
+                    classMemberName = ctorName.ToTitleCase();
+                    ctorName = ctorName.ToTitleCase();
+                    ctorName = this.GetCSharpCamelCaseName(ctorName);
+                }
+                else if(field.ContainsSpecialChars && !config.UsePascalCase)
+                {
+                    classMemberName = this.GetCSharpCamelCaseName(classMemberName);
+                    ctorName = this.GetCSharpCamelCaseName(ctorName);
+                }
 
-                sw.AppendFormat(indentBodies + "this.{0} = {1};{2}", /*0:*/ classPropertyName, /*1:*/ ctorParameterName, /*2:*/ Environment.NewLine);
+                sw.AppendFormat(indentBodies + "this.{0} = {1};{2}", /*0:*/ classMemberName, /*1:*/ ctorName, /*2:*/ Environment.NewLine);
             }
 
             sw.AppendLine(indentMembers + "}");
@@ -613,8 +622,11 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
         /// <summary>Converts an identifier from JSON into a C#-safe PascalCase identifier.</summary>
         private string CheckSyntax(string name)
         {
+            name = name.ReplaceSpecialCharacters(""); 
+
             // Check if property is a reserved keyword
             if (this.IsReservedKeyword(name)) name = "@" + name;
+
 
             // Check if property name starts with number
             if (!string.IsNullOrEmpty(name) && char.IsDigit(name[0])) name = "_" + name;

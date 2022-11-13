@@ -1,0 +1,131 @@
+// Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);
+    public class Awesomeobject
+    {
+        [JsonConstructor]
+        public Awesomeobject(
+            int someProps1,
+            string someProps2
+        )
+        {
+            this.SomeProps1 = someProps1;
+            this.SomeProps2 = someProps2;
+        }
+
+        [JsonPropertyName("SomeProps1")]
+        public int SomeProps1 { get; }
+
+        [JsonPropertyName("SomeProps2")]
+        public string SomeProps2 { get; }
+    }
+
+    public class Class1
+    {
+        [JsonConstructor]
+        public Class1(
+            int id,
+            string userId,
+            Awesomeobject awesomeobject,
+            string createdAt,
+            string updatedAt,
+            List<User> users
+        )
+        {
+            this.Id = id;
+            this.UserId = userId;
+            this.Awesomeobject = awesomeobject;
+            this.CreatedAt = createdAt;
+            this.UpdatedAt = updatedAt;
+            this.Users = users;
+        }
+
+        [JsonPropertyName("id")]
+        public int Id { get; }
+
+        [JsonPropertyName("user_id")]
+        public string UserId { get; }
+
+        [JsonPropertyName("awesomeobject")]
+        public Awesomeobject Awesomeobject { get; }
+
+        [JsonPropertyName("created_at")]
+        public string CreatedAt { get; }
+
+        [JsonPropertyName("updated_at")]
+        public string UpdatedAt { get; }
+
+        [JsonPropertyName("users")]
+        public IReadOnlyList<User> Users { get; }
+    }
+
+    public class Class2
+    {
+        [JsonConstructor]
+        public Class2(
+            string somePropertyOfClass2
+        )
+        {
+            this.SomePropertyOfClass2 = somePropertyOfClass2;
+        }
+
+        [JsonPropertyName("SomePropertyOfClass2")]
+        public string SomePropertyOfClass2 { get; }
+    }
+
+    public class Root
+    {
+        [JsonConstructor]
+        public Root(
+            Class1 class1,
+            Class2 class2
+        )
+        {
+            this.Class1 = class1;
+            this.Class2 = class2;
+        }
+
+        [JsonPropertyName("Class1")]
+        public Class1 Class1 { get; }
+
+        [JsonPropertyName("Class2")]
+        public Class2 Class2 { get; }
+    }
+
+    public class User
+    {
+        [JsonConstructor]
+        public User(
+            string id,
+            string name,
+            string createdAt,
+            string updatedAt,
+            string email,
+            string testanadditionalfield
+        )
+        {
+            this.Id = id;
+            this.Name = name;
+            this.CreatedAt = createdAt;
+            this.UpdatedAt = updatedAt;
+            this.Email = email;
+            this.Testanadditionalfield = testanadditionalfield;
+        }
+
+        [JsonPropertyName("id")]
+        public string Id { get; }
+
+        [JsonPropertyName("name")]
+        public string Name { get; }
+
+        [JsonPropertyName("created_at")]
+        public string CreatedAt { get; }
+
+        [JsonPropertyName("updated_at")]
+        public string UpdatedAt { get; }
+
+        [JsonPropertyName("email")]
+        public string Email { get; }
+
+        [JsonPropertyName("testanadditionalfield")]
+        public string Testanadditionalfield { get; }
+    }
+

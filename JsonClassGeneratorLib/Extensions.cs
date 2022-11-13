@@ -23,6 +23,11 @@ namespace Xamasoft.JsonClassGenerator
             return Regex.Replace(str, "[^a-zA-Z0-9]+", "", RegexOptions.Compiled);
         }
 
+        public static string ReplaceSpecialCharacters(this string str, string replaceWith)
+        {
+            return Regex.Replace(str, "[^a-zA-Z0-9_]+", replaceWith, RegexOptions.Compiled);
+        }
+
         public static string ToTitleCase(this string str)
         {
             StringBuilder sb = new StringBuilder(str.Length);
