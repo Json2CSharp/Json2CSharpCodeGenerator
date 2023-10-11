@@ -360,23 +360,23 @@ namespace Xamasoft.JsonClassGenerator.CodeWriters
         {
             switch (type.Type)
             {
-                case JsonTypeEnum.Anything: return "object";
-                case JsonTypeEnum.Array: return GetCollectionTypeName(elementTypeName: this.GetTypeName(type.InternalType), config.CollectionType);
-                case JsonTypeEnum.Dictionary: return "Dictionary<string, " + this.GetTypeName(type.InternalType) + ">";
+                case JsonTypeEnum.Anything: return "object" + ( config.AlwaysUseNullables ? "?" : "" );
+                case JsonTypeEnum.Array: return GetCollectionTypeName(elementTypeName: this.GetTypeName(type.InternalType), config.CollectionType) + ( config.AlwaysUseNullables ? "?" : "" );
+                case JsonTypeEnum.Dictionary: return "Dictionary<string, " + this.GetTypeName(type.InternalType) + ">" + ( config.AlwaysUseNullables ? "?" : "" );
                 case JsonTypeEnum.Boolean: return config.AlwaysUseNullables ? "bool?" : "bool";
                 case JsonTypeEnum.Float: return config.AlwaysUseNullables ? "double?" : "double";
                 case JsonTypeEnum.Integer: return config.AlwaysUseNullables ? "int?" : "int";
                 case JsonTypeEnum.Long: return config.AlwaysUseNullables ? "long?" : "long";
                 case JsonTypeEnum.Date: return config.AlwaysUseNullables ? "DateTime?" : "DateTime";
-                case JsonTypeEnum.NonConstrained: return "object";
+                case JsonTypeEnum.NonConstrained: return "object" + (config.AlwaysUseNullables ? "?" : "");
                 case JsonTypeEnum.NullableBoolean: return "bool?";
                 case JsonTypeEnum.NullableFloat: return "double?";
                 case JsonTypeEnum.NullableInteger: return "int?";
                 case JsonTypeEnum.NullableLong: return "long?";
                 case JsonTypeEnum.NullableDate: return "DateTime?";
-                case JsonTypeEnum.NullableSomething: return "object";
-                case JsonTypeEnum.Object: return type.NewAssignedName;
-                case JsonTypeEnum.String: return "string";
+                case JsonTypeEnum.NullableSomething: return "object?";
+                case JsonTypeEnum.Object: return type.NewAssignedName + ( config.AlwaysUseNullables ? "?" : "" );
+                case JsonTypeEnum.String: return config.AlwaysUseNullables ? "string?" : "string";
                 default: throw new NotSupportedException("Unsupported json type: " + type.Type);
             }
         }
