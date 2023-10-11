@@ -38,7 +38,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
 
             this.optAttribJP          .CheckedChanged += this.OnAttributesModeCheckedChanged;
             this.optAttribJpn         .CheckedChanged += this.OnAttributesModeCheckedChanged;
-            this.optAttribNone        .CheckedChanged += this.OnAttributesModeCheckedChanged;
+            //this.optAttribNone        .CheckedChanged += this.OnAttributesModeCheckedChanged;
 
             this.optMemberFields      .CheckedChanged += this.OnMemberModeCheckedChanged;
             this.optMemberProps       .CheckedChanged += this.OnMemberModeCheckedChanged;
@@ -48,6 +48,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
             this.optTypesRecords      .CheckedChanged += this.OnOutputTypeModeCheckedChanged;
 
             this.optsPascalCase       .CheckedChanged += this.OnOptionsChanged;
+            this.optsUseNullable      .CheckedChanged += this.OnOptionsChanged;
 
             this.wrapText.CheckedChanged += this.WrapText_CheckedChanged;
 
@@ -410,6 +411,7 @@ namespace Xamasoft.JsonClassGenerator.WinForms
         private void ConfigureGenerator( JsonClassGenerator config )
         {
             writerConfig.UsePascalCase = this.optsPascalCase.Checked;
+            writerConfig.AlwaysUseNullables = this.optsUseNullable.Checked;
 
             if( this.optAttribJP.Checked )
             {
